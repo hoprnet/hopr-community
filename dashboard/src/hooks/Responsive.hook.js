@@ -1,0 +1,45 @@
+import { useState, useEffect, useCallback } from 'react';
+
+export function useMobile() {
+  const [isMobile, setState] = useState(false);
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 1024) {
+        setState(true);
+      } else {
+        setState(false);
+      }
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setState]);
+  return [isMobile];
+}
+
+export function useWindowSize() {
+  const isClient = typeof window === 'object';
+
+  const getSize = useCallback(() => {
+    return {
+      width: isClient ? window.innerWidth : undefined,
+      height: isClient ? window.innerHeight : undefined,
+    };
+  }, [isClient]);
+  const [windowSize, setWindowSize] = useState(getSize);
+
+  useEffect(() => {
+    if (!isClient) {
+      return false;
+    }
+
+    function handleResize() {
+      setWindowSize(getSize());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [getSize, isClient]); // Empty array ensures that effect is only run on mount and unmount
+
+  return windowSize;
+}
