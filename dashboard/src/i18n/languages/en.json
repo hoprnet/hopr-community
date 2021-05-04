@@ -1,0 +1,18 @@
+{
+  "HOPR": "HOPR",
+  "HOPR_TOTAL_COUNT": "wxHOPR Staked",
+  "HOPR_ADDRESS": "HOPR address",
+  "HOPR_STAKED_AMOUNT": "Staked amount",
+  "HOPR_TOTAL_AMOUNT": "Total amount",
+  "HOPR_CHANEL_STATUS": "Chanel status",
+  "HOPR_SEARCH": "Search",
+  "HOPR_INPUT_TEXT": "Enter your HOPR address",
+  "HOPR_OPENED_CHANNELS": "Opened channels",
+  "HOPR_STAKED": "Staked",
+  "HOPR_NODE_UPTIME": "Node Uptime",
+  "HOPR_SETTINGS": "Settings",
+  "HOPR_CHANEL_ADDRESS": "HOPR Channels Contract Address",
+  "HOPR_RPC": "RPC Endpoint",
+  "HOPR_DISCARD": "Discard",
+  "HOPR_APPLY": "Apply"
+}
