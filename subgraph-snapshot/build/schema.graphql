@@ -5,6 +5,7 @@ type Account @entity {
   wxHoprBalance: BigDecimal!
   totalBalance: BigDecimal!
   blockNumber: BigInt!
+  blockTimestamp: BigInt!
 }
 
 type AccountSnapshot @entity {
@@ -14,4 +15,5 @@ type AccountSnapshot @entity {
   wxHoprBalance: BigDecimal!
   totalBalance: BigDecimal!
   blockNumber: BigInt!
+  blockTimestamp: BigInt!
 }

@@ -5,26 +5,26 @@ import { Address, BigDecimal, BigInt, } from '@graphprotocol/graph-ts'
 import { convertEthToDecimal, zeroBD, zeroBigInt } from './helpers'
 
 export function handleXHoprTransfer(event: Transfer ): void {
-  // Both xHOPR and wxHOPR are 18 decimals
+  // xHOPR has 18 decimals
   const value = convertEthToDecimal(event.params.value);
   const blockNumber = event.block.number;
-  // const id = event.transaction.hash.toHex() + "-" + event.logIndex.toString();
+  const blockTimestamp = event.block.timestamp;
 
-  handleAccountSnapshotUpdate(event.params.from, value, blockNumber, true, true);
-  handleAccountSnapshotUpdate(event.params.to, value, blockNumber, true, false);
+  handleAccountSnapshotUpdate(event.params.from, value, blockNumber, blockTimestamp, true, true);
+  handleAccountSnapshotUpdate(event.params.to, value, blockNumber, blockTimestamp, true, false);
 }
 
 export function handleWxHoprTransfer(event: wxTransfer): void {
-  // Both xHOPR and wxHOPR are 18 decimals
+  // wxHOPR has 18 decimals
   const value = convertEthToDecimal(event.params.value);
   const blockNumber = event.block.number;
-  // const id = event.transaction.hash.toHex() + "-" + event.logIndex.toString();
+  const blockTimestamp = event.block.timestamp;
 
-  handleAccountSnapshotUpdate(event.params.from, value, blockNumber, false, true);
-  handleAccountSnapshotUpdate(event.params.to, value, blockNumber, false, false);
+  handleAccountSnapshotUpdate(event.params.from, value, blockNumber, blockTimestamp, false, true);
+  handleAccountSnapshotUpdate(event.params.to, value, blockNumber, blockTimestamp, false, false);
 }
 
-function handleAccountSnapshotUpdate(address: Address, value: BigDecimal, block: BigInt, isXHopr: boolean, isFrom: boolean): void {
+function handleAccountSnapshotUpdate(address: Address, value: BigDecimal, block: BigInt, timestamp: BigInt, isXHopr: boolean, isFrom: boolean): void {
   const accountId = address.toHexString();
   let account = Account.load(accountId);
   if (account == null) {
@@ -59,6 +59,8 @@ function handleAccountSnapshotUpdate(address: Address, value: BigDecimal, block:
 
   account.blockNumber = block;
   snapshot.blockNumber = block
+  account.blockTimestamp = timestamp;
+  snapshot.blockTimestamp = timestamp;
 
   account.save()
   snapshot.save()
@@ -71,6 +73,7 @@ function createAccountEntity(accountId: string): void {
   account.wxHoprBalance = zeroBD();
   account.totalBalance = zeroBD();
   account.blockNumber = zeroBigInt();
+  account.blockTimestamp = zeroBigInt();
   account.save()
 }
 
@@ -81,5 +84,6 @@ function createAccountSnapshotEntity(accountId: string, snapshotId: string): voi
   snapshot.wxHoprBalance = zeroBD();
   snapshot.totalBalance = zeroBD();
   snapshot.blockNumber = zeroBigInt();
+  snapshot.blockTimestamp = zeroBigInt();
   snapshot.save()
 }
