@@ -1,0 +1,16 @@
+{
+  "name": "hopr-on-xdai",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ hoprnet/hopr-on-xdai",
+    "create-local": "graph create --node http://localhost:8020/ hoprnet/hopr-on-xdai",
+    "remove-local": "graph remove --node http://localhost:8020/ hoprnet/hopr-on-xdai",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hoprnet/hopr-on-xdai"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.20.0"
+  }
+}
