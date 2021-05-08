@@ -48,3 +48,4 @@ Thumbs.db
 # Custom
 /src/assets/config.prod.json
 /src/assets/data/*.json
+!/src/assets/data/test_data.json

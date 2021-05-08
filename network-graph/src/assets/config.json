@@ -5,7 +5,7 @@
   "chains": [
     {
       "type": 0,
-      "jsonPath": "./assets/test_data.json"
+      "jsonPath": "./assets/data/test_data.json"
     },
     {
       "type": 1,
