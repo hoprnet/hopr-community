@@ -1,5 +1,11 @@
+enum TokenType {
+  xHOPR,
+  wxHOPR
+}
+
 type Account @entity {
   id: ID!
+  index: BigInt!
   totalSupply: Boolean
   xHoprBalance: BigDecimal!
   wxHoprBalance: BigDecimal!
@@ -10,10 +16,42 @@ type Account @entity {
 
 type AccountSnapshot @entity {
   id: ID!
+  index: BigInt!
   account: Account!
   xHoprBalance: BigDecimal!
   wxHoprBalance: BigDecimal!
   totalBalance: BigDecimal!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
+}
+
+type StatsContainer @entity {
+  id: ID!
+  lastAccountIndex: BigInt!
+  lastAccountSnapshotIndex: BigInt!
+  lastTransactionIndex: BigInt!
+  lastTransferEventIndex: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  index: BigInt!
+  from: Bytes!
+  to: Bytes
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transferEvents: [TransferEvent!]! @derivedFrom(field: "transaction")
+}
+
+type TransferEvent @entity {
+  id: ID!
+  index: BigInt!
+  transaction: Transaction!
+  from: Bytes!
+  to: Bytes!
+  amount: BigDecimal!
+  logIndex: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  tokenType: TokenType!
 }

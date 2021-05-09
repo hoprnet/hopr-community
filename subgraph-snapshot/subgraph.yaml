@@ -18,6 +18,9 @@ dataSources:
       entities:
         - Account
         - AccountSnapshot
+        - StatsContainer
+        - Transaction
+        - TransferEvent
       abis:
         - name: xHOPR
           file: ./abis/xHOPR.json
@@ -39,6 +42,9 @@ dataSources:
       entities:
         - Account
         - AccountSnapshot
+        - StatsContainer
+        - Transaction
+        - TransferEvent
       abis:
         - name: wxHOPR
           file: ./abis/wxHOPR.json

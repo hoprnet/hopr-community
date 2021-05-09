@@ -18,13 +18,16 @@ dataSources:
       entities:
         - Account
         - AccountSnapshot
+        - StatsContainer
+        - Transaction
+        - TransferEvent
       abis:
         - name: xHOPR
-          file: xHOPR/abis/xHOPR.json
+          file: xHOPR\abis\xHOPR.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleXHoprTransfer
-      file: xHOPR/xHOPR.wasm
+      file: xHOPR\xHOPR.wasm
   - kind: ethereum/contract
     name: wxHOPR
     network: xdai
@@ -39,10 +42,13 @@ dataSources:
       entities:
         - Account
         - AccountSnapshot
+        - StatsContainer
+        - Transaction
+        - TransferEvent
       abis:
         - name: wxHOPR
-          file: wxHOPR/abis/wxHOPR.json
+          file: wxHOPR\abis\wxHOPR.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleWxHoprTransfer
-      file: xHOPR/xHOPR.wasm
+      file: xHOPR\xHOPR.wasm
