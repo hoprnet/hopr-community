@@ -43,15 +43,24 @@ type Transaction @entity {
   transferEvents: [TransferEvent!]! @derivedFrom(field: "transaction")
 }
 
-type TransferEvent @entity {
+interface TransactionEvent {
   id: ID!
   index: BigInt!
   transaction: Transaction!
-  from: Bytes!
-  to: Bytes!
-  amount: BigDecimal!
   logIndex: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
+}
+
+type TransferEvent implements TransactionEvent @entity {
+  id: ID!
+  index: BigInt!
+  transaction: Transaction!
+  logIndex: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  from: Bytes!
+  to: Bytes!
+  amount: BigDecimal!
   tokenType: TokenType!
 }
