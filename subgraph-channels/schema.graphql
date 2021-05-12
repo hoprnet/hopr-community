@@ -24,7 +24,7 @@ type Channel @entity {
   partyB: Account!
   status: ChannelStatus!
   epoch: BigInt!
-  deposit: BigInt! # computed
+  deposit: BigInt!
   partyABalance: BigInt!
   partyBBalance: BigInt!
   partyACommitment: Bytes!
@@ -33,8 +33,10 @@ type Channel @entity {
   partyBTicketEpoch: BigInt!
   partyATicketIndex: BigInt!
   partyBTicketIndex: BigInt!
-  openedAt: Int
+  "timestamp when it was opened"
+  openedAt: BigInt
   openedBy: Account
-  closedAt: Int
+  "timestamp when it was closed"
+  closedAt: BigInt
   closedBy: Account
 }
