@@ -1,0 +1,43 @@
+<div id="graphContainer" [ngClass]="{'loading': isLoading}">
+  <hopr-cytoscape (selectEmitter)="nodeChange($event)" *ngIf="useCytoscapeLibrary; else showD3Block">
+  </hopr-cytoscape>
+  <ng-template #showD3Block>
+    <hopr-d3 (selectEmitter)="nodeChange($event)"></hopr-d3>
+  </ng-template>
+</div>
+
+<div id="infoContainer">
+  <div *ngIf="isLoading; else showMessageBlock">
+    Loading...
+  </div>
+  <ng-template #showMessageBlock>
+    {{message}}
+  </ng-template>
+  <div *ngIf="node || edge">
+    <div *ngIf="node; else showEdgeBlock">
+      Selected node
+      <ul>
+        <li>address: <a [href]="buildAddressUrl(node?.data?.id)" target="_blank">{{node?.data?.id}}</a></li>
+        <li>weight: {{node?.data?.weight}}</li>
+      </ul>
+    </div>
+
+    <ng-template #showEdgeBlock>
+      Selected edge (transactionHash:
+      <a [href]="buildTxUrl(edge?.scratch?.transfer?.transactionHash)"
+        target="_blank">{{edge?.scratch?.transfer?.transactionHash}})</a>
+      <ul>
+        <li>source: <a [href]="buildAddressUrl(edge?.data?.source)" target="_blank">{{edge?.data?.source}}</a></li>
+        <li>target: <a [href]="buildAddressUrl(edge?.data?.target)" target="_blank">{{edge?.data?.target}}</a></li>
+        <li>amount: {{edge?.scratch?.transfer?.args?.amount}}</li>
+      </ul>
+    </ng-template>
+  </div>
+  <div id="filter">
+    <ng-container *ngFor="let kvp of filter | keyvalue">
+      <input type="checkbox" [id]="kvp.key" [name]="kvp.key" [checked]="kvp.value.isSelected"
+        (change)="changeFilter(kvp.key,$event)">
+      <label [for]="kvp.key"><b [style.color]="kvp.value.color">{{kvp.value.name}}</b></label>
+    </ng-container>
+  </div>
+</div>

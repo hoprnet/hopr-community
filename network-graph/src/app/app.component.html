@@ -1,0 +1,19 @@
+HOPR network graph
+
+<select (change)="changeChain($event)" #dropdown>
+  <option [value]="chain.type" [selected]="chain.type === selectedChainType" *ngFor="let chain of chains">{{chain.name}}
+  </option>
+</select>
+
+min. weight <input type="range" min="0" max="100" step="1" [value]="minWeight" (change)="changeMinWeight($event)">
+{{minWeight}}
+
+<select (change)="changeLibrary($event)" #dropdown>
+  <option [value]="library.type" [selected]="library.type === selectedLibraryType" *ngFor="let library of libraries">
+    {{library.name}}
+  </option>
+</select>
+
+<button *ngIf="showStopSimulationButton" (click)="stopSimulation()">Stop simulation</button>
+
+<hopr-network-graph></hopr-network-graph>
