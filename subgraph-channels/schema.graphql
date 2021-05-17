@@ -1,0 +1,42 @@
+type Account @entity {
+  "account's address"
+  id: ID!
+  multiaddr: Bytes
+  "the channels which the Account is part of"
+  channels: [Channel]!
+  "has the Account set a multiaddr?"
+  hasAnnounced: Boolean!
+}
+
+enum ChannelStatus {
+  CLOSED
+  OPEN
+  PENDING_TO_CLOSE
+}
+
+type Channel @entity {
+  "
+    the channel id, this should be computed like:
+    https://github.com/hoprnet/hoprnet/blob/bb42481595ff374dfacd58a10954898630bc046a/packages/utils/src/types/channelEntry.ts#L8
+  "
+  id: ID!
+  partyA: Account!
+  partyB: Account!
+  status: ChannelStatus!
+  epoch: BigInt!
+  deposit: BigInt!
+  partyABalance: BigInt!
+  partyBBalance: BigInt!
+  partyACommitment: Bytes!
+  partyBCommitment: Bytes!
+  partyATicketEpoch: BigInt!
+  partyBTicketEpoch: BigInt!
+  partyATicketIndex: BigInt!
+  partyBTicketIndex: BigInt!
+  "timestamp when it was opened"
+  openedAt: BigInt
+  openedBy: Account
+  "timestamp when it was closed"
+  closedAt: BigInt
+  closedBy: Account
+}
