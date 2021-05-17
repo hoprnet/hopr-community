@@ -2,13 +2,13 @@ specVersion: 0.0.2
 description: xHOPR and wxHOPR balance
 repository: https://github.com/hoprnet/hopr-analytics
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: xHOPR
     network: xdai
     source:
-      address: '0xd057604a14982fe8d88c5fc25aac3267ea142a08'
+      address: "0xd057604a14982fe8d88c5fc25aac3267ea142a08"
       abi: xHOPR
       startBlock: 14635000
     mapping:
@@ -23,16 +23,16 @@ dataSources:
         - TransferEvent
       abis:
         - name: xHOPR
-          file: ./abis/xHOPR.json
+          file: xHOPR/abis/xHOPR.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleXHoprTransfer
-      file: ./src/mapping.ts
+      file: xHOPR/xHOPR.wasm
   - kind: ethereum/contract
     name: wxHOPR
     network: xdai
     source:
-      address: '0xd4fdec44db9d44b8f2b6d529620f9c0c7066a2c1'
+      address: "0xd4fdec44db9d44b8f2b6d529620f9c0c7066a2c1"
       abi: wxHOPR
       startBlock: 14744100
     mapping:
@@ -47,8 +47,8 @@ dataSources:
         - TransferEvent
       abis:
         - name: wxHOPR
-          file: ./abis/wxHOPR.json
+          file: wxHOPR/abis/wxHOPR.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleWxHoprTransfer
-      file: ./src/mapping.ts
+      file: xHOPR/xHOPR.wasm
