@@ -74,7 +74,7 @@ Finally the output will be stored in the `\src\assets\data` folder which is excl
 IMPORTANT: Don't forget to set `rpcProviderUrl` for Ethereum mainnet in the `config.json` file. (e.g. https://eth-mainnet.alchemyapi.io/v2/...)
 
 ```bash
-npx ts-node -P tsconfig.commonjs.json .\extract.ts
+npx ts-node -P tsconfig.commonjs.json ./extract.ts
 ```
 [npx](https://docs.npmjs.com/cli/v7/commands/npx) runs a command from a local or remote npm package.
 [ts-node](https://github.com/TypeStrong/ts-node) compiles the code on the fly and runs it through node.
