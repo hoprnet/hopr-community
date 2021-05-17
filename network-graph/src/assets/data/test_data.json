@@ -1,0 +1,134 @@
+{
+  "nodes": [
+    {
+      "data": {
+        "id": "a",
+        "name": "X1",
+        "weight": 1,
+        "colorCode": "blue",
+        "shapeType": "roundrectangle"
+      }
+    },
+    {
+      "data": {
+        "id": "b",
+        "name": "X2",
+        "weight": 100,
+        "colorCode": "magenta",
+        "shapeType": "roundrectangle"
+      }
+    },
+    {
+      "data": {
+        "id": "c",
+        "name": "X3",
+        "weight": 25,
+        "colorCode": "magenta",
+        "shapeType": "roundrectangle"
+      }
+    },
+    {
+      "data": {
+        "id": "d",
+        "name": "X4",
+        "weight": 50,
+        "colorCode": "orange",
+        "shapeType": "roundrectangle"
+      }
+    },
+    {
+      "data": {
+        "id": "e",
+        "name": "X5",
+        "weight": 100,
+        "colorCode": "orange",
+        "shapeType": "roundrectangle"
+      }
+    },
+    {
+      "data": {
+        "id": "f",
+        "name": "X6",
+        "weight": 75,
+        "colorCode": "orange",
+        "shapeType": "roundrectangle"
+      }
+    },
+    {
+      "data": {
+        "id": "j",
+        "name": "X7",
+        "weight": 10,
+        "colorCode": "red",
+        "shapeType": "ellipse"
+      }
+    },
+    {
+      "data": {
+        "id": "k",
+        "name": "X8",
+        "weight": 60,
+        "colorCode": "green",
+        "shapeType": "ellipse"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "data": {
+        "source": "a",
+        "target": "b",
+        "colorCode": "blue",
+        "strength": 1
+      }
+    },
+    {
+      "data": {
+        "source": "b",
+        "target": "c",
+        "colorCode": "blue",
+        "strength": 100
+      }
+    },
+    {
+      "data": {
+        "source": "c",
+        "target": "d",
+        "colorCode": "blue",
+        "strength": 25
+      }
+    },
+    {
+      "data": {
+        "source": "c",
+        "target": "e",
+        "colorCode": "blue",
+        "strength": 50
+      }
+    },
+    {
+      "data": {
+        "source": "c",
+        "target": "f",
+        "colorCode": "blue",
+        "strength": 100
+      }
+    },
+    {
+      "data": {
+        "source": "e",
+        "target": "j",
+        "colorCode": "red",
+        "strength": 75
+      }
+    },
+    {
+      "data": {
+        "source": "e",
+        "target": "k",
+        "colorCode": "green",
+        "strength": 10
+      }
+    }
+  ]
+}

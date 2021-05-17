@@ -1,0 +1,23 @@
+#graphContainer {
+  height: 80vh;
+  float: left;
+  width: 100%;
+  position: relative;
+}
+
+.loading {
+  background-color: black;
+  opacity: 0.5;
+}
+
+#infoContainer {
+  float: left;
+  width: 100%;
+  position: relative;
+}
+
+#filter {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

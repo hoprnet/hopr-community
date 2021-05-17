@@ -1,0 +1,53 @@
+{
+  "minWeight": 10,
+  "selectedChainType": 1,
+  "selectedGraphLibraryType": 0,
+  "chains": [
+    {
+      "type": 0,
+      "jsonPath": "./assets/data/test_data.json"
+    },
+    {
+      "type": 1,
+      "rpcProviderUrl": "",
+      "addressUrl": "https://etherscan.io/address/{address}",
+      "txUrl": "https://etherscan.io/tx/{transactionHash}",
+      "tokenContractAbi": [
+        "function name() view returns (string)",
+        "function symbol() view returns (string)",
+        "function balanceOf(address) view returns (uint)",
+        "event Transfer(address indexed from, address indexed to, uint amount)",
+        "event Minted(address indexed operator, address indexed to, uint256 amount, bytes data, bytes operatorData)",
+        "event Burned(address indexed operator, address indexed from, uint256 amount, bytes data, bytes operatorData)"
+      ],
+      "tokenContractAddress": "0xf5581dfefd8fb0e4aec526be659cfab1f8c781da",
+      "txEventNames": {
+        "MINT": "Minted",
+        "TRANSFER": "Transfer",
+        "BURN": "Burned"
+      },
+      "jsonPath": "./assets/data/ETH_MAIN_EVENTS.json"
+    },
+    {
+      "type": 2,
+      "rpcProviderUrl": "https://rpc.xdaichain.com/",
+      "addressUrl": "https://blockscout.com/xdai/mainnet/address/{address}",
+      "txUrl": "https://blockscout.com/xdai/mainnet/tx/{transactionHash}",
+      "tokenContractAbi": [
+        "function name() view returns (string)",
+        "function symbol() view returns (string)",
+        "function balanceOf(address) view returns (uint)",
+        "event Transfer(address indexed from, address indexed to, uint amount)",
+        "event Mint(address indexed to, uint256 amount)",
+        "event Burn(address indexed burner, uint256 value)"
+      ],
+      "tokenContractAddress": "0xD057604A14982FE8D88c5fC25Aac3267eA142a08",
+      "txEventNames": {
+        "MINT": "Mint",
+        "TRANSFER": "Transfer",
+        "BURN": "Burn"
+      },
+      "jsonPath": "./assets/data/XDAI_MAIN_EVENTS.json"
+    }
+  ]
+}
