@@ -2,12 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 import cytoscape from 'cytoscape';
 import fcose from 'cytoscape-fcose';
 import klay from 'cytoscape-klay';
-import { Subscription } from 'rxjs';
 import { AppConstants } from '../../app.constants';
 import { ChainTxEventType } from '../../enums/chain.enum';
-import { GraphEventType } from '../../enums/graph.enum';
-import { EdgeDataModel, EdgeGraphModel, GraphEventModel, GraphScratchModel, NodeDataModel, NodeGraphModel } from '../../models/graph.model';
+import { EdgeDataModel, EdgeGraphModel, GraphContainerModel, GraphScratchModel, NodeDataModel, NodeGraphModel } from '../../models/graph.model';
 import { GraphService } from '../../services/graph.service';
+import { Logger } from '../../services/logger.service';
+import { SharedGraphLibComponent } from '../shared/shared-graph-lib.component';
 
 @Component({
   selector: 'hopr-cytoscape',
@@ -15,7 +15,7 @@ import { GraphService } from '../../services/graph.service';
   styleUrls: ['./cytoscape.component.css'],
 })
 
-export class CytoscapeComponent implements OnInit, OnDestroy {
+export class CytoscapeComponent extends SharedGraphLibComponent implements OnInit, OnDestroy {
 
   @Input() public style: any;
   @Input() public layout: any;
@@ -25,11 +25,12 @@ export class CytoscapeComponent implements OnInit, OnDestroy {
 
   @ViewChild('containerElementRef') containerElementRef: ElementRef;
 
+  protected readonly componentName: string = 'Cytoscape';
+
   private cy: cytoscape.Core;
-  private subs: Subscription[] = [];
 
-  constructor(private graphService: GraphService) {
-
+  constructor(protected logger: Logger, protected graphService: GraphService) {
+    super(logger, graphService);
     cytoscape.use(fcose);
     cytoscape.use(klay);
 
@@ -53,7 +54,7 @@ export class CytoscapeComponent implements OnInit, OnDestroy {
           'font-size': 'mapData(weight, 1, 100, 5, 10)',
           // 'content': 'data(name)',
           'text-valign': 'center',
-          'background-color': AppConstants.NODE_COLOR
+          'background-color': AppConstants.SECONDARY_COLOR
         }
       },
       {
@@ -98,41 +99,19 @@ export class CytoscapeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.graphService.onChangeSubject) {
-      const sub1 = this.graphService.onChangeSubject.subscribe({
-        next: (data: GraphEventModel) => {
-          setTimeout(() => {
-            this.handleOnChangeSubject(data);
-          }, 0);
-        }
-      });
-      this.subs.push(sub1);
-    }
+    super.onInit();
   }
 
-  ngOnDestroy(): any {
-    console.log('Cytoscape destroy called.');
+  ngOnDestroy(): void {
+    super.onDestroy();
+  }
+
+  protected destroy(): void {
     this.cy.destroy();
-    this.subs.forEach(sub => {
-      sub.unsubscribe();
-    });
-    this.subs = [];
   }
 
-  private handleOnChangeSubject(data: GraphEventModel) {
-    if (data) {
-      switch (data.type) {
-        case GraphEventType.DATA_CHANGED:
-          this.render(data.payload);
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  public render(data: any): void {
-    this.graphService.isLoading = true;
+  protected init(data: GraphContainerModel): void {
+    super.beforeInit(data);
     if (data) {
       if (this.cy) {
         this.cy.destroy();
@@ -143,7 +122,7 @@ export class CytoscapeComponent implements OnInit, OnDestroy {
         minZoom: this.zoom.min,
         maxZoom: this.zoom.max,
         style: this.style,
-        elements: data,
+        elements: data as any,
       });
 
       this.cy.on('tap', 'node', (e: any) => {
@@ -177,12 +156,13 @@ export class CytoscapeComponent implements OnInit, OnDestroy {
           edge.target().removeClass('faded');
           this.selectEmitter.emit(new EdgeGraphModel({
             data: new EdgeDataModel({
+              name: edge.data('name'),
               source: edge.data('source'),
               target: edge.data('target'),
               strength: edge.data('strength')
             }),
             scratch: new GraphScratchModel({
-              transfer: edge.scratch('transfer')
+              refTransfer: edge.scratch('refTransfer')
             })
           }));
         }
@@ -194,12 +174,15 @@ export class CytoscapeComponent implements OnInit, OnDestroy {
         }
       });
     }
-
-    this.graphService.isLoading = false;
+    super.afterInit();
   }
 
   private unselectAll(): void {
     this.cy.elements().removeClass('faded');
     this.selectEmitter.emit(undefined);
+  }
+
+  protected center(counter: number): void {
+
   }
 }

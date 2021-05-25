@@ -20,11 +20,19 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "allowedCommonJsDependencies": [
+              "axios",
               "cytoscape-fcose",
               "cytoscape-klay",
               "cytoscape",
+              "stardust-core",
+              "stardust-webgl",
               "bn.js",
-              "hash.js"
+              "hash.js",
+              "lz-string",
+              "easy-table",
+              "numeral",
+              "papaparse",
+              "typy"
             ],
             "assets": [
               "src/favicon.ico",

@@ -1,6 +1,6 @@
 {
   "name": "hopr-network-graph",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,13 +19,21 @@
     "@angular/platform-browser": "~11.2.12",
     "@angular/platform-browser-dynamic": "~11.2.12",
     "@angular/router": "~11.2.12",
+    "axios": "^0.21.1",
     "cytoscape": "^3.18.2",
     "cytoscape-fcose": "^2.0.0",
     "cytoscape-klay": "^3.1.4",
     "d3": "^6.7.0",
+    "data-forge": "^1.8.17",
     "ethers": "^5.1.4",
+    "lz-string": "^1.4.4",
+    "moment": "^2.29.1",
     "rxjs": "~6.6.0",
+    "stardust-core": "^0.2.4",
+    "stardust-webgl": "^0.2.4",
+    "taffydb": "^2.7.3",
     "tslib": "^2.0.0",
+    "uuid": "^8.3.2",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {

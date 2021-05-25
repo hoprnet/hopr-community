@@ -1,9 +1,14 @@
 <div id="graphContainer" [ngClass]="{'loading': isLoading}">
-  <hopr-cytoscape (selectEmitter)="nodeChange($event)" *ngIf="useCytoscapeLibrary; else showD3Block">
-  </hopr-cytoscape>
-  <ng-template #showD3Block>
-    <hopr-d3 (selectEmitter)="nodeChange($event)"></hopr-d3>
-  </ng-template>
+  <container-element [ngSwitch]="selectedGraphLibraryType">
+    <hopr-cytoscape (selectEmitter)="nodeChange($event)" *ngSwitchCase="graphLibraries.cytoscape">
+    </hopr-cytoscape>
+    <hopr-stardust (selectEmitter)="nodeChange($event)" *ngSwitchCase="graphLibraries.stardust">
+    </hopr-stardust>
+    <hopr-d3canvas (selectEmitter)="nodeChange($event)" *ngSwitchCase="graphLibraries.d3canvas">
+    </hopr-d3canvas>
+    <hopr-d3 (selectEmitter)="nodeChange($event)" *ngSwitchDefault>
+    </hopr-d3>
+  </container-element>
 </div>
 
 <div id="infoContainer">
@@ -13,23 +18,36 @@
   <ng-template #showMessageBlock>
     {{message}}
   </ng-template>
-  <div *ngIf="node || edge">
+  <div id="info" *ngIf="node || edge">
     <div *ngIf="node; else showEdgeBlock">
-      Selected node
+      Selected node ({{node?.data?.name}})
       <ul>
         <li>address: <a [href]="buildAddressUrl(node?.data?.id)" target="_blank">{{node?.data?.id}}</a></li>
         <li>weight: {{node?.data?.weight}}</li>
       </ul>
     </div>
-
     <ng-template #showEdgeBlock>
-      Selected edge (transactionHash:
-      <a [href]="buildTxUrl(edge?.scratch?.transfer?.transactionHash)"
-        target="_blank">{{edge?.scratch?.transfer?.transactionHash}})</a>
+      Selected edge ({{edge?.data?.name}})
       <ul>
-        <li>source: <a [href]="buildAddressUrl(edge?.data?.source)" target="_blank">{{edge?.data?.source}}</a></li>
-        <li>target: <a [href]="buildAddressUrl(edge?.data?.target)" target="_blank">{{edge?.data?.target}}</a></li>
-        <li>amount: {{edge?.scratch?.transfer?.args?.amount}}</li>
+        <li>address1: <a [href]="buildAddressUrl(edge?.data?.source)" target="_blank">{{edge?.data?.source}}</a></li>
+        <li>address2: <a [href]="buildAddressUrl(edge?.data?.target)" target="_blank">{{edge?.data?.target}}</a></li>
+      </ul>
+    </ng-template>
+    Transfers
+    <div *ngIf="!showTransfers; else showTransfersBlock">
+      <ul>
+        <li>
+          <button (click)="revealTransfers()">Show</button>
+        </li>
+      </ul>
+    </div>
+    <ng-template #showTransfersBlock>
+      <ul *ngFor="let transfer of transfers">
+        <li [ngStyle]="{color: getTransferColor(transfer)}">amount: {{transfer.argsAmount}}</li>
+        <li *ngIf="transfer.blockTimestamp">blockTimestamp: {{transfer.blockTimestamp}}</li>
+        <li *ngIf="node">to: <a [href]="buildAddressUrl(transfer.argsTo)" target="_blank">{{transfer.argsTo}}</a></li>
+        <li *ngIf="transfer.transactionHash">transactionHash: <a [href]="buildTxUrl(transfer.transactionHash)"
+            target="_blank">{{transfer.transactionHash}}</a></li>
       </ul>
     </ng-template>
   </div>

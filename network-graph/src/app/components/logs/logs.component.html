@@ -1,0 +1,6 @@
+<div id="logsContainer" #containerElementRef>
+  <div>-</div>
+  <div class="logMessage" *ngFor="let log of logs">
+    {{log.banner}} {{log.args}}
+  </div>
+</div>
