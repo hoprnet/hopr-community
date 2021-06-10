@@ -3,7 +3,7 @@
 A visualization approach to gain a bird view on the HOPR token transfers on Ethereum mainnet and xDai chain.
 
 <h1 align="center">
-	<img src="images/hopr_network_graph_xdai_chain_1.gif" alt="HOPR network graph xDai chain">
+	<img src="images/hopr_network_graph_v0_0_3.gif" alt="HOPR network graph xDai chain">
 </h1>
 
 #### Table of Content
@@ -50,7 +50,7 @@ In order to run HORP network graph, ensure that you have [Git](https://git-scm.c
 Clone the repo:
 
 ```bash
-git clone https://github.com/hoprnet/hopr-analytics/network-graph.git
+git clone https://github.com/hoprnet/hopr-analytics.git
 ```
 
 Change to the network-graph directory:

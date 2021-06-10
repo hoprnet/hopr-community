@@ -1,8 +1,10 @@
+ul {
+  margin-block-start: 8px;
+  margin-block-end: 8px;
+}
+
 #graphContainer {
-  height: 80vh;
-  float: left;
-  width: 100%;
-  position: relative;
+  height: 100%;
 }
 
 .loading {
@@ -14,6 +16,12 @@
   float: left;
   width: 100%;
   position: relative;
+  height: 170px;
+  overflow-y: auto;
+}
+
+#info {
+  padding: 8px;
 }
 
 #filter {

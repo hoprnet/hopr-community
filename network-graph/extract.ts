@@ -1,20 +1,32 @@
-import * as fs from 'fs';
+import { EthersClient } from './src/app/clients/ethers.client';
+import { TheGraphClient } from './src/app/clients/thegraph.client';
 import { ChainType } from './src/app/enums/chain.enum';
-import { ConfigChainModel, ConfigModel } from './src/app/models/config.model';
-import { ChainProxy } from './src/app/proxies/chain.proxy';
+import { GraphqlChainExtractor } from './src/app/extractors/graphql.extractor';
+import { RpcChainExtractor } from './src/app/extractors/rpc.extractor';
+import { ChainConfigModel, ConfigModel } from './src/app/models/config.model';
+import { EventModel } from './src/app/models/event.model';
+import { DefaultLoggerService, Logger } from './src/app/services/logger.service';
 import { CommonUtil } from './src/app/utils/common.util';
-import { JsonUtil } from './src/app/utils/json.util';
+import { LocalFileUtil } from './src/app/utils/local-file.util';
 
 class Extractor {
 
-  private proxy: ChainProxy;
+  private logger: Logger;
+  private fileUtil: LocalFileUtil;
+  private extractor1: GraphqlChainExtractor;
+  private extractor2: RpcChainExtractor;
 
   constructor() {
-    this.proxy = new ChainProxy();
+    this.logger = new DefaultLoggerService();
+    this.fileUtil = new LocalFileUtil();
+    this.fileUtil.baseDir = __dirname;
+    this.extractor1 = new GraphqlChainExtractor(this.logger, new TheGraphClient());
+    this.extractor2 = new RpcChainExtractor(this.logger, new EthersClient(this.logger, this.fileUtil));
   }
 
   public async extractAsync(): Promise<void> {
-    const config = new ConfigModel(JSON.parse(fs.readFileSync('./src/assets/config.json', 'utf8')));
+    const rawConfig = await this.fileUtil.readFileAsync('./src/assets/config.json');
+    const config = new ConfigModel(JSON.parse(rawConfig));
     for (const chain of config.chains) {
       if (chain.type !== ChainType.TEST) {
         await this.extractChainAsync(chain);
@@ -22,16 +34,28 @@ class Extractor {
     }
   }
 
-  private async extractChainAsync(chain: ConfigChainModel): Promise<void> {
+  private async extractChainAsync(chain: ChainConfigModel): Promise<void> {
     const chainName = ChainType[chain.type];
-    if (CommonUtil.isNullOrWhitespace(chain.rpcProviderUrl)) {
-      console.log(`Skipping ${chainName} because rpcProviderUrl is empty.`);
-      return;
+    this.logger.info(`Extract ${chainName} started.`)();
+    let events: EventModel[];
+    if (CommonUtil.isNullOrWhitespace(chain.theGraphUrl)) {
+      this.logger.info(`Skipping GraphQL extraction because theGraphUrl is empty.`)();
+    } else {
+      // Use GraphQL extractor
+      events = await this.extractor1.extractAsync(chain);
     }
-    console.log(`Extract ${chainName} started.`);
-    const events = await this.proxy.loadRawData(chain);
-    console.log(`Extract ${chainName} ended.`);
-    fs.writeFileSync(`./src/assets/data/${chainName}_EVENTS.json`, JsonUtil.toString(events), 'utf8');
+    if ((!events || events?.length <= 0)) {
+      if (CommonUtil.isNullOrWhitespace(chain.rpcProviderUrl)) {
+        this.logger.info(`Skipping RPC extraction because rpcProviderUrl is empty.`)();
+      } else {
+        // Use RPC extractor
+        events = await this.extractor2.extractAsync(chain);
+      }
+    }
+    if (events && events.length > 0) {
+      this.fileUtil.writeFile(CommonUtil.toJsonString(events), `./src/assets/data/${chainName}_EVENTS.json`);
+    }
+    this.logger.info(`Extract ${chainName} ended.`)();
   }
 }
 

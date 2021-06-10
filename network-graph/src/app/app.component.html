@@ -1,19 +1,53 @@
-HOPR network graph
+<div id="app">
+  <div id="header">
+    <span>HOPR network graph</span>
+    <div *ngIf="!isLoading">
+      <select (change)="changeChain($event)">
+        <option [value]="chain.type" [selected]="chain.type === selectedChainType" *ngFor="let chain of chains">
+          {{chain.name}}
+        </option>
+      </select>
 
-<select (change)="changeChain($event)" #dropdown>
-  <option [value]="chain.type" [selected]="chain.type === selectedChainType" *ngFor="let chain of chains">{{chain.name}}
-  </option>
-</select>
+      min. weight <input type="range" min="0" max="100" step="1" [value]="minWeight" (change)="changeMinWeight($event)">
+      {{minWeight}}
 
-min. weight <input type="range" min="0" max="100" step="1" [value]="minWeight" (change)="changeMinWeight($event)">
-{{minWeight}}
+      <select (change)="changeLibrary($event)">
+        <option [value]="library.type" [selected]="library.type === selectedLibraryType"
+          *ngFor="let library of libraries">
+          {{library.name}}
+        </option>
+      </select>
 
-<select (change)="changeLibrary($event)" #dropdown>
-  <option [value]="library.type" [selected]="library.type === selectedLibraryType" *ngFor="let library of libraries">
-    {{library.name}}
-  </option>
-</select>
+      <button *ngIf="showStopSimulationButton" (click)="stopSimulation()">Stop simulation</button>
+    </div>
+  </div>
 
-<button *ngIf="showStopSimulationButton" (click)="stopSimulation()">Stop simulation</button>
+  <div id="main">
+    <hopr-logs [hidden]="showGraph"></hopr-logs>
+    <hopr-network-graph *ngIf="showGraph"></hopr-network-graph>
+  </div>
 
-<hopr-network-graph></hopr-network-graph>
+  <div id="footer">
+    <div *ngIf="!isLoading; else showLoadingBlock">
+      <div *ngIf="selectedChainStat?.extractSuccess; else extractFailedBlock">
+        Last block: {{selectedChainStat.lastBlock}}
+      </div>
+      <ng-template #extractFailedBlock>Load failed</ng-template>
+      <div *ngIf="selectedChainStat?.source">
+        &nbsp;/ Source:
+        <select (change)="changeSource($event)">
+          <option [value]="source.type" [selected]="source.type === selectedChainStat.source"
+            *ngFor="let source of sources">
+            {{source.name}}
+          </option>
+        </select>
+      </div>
+      <button (click)="reload()">Reload</button>
+    </div>
+    <ng-template #showLoadingBlock>Loading...</ng-template>
+  </div>
+
+  <div id="appVersion">
+    {{appVersion}}
+  </div>
+</div>

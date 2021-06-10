@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AppConstants } from '../../app.constants';
+import { ChainTxEventType } from '../../enums/chain.enum';
 import { GraphEventType, GraphLibraryType } from '../../enums/graph.enum';
 import { ChainFilterItemModel } from '../../models/chain.model';
+import { TransferEventModel } from '../../models/event.model';
 import { BaseGraphModel, EdgeGraphModel, GraphEventModel, NodeGraphModel } from '../../models/graph.model';
 import { ConfigService } from '../../services/config.service';
 import { GraphService } from '../../services/graph.service';
@@ -14,11 +17,21 @@ import { GraphService } from '../../services/graph.service';
 
 export class GraphComponent implements OnInit, OnDestroy {
 
+  private _showTransfers: boolean;
+
   private subs: Subscription[] = [];
 
   public node: NodeGraphModel;
   public edge: EdgeGraphModel;
+  public transfers: TransferEventModel[];
   public message: string;
+
+  public graphLibraries = {
+    d3: GraphLibraryType.D3,
+    cytoscape: GraphLibraryType.CYTOSCAPE,
+    stardust: GraphLibraryType.STARDUST,
+    d3canvas: GraphLibraryType.D3_CANVAS
+  };
 
   constructor(private configService: ConfigService, private graphService: GraphService) {
   }
@@ -47,7 +60,7 @@ export class GraphComponent implements OnInit, OnDestroy {
     if (data) {
       switch (data.type) {
         case GraphEventType.DATA_CHANGED:
-          this.onDataChanged(data.payload);
+          this.onDataChanged(this.graphService.currentData);
           break;
         default:
           break;
@@ -58,6 +71,8 @@ export class GraphComponent implements OnInit, OnDestroy {
   private onDataChanged(data: any): void {
     this.node = undefined;
     this.edge = undefined;
+    this.transfers = undefined;
+    this._showTransfers = false;
     if (Array.isArray(data?.nodes) && data.nodes.length > 0) {
       this.message = undefined;
     } else {
@@ -65,16 +80,24 @@ export class GraphComponent implements OnInit, OnDestroy {
     }
   }
 
+  public get showTransfers(): boolean {
+    return this._showTransfers || this.transfers?.length <= 100;
+  }
+
   public nodeChange(event: BaseGraphModel): void {
+    this._showTransfers = false;
     if (event instanceof NodeGraphModel) {
       this.node = event;
+      this.transfers = this.node.scratch.transfers;
       this.edge = undefined;
     } else if (event instanceof EdgeGraphModel) {
       this.edge = event;
+      this.transfers = this.edge.scratch.transfers;
       this.node = undefined;
     } else {
       this.node = undefined;
       this.edge = undefined;
+      this.transfers = undefined;
     }
   }
 
@@ -82,12 +105,30 @@ export class GraphComponent implements OnInit, OnDestroy {
     return this.graphService.isLoading;
   }
 
-  public get useCytoscapeLibrary(): boolean {
-    return this.configService.config.selectedGraphLibraryType === GraphLibraryType.CYTOSCAPE;
+  public get selectedGraphLibraryType(): GraphLibraryType {
+    return this.configService.config.selectedGraphLibraryType;
   }
 
   public get filter(): Map<string, ChainFilterItemModel> {
     return this.graphService.filter;
+  }
+
+  public revealTransfers(): void {
+    this._showTransfers = true;
+  }
+
+  public getTransferColor(transfer: TransferEventModel): string {
+    if (transfer) {
+      switch (transfer.type) {
+        case ChainTxEventType.BURN:
+          return AppConstants.TX_EVENT_BURN_COLOR;
+        case ChainTxEventType.MINT:
+          return AppConstants.TX_EVENT_MINT_COLOR;
+        default:
+          break;
+      }
+    }
+    return '#000';
   }
 
   public buildAddressUrl(address: string): string {

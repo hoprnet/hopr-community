@@ -1,3 +1,42 @@
-button {
+button,
+select {
   margin: 0 5px 0 5px;
+}
+
+#app {
+  min-width: 740px;
+}
+
+#header {
+  margin: 8px;
+}
+
+#header div {
+  display: inline-block;
+}
+
+#main {
+  height: 70vh;
+  float: left;
+  width: 100%;
+  position: relative;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 5px;
+  background-color: #fff;
+}
+
+#footer div {
+  display: inline-flex;
+}
+
+#appVersion {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
 }
