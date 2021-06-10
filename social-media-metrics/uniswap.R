@@ -75,7 +75,7 @@ ggplot() +
     geom_point() +
     scale_x_datetime(date_breaks = "months" , date_labels = "%b-%y")+
     labs(x = "Time", y = "HOPR-DAI Pool Swaps in USD", title = "Time Series of HOPR-DAI Pool Swaps")
-ggsave("~/Desktop/hopr/uniswap_plot/Uniswap_Volume_Over_Time.png", dpi = 300, width = 8, height = 6)
+ggsave("uniswap_plot/Uniswap_Volume_Over_Time.png", dpi = 300, width = 8, height = 6)
 
 
 ## Box plot including event data
@@ -96,7 +96,7 @@ ggplot(data = data_p2, aes(x = Weekday, y = amountUSD)) +
         x = "Weekday",
         y = "HOPR-DAI Pool Swaps in USD"
     )
-ggsave("~/Desktop/hopr/uniswap_plot/Uniswap_Volume_Weekday_Wise.png", dpi = 300, width = 8, height = 6)
+ggsave("uniswap_plot/Uniswap_Volume_Weekday_Wise.png", dpi = 300, width = 8, height = 6)
 
 
 

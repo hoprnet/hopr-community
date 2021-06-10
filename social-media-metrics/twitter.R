@@ -3,11 +3,11 @@ library(lubridate)
 library(tidyverse)
 
 ## Read in data
-data1 <- read.csv("~/Desktop/hopr/twit_data/tweet_activity_metrics_hoprnet_20201201_20210101_en.csv")
-data2 <- read.csv("~/Desktop/hopr/twit_data/tweet_activity_metrics_hoprnet_20210101_20210201_en.csv")
-data3 <- read.csv("~/Desktop/hopr/twit_data/tweet_activity_metrics_hoprnet_20210201_20210301_en.csv")
-data4 <- read.csv("~/Desktop/hopr/twit_data/tweet_activity_metrics_hoprnet_20210301_20210401_en.csv")
-data5 <- read.csv("~/Desktop/hopr/twit_data/tweet_activity_metrics_hoprnet_20210401_20210414_en.csv")
+data1 <- read.csv("twit_data/tweet_activity_metrics_hoprnet_20201201_20210101_en.csv")
+data2 <- read.csv("twit_data/tweet_activity_metrics_hoprnet_20210101_20210201_en.csv")
+data3 <- read.csv("twit_data/tweet_activity_metrics_hoprnet_20210201_20210301_en.csv")
+data4 <- read.csv("twit_data/tweet_activity_metrics_hoprnet_20210301_20210401_en.csv")
+data5 <- read.csv("twit_data/tweet_activity_metrics_hoprnet_20210401_20210414_en.csv")
 data <- do.call(rbind,list(data1,data2,data3,data4,data5))
 data$Time <- as_datetime(data$time,format="%Y-%m-%d %H:%M")
 data <- data[order(data$Time),]
@@ -59,7 +59,7 @@ ggplot() +
     geom_point() +
     scale_x_datetime(date_breaks = "months" , date_labels = "%b-%y")+
     labs(x = "Time", y = "Engagements", title = "Time Series of Engagements")
-ggsave("~/Desktop/hopr/twit_plot/Twitter_Engagement_Over_Time_Tweet_Wise.png", dpi = 300, width = 8, height = 6)
+ggsave("twit_plot/Twitter_Engagement_Over_Time_Tweet_Wise.png", dpi = 300, width = 8, height = 6)
 
 ## Line Plot Cummulative per day
 # plot(data_d$Date,data_d$engagements,type="l",xlab="Day",ylab="Engagements")
@@ -75,7 +75,7 @@ ggplot() +
     geom_point() +
     scale_x_datetime(date_breaks = "months" , date_labels = "%b-%y")+
     labs(x = "Time", y = "Engagements", title = "Time Series of Engagements")
-ggsave("~/Desktop/hopr/twit_plot/Twitter_Engagement_Over_Time_Day_Wise.png", dpi = 300, width = 8, height = 6)
+ggsave("twit_plot/Twitter_Engagement_Over_Time_Day_Wise.png", dpi = 300, width = 8, height = 6)
 
 ## Box plot including event data
 data_p1 <- data_d %>%
@@ -95,7 +95,7 @@ ggplot(data = data_p2, aes(x = Weekday, y = engagements)) +
         x = "Weekday",
         y = "Number of Tweet Engagements"
     )
-ggsave("~/Desktop/hopr/twit_plot/Twitter_Engagement_Weekday_Wise_All_Data.png", dpi = 300, width = 8, height = 6)
+ggsave("twit_plot/Twitter_Engagement_Weekday_Wise_All_Data.png", dpi = 300, width = 8, height = 6)
 
 ## Box plot not including event data
 data_p1 <- data_ev_ex %>%
@@ -115,4 +115,4 @@ ggplot(data = data_p2, aes(x = Weekday, y = engagements)) +
         x = "Weekday",
         y = "Number of Tweet Engagements"
     )
-ggsave("~/Desktop/hopr/twit_plot/Twitter_Engagement_Weekday_Wise_Events_Excluded.png", dpi = 300, width = 8, height = 6)
+ggsave("twit_plot/Twitter_Engagement_Weekday_Wise_Events_Excluded.png", dpi = 300, width = 8, height = 6)

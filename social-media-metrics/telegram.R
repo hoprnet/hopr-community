@@ -5,7 +5,7 @@ library(tidyverse)
 options(scipen=99)
 
 ## Read in data
-data <- as.data.frame(fromJSON("~/Desktop/hopr/telegram_data/hopr_tg_message.json"))
+data <- as.data.frame(fromJSON("telegram_data/hopr_tg_message.json"))
 names(data) <- c("Day","Num_Msgs")
 data$Day <- as_datetime(data$Day/1000)
 data$Weekday <- format(data$Day,"%w")
@@ -35,7 +35,7 @@ ggplot() +
     geom_point() +
     scale_x_datetime(date_breaks = "months" , date_labels = "%b-%y")+
     labs(x = "Time", y = "Number of Telegram Messages", title = "Time Series of Number of Telegram Messages")
-ggsave("~/Desktop/hopr/telegram_plot/Telegram_Messages_Over_Time.png", dpi = 300, width = 8, height = 6)
+ggsave("telegram_plot/Telegram_Messages_Over_Time.png", dpi = 300, width = 8, height = 6)
 
 
 ## Box plot including event data
@@ -57,7 +57,7 @@ ggplot(data = data_p2, aes(x = Weekday, y = Num_Msgs)) +
         x = "Weekday",
         y = "Number of Telegram Messages"
     )
-ggsave("~/Desktop/hopr/telegram_plot/Telegram_Messages_Weekday_Wise_All_Data.png", dpi = 300, width = 8, height = 6)
+ggsave("telegram_plot/Telegram_Messages_Weekday_Wise_All_Data.png", dpi = 300, width = 8, height = 6)
 
 
 ## Box plot not including event data
@@ -81,4 +81,4 @@ ggplot(data = data_p2, aes(x = Weekday, y = Num_Msgs)) +
         x = "Weekday",
         y = "Number of Telegram Messages"
     )
-ggsave("~/Desktop/hopr/telegram_plot/Telegram_Messages_Weekday_Wise_Events_Excluded.png", dpi = 300, width = 8, height = 6)
+ggsave("telegram_plot/Telegram_Messages_Weekday_Wise_Events_Excluded.png", dpi = 300, width = 8, height = 6)
