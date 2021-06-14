@@ -23,7 +23,7 @@ type Channel @entity {
   id: ID!
   source: Account!
   destination: Account!
-  balannce: BigInt!
+  balance: BigInt!
   commitment: Bytes!
   ticketEpoch: BigInt!
   ticketIndex: BigInt!
