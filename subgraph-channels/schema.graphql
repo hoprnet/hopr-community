@@ -11,6 +11,7 @@ type Account @entity {
 enum ChannelStatus {
   CLOSED
   OPEN
+  WAITING_FOR_COMMITMENT
   PENDING_TO_CLOSE
 }
 
@@ -20,23 +21,15 @@ type Channel @entity {
     https://github.com/hoprnet/hoprnet/blob/bb42481595ff374dfacd58a10954898630bc046a/packages/utils/src/types/channelEntry.ts#L8
   "
   id: ID!
-  partyA: Account!
-  partyB: Account!
+  source: Account!
+  destination: Account!
+  balannce: BigInt!
+  commitment: Bytes!
+  ticketEpoch: BigInt!
+  ticketIndex: BigInt!
   status: ChannelStatus!
-  epoch: BigInt!
-  deposit: BigInt!
-  partyABalance: BigInt!
-  partyBBalance: BigInt!
-  partyACommitment: Bytes!
-  partyBCommitment: Bytes!
-  partyATicketEpoch: BigInt!
-  partyBTicketEpoch: BigInt!
-  partyATicketIndex: BigInt!
-  partyBTicketIndex: BigInt!
   "timestamp when it was opened"
   openedAt: BigInt
-  openedBy: Account
   "timestamp when it was closed"
   closedAt: BigInt
-  closedBy: Account
 }
