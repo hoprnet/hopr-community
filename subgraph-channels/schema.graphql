@@ -18,7 +18,7 @@ enum ChannelStatus {
 type Channel @entity {
   "
     the channel id, this should be computed like:
-    https://github.com/hoprnet/hoprnet/blob/bb42481595ff374dfacd58a10954898630bc046a/packages/utils/src/types/channelEntry.ts#L8
+    https://github.com/hoprnet/hoprnet/blob/26abb110bc5d18b84786066676b379bbc00a331c/packages/utils/src/types/channelEntry.ts#L14
   "
   id: ID!
   source: Account!
