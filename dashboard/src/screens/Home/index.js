@@ -27,20 +27,20 @@ const HomeScreen = () => {
     <div className="home-screen fadeIn">
       <SettingsModal />
       <div className="wrapper">
-        <Row justify="space-between" gutter={[40]}>
-          <Col xs={12} xl={12}>
+        <Row justify="space-between" gutter={[40]} className="header">
+          <Col xs={12} xl={12} className="image-left">
             <img src={BrandLogo} alt="HOPR" />
+            <InputFilter />
           </Col>
-          <Col xs={12} xl={7} className="align-center">
+          <Col xs={12} xl={7} className="align-right">
             <div className="token-total">
               <div className="title-head">
-                <h3>{t('HOPR_TOTAL_COUNT')}</h3>
-                <h1>{total}</h1>
+                <span>{t('HOPR_TOTAL_COUNT')}: </span>
+                <span className="qty">{total} wxHOPR</span>
               </div>
             </div>
           </Col>
         </Row>
-        <InputFilter />
         <div className="hopr-table">
           <HoprAddressTable dataSource={data} />
         </div>
