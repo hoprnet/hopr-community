@@ -1,0 +1,1 @@
+export const STAKE_PER_CHANNEL = 5;

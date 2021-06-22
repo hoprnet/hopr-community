@@ -16,11 +16,11 @@ export class Channel {
   id: ChannelId;
   source: HoprNode;
   destination: HoprNode;
-  balance: Number;
+  balance: number;
 
   static getChannelId = (src: HoprNode, dest: HoprNode) => new ChannelId(src.id, dest.id)
 
-  constructor(source: HoprNode, destination: HoprNode, balance: Number, id: ChannelId) {
+  constructor(source: HoprNode, destination: HoprNode, balance: number, id: ChannelId) {
     this.id = id || Channel.getChannelId(source, destination)
     this.source = source;
     this.destination = destination
@@ -35,11 +35,13 @@ export class Channel {
 export class HoprNode {
   private _id: HOPR_ID;
   private _channels: Map<string, Channel>;
-  constructor(id: HOPR_ID) {
+  private _balance: number;
+  constructor(id: HOPR_ID, balance: number = 0) {
     this._id = id;
     this._channels = new Map();
+    this._balance = balance;
   }
-  open(dest: HoprNode, balance: Number) {
+  open(dest: HoprNode, balance = 0.1) {
     try {
       if (this._id == dest.id) {
         throw Error(`Node ${this.id} can not open channel to itself, ${dest.id}`)
@@ -48,11 +50,19 @@ export class HoprNode {
       if (this._channels.get(channelId.toString())) {
         throw Error(`Channel with Id ${channelId} has already been created.`)
       } else {
-        this._channels.set(channelId.toString(), new Channel(this, dest, balance, channelId))
+        if (balance > this._balance) {
+          throw Error(`Trying to open a channel with a balance of ${this._balance} for ${balance} failed.`)
+        } else {
+          this._channels.set(channelId.toString(), new Channel(this, dest, balance, channelId))
+          this._balance -= balance;
+        }
       }
     } catch(e) {
       console.log(`Unable to open channel from ${this.id} to ${dest.id}`)
     }
+  }
+  hasFunds() {
+    return this._balance > 0;
   }
   public get id() {
     return this._id;
@@ -61,7 +71,7 @@ export class HoprNode {
     return this._channels;
   }
   toJson() {
-    return ({ id: this._id, channels: this.channels.size })
+    return ({ id: this._id, channels: this.channels.size, balance: this._balance })
   }
 }
 
@@ -76,30 +86,51 @@ class Links {
 }
 
 export class Network {
-  private nodes: HoprNode[];
+  private _nodes: HoprNode[];
+  private _coverTrafficNodes: HoprNode[];
 
   constructor(nodes: HoprNode[]) {
-    this.nodes = nodes;
+    this._nodes = nodes;
+    this._coverTrafficNodes = [];
   }
 
   static pickRandom(arr: HoprNode[]) {
     return arr[~~(Math.random() * arr.length)]
   }
 
-  simulateOpening(runs: Number) {
+  simulateOpening(runs: number) {
     [...Array(runs).keys()].map(() =>
-      Network.pickRandom(this.nodes)
-        .open(Network.pickRandom(this.nodes), 0.1))
+      Network.pickRandom(this._nodes)
+        .open(Network.pickRandom(this._nodes), 0.1))
+  }
+
+  addCoverTrafficNode(ctn: HoprNode) {
+    this._coverTrafficNodes.push(ctn);
   }
 
   print() {
-    const nodesToPrint = this.nodes.map(node => node.toJson())
+    const nodesToPrint = this._nodes.map(node => node.toJson())
     printTable(nodesToPrint)
     const channelsToPrint: any = []
-    this.nodes.map(
+    this._nodes.map(
       node => node.channels.forEach(channel => channelsToPrint.push(channel.toJson()))
     )
     printTable(channelsToPrint)
+  }
+  printCoverTraffic() {
+    console.log('##### Cover Traffic Table #####')
+    const nodesToPrint = this._coverTrafficNodes.map(node => node.toJson())
+    printTable(nodesToPrint);
+    const channelsToPrint: any = []
+    this._coverTrafficNodes.map(
+      node => node.channels.forEach(channel => channelsToPrint.push(channel.toJson())))
+    printTable(channelsToPrint)
+  }
+  public get nodes() {
+    return this._nodes;
+  }
+  public get coverTrafficNodes() {
+    return this._coverTrafficNodes;
   }
 }
 
@@ -107,4 +138,10 @@ export enum HOPR_IDS {
   'Alice', 'Bob', 'Charlie', 'Dave', 'Eryn'
 }
 
-export type HOPR_ID = HOPR_IDS.Alice | HOPR_IDS.Bob | HOPR_IDS.Charlie | HOPR_IDS.Dave | HOPR_IDS.Eryn
+export type HOPR_ID =
+  HOPR_IDS.Alice |
+  HOPR_IDS.Bob |
+  HOPR_IDS.Charlie |
+  HOPR_IDS.Dave |
+  HOPR_IDS.Eryn |
+  'CT'
