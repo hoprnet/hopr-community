@@ -11,4 +11,5 @@ const createNodes = (): HoprNode[] => {
 }
 
 const network = new Network(createNodes())
+network.simulateOpening(5);
 network.print()

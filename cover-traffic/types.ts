@@ -26,28 +26,42 @@ export class Channel {
     this.destination = destination
     this.balance = balance;
   }
+
+  toJson() {
+    return ({ id: this.id, source: this.source.id, destination: this.destination.id, balance: this.balance })
+  }
 }
 
 export class HoprNode {
   private _id: HOPR_ID;
-  private channels: Map<string, Channel>;
+  private _channels: Map<string, Channel>;
   constructor(id: HOPR_ID) {
     this._id = id;
-    this.channels = new Map();
+    this._channels = new Map();
   }
   open(dest: HoprNode, balance: Number) {
-    const channelId = Channel.getChannelId(this, dest)
-    if (this.channels.get(channelId.toString())) {
-      throw Error(`Channel with Id ${channelId} has already been created.`)
-    } else {
-      this.channels.set(channelId.toString(), new Channel(this, dest, balance, channelId))
+    try {
+      if (this._id == dest.id) {
+        throw Error(`Node ${this.id} can not open channel to itself, ${dest.id}`)
+      }
+      const channelId = Channel.getChannelId(this, dest)
+      if (this._channels.get(channelId.toString())) {
+        throw Error(`Channel with Id ${channelId} has already been created.`)
+      } else {
+        this._channels.set(channelId.toString(), new Channel(this, dest, balance, channelId))
+      }
+    } catch(e) {
+      console.error('Unable to open channel', e)
     }
   }
   public get id() {
     return this._id;
   }
+  public get channels() {
+    return this._channels;
+  }
   toJson() {
-    return ({ id: this._id, channels: Object.keys(this.channels).length })
+    return ({ id: this._id, channels: this.channels.size })
   }
 }
 
@@ -68,9 +82,24 @@ export class Network {
     this.nodes = nodes;
   }
 
+  static pickRandom(arr: HoprNode[]) {
+    return arr[~~(Math.random() * arr.length)]
+  }
+
+  simulateOpening(runs: Number) {
+    [...Array(runs).keys()].map(() =>
+      Network.pickRandom(this.nodes)
+        .open(Network.pickRandom(this.nodes), 0.1))
+  }
+
   print() {
     const nodesToPrint = this.nodes.map(node => node.toJson())
-    printTable(nodesToPrint);
+    printTable(nodesToPrint)
+    const channelsToPrint: any = []
+    this.nodes.map(
+      node => node.channels.forEach(channel => channelsToPrint.push(channel.toJson()))
+    )
+    printTable(channelsToPrint)
   }
 }
 
