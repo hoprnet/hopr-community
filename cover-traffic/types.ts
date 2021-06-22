@@ -61,6 +61,11 @@ export class HoprNode {
       console.log(`Unable to open channel from ${this.id} to ${dest.id}`)
     }
   }
+  opennedChannelsImmediateNodes(): HoprNode[] {
+    const immediateNodes = []
+    this._channels.forEach(channel => immediateNodes.push(channel.destination))
+    return immediateNodes;
+  }
   hasFunds() {
     return this._balance > 0;
   }
