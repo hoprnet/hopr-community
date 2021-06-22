@@ -1,4 +1,4 @@
-import { coverTrafficOpeningAlgorithm } from "./formulae";
+import { coverTrafficOpeningAlgorithm, coverTrafficPathFindingAndSendingAlgorithm } from "./formulae";
 import { HoprNode, HOPR_IDS, HOPR_ID, Network } from "./types"
 
 /*
@@ -17,4 +17,5 @@ network.print()
 const coverTrafficNode = new HoprNode('CT', 10)
 network.addCoverTrafficNode(coverTrafficNode);
 coverTrafficOpeningAlgorithm(network.nodes, network.coverTrafficNodes[0])
+coverTrafficPathFindingAndSendingAlgorithm(network.nodes, network.coverTrafficNodes[0])
 network.printCoverTraffic()

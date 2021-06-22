@@ -62,7 +62,7 @@ export class HoprNode {
     }
   }
   opennedChannelsImmediateNodes(): HoprNode[] {
-    const immediateNodes = []
+    const immediateNodes: HoprNode[] = []
     this._channels.forEach(channel => immediateNodes.push(channel.destination))
     return immediateNodes;
   }
@@ -99,8 +99,15 @@ export class Network {
     this._coverTrafficNodes = [];
   }
 
-  static pickRandom(arr: HoprNode[]) {
+  static pickRandom(arr: HoprNode[]): HoprNode {
     return arr[~~(Math.random() * arr.length)]
+  }
+
+  static removeRandom(arr: HoprNode[]): HoprNode {
+    const index = ~~(Math.random() * arr.length)
+    const node = arr[index]
+    arr.splice(index, 1);
+    return node;
   }
 
   simulateOpening(runs: number) {
