@@ -21,6 +21,11 @@ const HoprNodeColumns = [
     dataIndex: 'hopr_chanel_status',
     id: 'hopr_chanel_status',
   },
+  {
+    title: 'HOPR_TOTAL_CHANNELS',
+    dataIndex: 'hopr_total_channels',
+    id: 'hopr_total_channels',
+  },
 ];
 
 export function useNodeColumns() {

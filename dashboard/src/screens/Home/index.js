@@ -15,6 +15,7 @@ function generateData() {
       hopr_address: '10x' + parseInt(Math.random() * 1000000000000),
       hopr_staked_amount: parseInt(Math.random() * 100),
       hopr_total_amount: parseInt(Math.random() * 1000),
+      hopr_total_channels: parseInt(Math.random() * 100),
     });
   }
   return data;
@@ -39,6 +40,14 @@ const HomeScreen = () => {
                 <span className="qty">{total} wxHOPR</span>
               </div>
             </div>
+          </Col>
+        </Row>
+        <Row justify="space-between" className="sub-head">
+          <Col>
+            <h2>HOPR Channels</h2>
+          </Col>
+          <Col>
+            <h2>Explore</h2>
           </Col>
         </Row>
         <div className="hopr-table">
