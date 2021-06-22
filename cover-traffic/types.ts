@@ -51,7 +51,7 @@ export class HoprNode {
         this._channels.set(channelId.toString(), new Channel(this, dest, balance, channelId))
       }
     } catch(e) {
-      console.error('Unable to open channel', e)
+      console.log(`Unable to open channel from ${this.id} to ${dest.id}`)
     }
   }
   public get id() {
