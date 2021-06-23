@@ -59,11 +59,25 @@ const HomeScreen = () => {
           <div className="container">
             <div className="twitter-link">
               <FontAwesomeIcon icon={faTwitter} className="anticon" />
-              @hoprnet.
+
+              <a
+                href="https://twitter.com/hoprnet"
+                target="_blank"
+                rel="noreferrer"
+              >
+                @hoprnet.
+              </a>
             </div>
             <div className="twitter-link">
               <FontAwesomeIcon icon={faTwitter} className="anticon" />
-              #HOPRNetwork
+
+              <a
+                href="https://twitter.com/hashtag/HOPRNetwork"
+                target="_blank"
+                rel="noreferrer"
+              >
+                #HOPRNetwork
+              </a>
             </div>
           </div>
         </div>
