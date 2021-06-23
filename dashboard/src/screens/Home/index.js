@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import HoprAddressTable from '../../components/tables/HoprAddress';
 import InputFilter from '../../components/entry/InputFilter';
 import SettingsModal from '../../components/layout/SettingsModal';
@@ -52,6 +54,18 @@ const HomeScreen = () => {
         </Row>
         <div className="hopr-table">
           <HoprAddressTable dataSource={data} />
+        </div>
+        <div className="social-section">
+          <div className="container">
+            <div className="twitter-link">
+              <FontAwesomeIcon icon={faTwitter} className="anticon" />
+              @hoprnet.
+            </div>
+            <div className="twitter-link">
+              <FontAwesomeIcon icon={faTwitter} className="anticon" />
+              #HOPRNetwork
+            </div>
+          </div>
         </div>
       </div>
     </div>

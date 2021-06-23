@@ -51,8 +51,12 @@ const HoprAddressTable = props => {
       };
     },
     rowKey: e => e._id || e.hopr_address,
-    pagination: false,
     scroll: { y: '50vh' },
+    pagination: {
+      simple: true,
+      position: ['bottomCenter'],
+      pageSize: 7,
+    },
     ...props,
   };
   return <Table {...tableProps} />;
