@@ -11,7 +11,7 @@ const HoprNodeTable = props => {
   const tableProps = {
     columns: [
       {
-        title: '',
+        title: '#',
         dataIndex: 'hopr_address',
         render(test, record, index) {
           return index + 1 + '.';
@@ -66,8 +66,12 @@ const HoprNodeTable = props => {
       };
     },
     rowKey: e => e._id || e.hopr_address,
-    pagination: false,
     scroll: { y: '50vh' },
+    pagination: {
+      simple: true,
+      position: ['bottomCenter'],
+      pageSize: 7,
+    },
     ...props,
   };
   return <Table {...tableProps} />;

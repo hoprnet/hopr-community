@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col } from 'antd';
 import HoprNodeTable from '../../components/tables/HoprNode';
 import SettingsModal from '../../components/layout/SettingsModal';
+import InputFilter from '../../components/entry/InputFilter';
 //Assets
 import BrandLogo from '../../assets/brand/logo.svg';
 //Hooks
@@ -28,31 +29,28 @@ const NodeScreen = () => {
     <div className="node-screen fadeIn">
       <SettingsModal />
       <div className="wrapper">
-        <Row justify="space-between" gutter={[40]}>
-          <Col xs={12} xl={12}>
-            <img
-              src={BrandLogo}
-              alt="HOPR"
-              style={{ cursor: 'pointer' }}
-              onClick={() => nav('/')}
-            />
+        <Row justify="space-between" gutter={[40]} className="header">
+          <Col xs={12} xl={12} className="image-left">
+            <img src={BrandLogo} alt="HOPR" onClick={() => nav('/')} />
+            <InputFilter />
           </Col>
-          <Col xs={12} xl={7} className="align-center">
+          <Col xs={12} xl={7} className="align-right">
             <div className="token-total">
               <div className="title-head">
-                {t('HOPR_STAKED')}:<span className="primary-mk">{total}</span>
+                <span>{t('HOPR_TOTAL_COUNT')}: </span>
+                <span className="qty">{total} wxHOPR</span>
               </div>
               <div className="title-head">
-                {t('HOPR_NODE_UPTIME')}:
-                <span className="primary-mk">12H 30min</span>
+                <span>Stacked per node (myself):</span>
+                <span className="qty">{total / 2} wxHOPR</span>
               </div>
             </div>
           </Col>
         </Row>
-        <Row className="input-filter ">
+        <Row className="sub-head ">
           <Col>
-            {t('HOPR_OPENED_CHANNELS')}:
-            <span className="primary-mk">{data.length} </span>
+            Your HORP address:
+            <span>{data.length} </span>
           </Col>
         </Row>
         <div className="hopr-table">
