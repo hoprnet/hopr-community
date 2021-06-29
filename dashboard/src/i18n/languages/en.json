@@ -15,5 +15,10 @@
   "HOPR_RPC": "RPC Endpoint",
   "HOPR_DISCARD": "Discard",
   "HOPR_APPLY": "Apply",
-  "HOPR_TOTAL_CHANNELS": "Total channels"
+  "HOPR_TOTAL_CHANNELS": "Total channels",
+  "CHANNEL_ID": "Channel ID",
+  "HOPR_STATUS": "Status",
+  "HOPR_EPOCH": "Epoch",
+  "HOPR_PARTY_B": "Party B",
+  "HOPR_DEPOSIT": "Deposit"
 }

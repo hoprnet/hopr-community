@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Badge } from 'antd';
+import { Table, Tag } from 'antd';
 //Hooks
 import { useNodeColumns } from '../../hooks/Columns.hook';
 import { useNavigation } from '../../hooks/Nav.hook';
@@ -13,13 +13,13 @@ const HoprNodeTable = props => {
       {
         title: '#',
         dataIndex: 'hopr_address',
-        render(test, record, index) {
-          return index + 1 + '.';
+        width: 100,
+        render() {
+          return 'Channel: ';
         },
       },
       {
-        ...getCol('hopr_address'),
-        className: 'hopr-title',
+        ...getCol('hopr_channel_id'),
         render(value) {
           return (
             <span
@@ -32,32 +32,39 @@ const HoprNodeTable = props => {
         },
       },
       {
-        ...getCol('hopr_staked_amount'),
+        ...getCol('hopr_status'),
         align: 'center',
-        className: 'hopr-title',
-        render(value) {
-          return <div className="hopr-staked">{value} HOPR</div>;
-        },
-      },
-      {
-        ...getCol('hopr_total_amount'),
-        align: 'center',
-        className: 'hopr-title',
-        render(value) {
-          return <div className="hopr-staked">{value} HOPR</div>;
-        },
-      },
-      {
-        ...getCol('hopr_chanel_status'),
-        align: 'center',
-        className: 'hopr-title',
+        width: 100,
         render() {
           return (
             <div>
-              <Badge color="green" dot text="Open"></Badge>
+              <Tag
+                color="#A2EEAE"
+                text="Open"
+                style={{ width: '100%', height: '100%' }}
+              >
+                <span style={{ color: '#000' }}>Open</span>
+              </Tag>
             </div>
           );
         },
+      },
+      {
+        ...getCol('hopr_epoch'),
+        align: 'center',
+        render(value) {
+          return (
+            <div className="hopr-staked">{parseInt(Math.random() * value)}</div>
+          );
+        },
+      },
+      {
+        ...getCol('deposit'),
+        align: 'center',
+      },
+      {
+        ...getCol('party'),
+        align: 'center',
       },
     ],
     onRow: (record, rowIndex) => {

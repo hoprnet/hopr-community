@@ -24,9 +24,14 @@ const NodeScreen = () => {
   const [, t] = useI18n();
   const [total] = useState(348);
   const [data] = useState(generateData());
-  const [, nav] = useNavigation();
+  const [
+    {
+      query: { address },
+    },
+    nav,
+  ] = useNavigation();
   return (
-    <div className="node-screen fadeIn">
+    <div className="home-screen fadeIn">
       <SettingsModal />
       <div className="wrapper">
         <Row justify="space-between" gutter={[40]} className="header">
@@ -50,7 +55,7 @@ const NodeScreen = () => {
         <Row className="sub-head ">
           <Col>
             Your HORP address:
-            <span>{data.length} </span>
+            <span>{address} </span>
           </Col>
         </Row>
         <div className="hopr-table">
