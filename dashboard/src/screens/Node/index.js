@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import HoprNodeTable from '../../components/tables/HoprNode';
 import SettingsModal from '../../components/layout/SettingsModal';
 import InputFilter from '../../components/entry/InputFilter';
@@ -31,7 +33,7 @@ const NodeScreen = () => {
     nav,
   ] = useNavigation();
   return (
-    <div className="home-screen fadeIn">
+    <div className="node-screen fadeIn">
       <SettingsModal />
       <div className="wrapper">
         <Row justify="space-between" gutter={[40]} className="header">
@@ -60,6 +62,32 @@ const NodeScreen = () => {
         </Row>
         <div className="hopr-table">
           <HoprNodeTable dataSource={data} />
+        </div>
+        <div className="social-section">
+          <div className="container">
+            <div className="twitter-link">
+              <FontAwesomeIcon icon={faTwitter} className="anticon" />
+
+              <a
+                href="https://twitter.com/hoprnet"
+                target="_blank"
+                rel="noreferrer"
+              >
+                @hoprnet.
+              </a>
+            </div>
+            <div className="twitter-link">
+              <FontAwesomeIcon icon={faTwitter} className="anticon" />
+
+              <a
+                href="https://twitter.com/hashtag/HOPRNetwork"
+                target="_blank"
+                rel="noreferrer"
+              >
+                #HOPRNetwork
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

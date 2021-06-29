@@ -53,9 +53,7 @@ const HoprNodeTable = props => {
         ...getCol('hopr_epoch'),
         align: 'center',
         render(value) {
-          return (
-            <div className="hopr-staked">{parseInt(Math.random() * value)}</div>
-          );
+          return parseInt(Math.random() * value);
         },
       },
       {
