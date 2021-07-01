@@ -11,7 +11,8 @@ const HoprAddressTable = props => {
   const tableProps = {
     columns: [
       {
-        title: '',
+        title: '#',
+        width: 60,
         dataIndex: 'hopr_address',
         render(test, record, index) {
           return index + 1 + '.';
@@ -19,7 +20,6 @@ const HoprAddressTable = props => {
       },
       {
         ...getCol('hopr_address'),
-        className: 'hopr-title',
         render(value) {
           return (
             <span
@@ -34,9 +34,14 @@ const HoprAddressTable = props => {
       {
         ...getCol('hopr_staked_amount'),
         align: 'center',
-        className: 'hopr-title',
         render(value) {
-          return <div className="hopr-staked">{value}</div>;
+          return <>{value} HOPR</>;
+        },
+      },
+      {
+        ...getCol('hopr_total_channels'),
+        render(text) {
+          return text + ' HOPR';
         },
       },
     ],
@@ -46,8 +51,12 @@ const HoprAddressTable = props => {
       };
     },
     rowKey: e => e._id || e.hopr_address,
-    pagination: false,
     scroll: { y: '50vh' },
+    pagination: {
+      simple: true,
+      position: ['bottomCenter'],
+      pageSize: 7,
+    },
     ...props,
   };
   return <Table {...tableProps} />;
