@@ -13,6 +13,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
     "@graphprotocol/graph-ts": "^0.20.0",
+    "@hoprnet/hopr-utils": "^1.74.0-next.16",
     "mustache": "^4.2.0"
   }
 }
