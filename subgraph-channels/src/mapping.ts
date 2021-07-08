@@ -1,8 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Announcement, ChannelUpdate } from '../generated/HoprChannels/HoprChannels'
 import { Account, Channel } from '../generated/schema'
-import { generateChannelId } from '@hoprnet/hopr-utils/lib/types/channelEntry'
-import { Address } from '@hoprnet/hopr-utils/lib/types/primitives'
 
 export function handleAnnouncement(event: Announcement) {
     const account = new Account(event.params.account.toString());
