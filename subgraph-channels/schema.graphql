@@ -8,10 +8,10 @@ type Account @entity {
   hasAnnounced: Boolean!
 }
 
-enum ChannelStatus {
+enum ChannelStatus @entity {
   CLOSED
-  OPEN
   WAITING_FOR_COMMITMENT
+  OPEN
   PENDING_TO_CLOSE
 }
 
