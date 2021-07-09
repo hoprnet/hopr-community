@@ -18,7 +18,7 @@ services:
       postgres_db: graph-node
       ipfs: "ipfs:5001"
       ethereum: "${ETHEREUM_NETWORK}:${ETHEREUM_ENDPOINT}"
-      GRAPH_LOG: info
+      GRAPH_LOG: debug
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
     ports:
