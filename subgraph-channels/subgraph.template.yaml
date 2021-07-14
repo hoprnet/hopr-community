@@ -1,16 +1,16 @@
 specVersion: 0.0.2
 description: HOPR Channels
-repository: https://github.com/hoprnet/hopr-analytics
+repository: https://github.com/hoprnet/hopr-community
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: HoprChannels
-    network: xdai
+    network: {{network}}
     source:
-      address: "0x2da84C8cf3ce847Fb4C016e17576C660D77C36E1"
       abi: HoprChannels
-      startBlock: 15877153
+      address: "{{channelAddress}}"
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -22,8 +22,8 @@ dataSources:
         - name: HoprChannels
           file: ./abis/HoprChannels.json
       eventHandlers:
-        - event: Announcement(address indexed account,bytes multiaddr)
+        - event: Announcement(indexed address,bytes)
           handler: handleAnnouncement
-        - event: ChannelUpdate(address indexed partyA,address indexed partyB,Channel newState)
+        - event: ChannelUpdate(indexed address,indexed address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
           handler: handleChannelUpdate
       file: ./src/mapping.ts
