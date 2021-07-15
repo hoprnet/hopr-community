@@ -1,22 +1,25 @@
 {
   "name": "nextjs-ethereum-starter",
-  "version": "1.0.0",
+  "version": "independent",
   "private": true,
   "scripts": {
-    "dev": "yarn workspace nextjs-ethereum-starter-frontend dev",
-    "build": "yarn workspace nextjs-ethereum-starter-frontend build",
-    "start": "yarn workspace nextjs-ethereum-starter-frontend start",
-    "chain": "yarn workspace nextjs-ethereum-starter-hardhat chain",
-    "deploy": "yarn workspace nextjs-ethereum-starter-hardhat deploy",
-    "compile": "yarn workspace nextjs-ethereum-starter-hardhat compile"
+    "dev": "yarn workspace frontend dev",
+    "build": "yarn workspace frontend build",
+    "start": "yarn workspace frontend start",
+    "clean:contracts": "yarn workspace hopr-stake clean",
+    "clean:frontend": "yarn workspace frontend clean",
+    "clean": "yarn clean:contracts && yarn clean:frontend",
+    "compile": "yarn clean:contracts && yarn workspace hopr-stake build",
+    "chain": "yarn workspace hopr-stake chain",
+    "deploy": "yarn workspace hopr-stake deploy",
+    "connect": "cp -R packages/hopr-stake/types packages/frontend && cp -R packages/hopr-stake/hardhat/artifacts packages/frontend"
   },
   "workspaces": {
     "packages": [
       "packages/*"
     ],
     "nohoist": [
-      "**/hardhat",
-      "**/hardhat/**"
+      "**"
     ]
   }
 }

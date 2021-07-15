@@ -1,9 +1,10 @@
 {
-  "name": "nextjs-ethereum-starter-frontend",
+  "name": "frontend",
   "author": "@huntarosan",
   "license": "MIT",
   "version": "1.0.0",
   "scripts": {
+    "clean": "rimraf ./.next && rimraf ./artifacts && rimraf ./types",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

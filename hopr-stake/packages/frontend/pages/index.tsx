@@ -2,10 +2,10 @@ import { Box, Button, Divider, Heading, Input, Text } from '@chakra-ui/react'
 import { ChainId, useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
-import { YourContract as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
-import YourContract from '../artifacts/contracts/YourContract.sol/YourContract.json'
+import { HoprStake as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
+import HoprStake from '../artifacts/contracts/HoprStake.sol/HoprStake.json'
 import Layout from '../components/layout/Layout'
-import { YourContract as YourContractType } from '../types/typechain'
+import { HoprStake as HoprStakeType } from '../types'
 
 /**
  * Constants & Helpers
@@ -91,14 +91,14 @@ function HomeIndex(): JSX.Element {
   // call the smart contract, read the current greeting value
   async function fetchContractGreeting() {
     if (library) {
-      const contract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        YourContract.abi,
-        library
-      ) as YourContractType
+      // const contract = new ethers.Contract(
+      //   CONTRACT_ADDRESS,
+      //   HoprStake.abi,
+      //   library
+      // ) as HoprStakeType
       try {
-        const data = await contract.greeting()
-        dispatch({ type: 'SET_GREETING', greeting: data })
+        // const data = await contract.greeting()
+        // dispatch({ type: 'SET_GREETING', greeting: data })
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log('Error: ', err)
@@ -115,14 +115,14 @@ function HomeIndex(): JSX.Element {
         isLoading: true,
       })
       const signer = library.getSigner()
-      const contract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        YourContract.abi,
-        signer
-      ) as YourContractType
-      const transaction = await contract.setGreeting(state.inputValue)
-      await transaction.wait()
-      fetchContractGreeting()
+      // const contract = new ethers.Contract(
+      //   CONTRACT_ADDRESS,
+      //   HoprStake.abi,
+      //   signer
+      // ) as HoprStakeType
+      // const transaction = await contract.setGreeting(state.inputValue)
+      // await transaction.wait()
+      // fetchContractGreeting()
       dispatch({
         type: 'SET_LOADING',
         isLoading: false,
@@ -142,17 +142,7 @@ function HomeIndex(): JSX.Element {
       <Heading as="h1" mb="8">
         Next.js Ethereum Starter
       </Heading>
-      <Button
-        as="a"
-        size="lg"
-        colorScheme="teal"
-        variant="outline"
-        href="https://github.com/ChangoMan/nextjs-ethereum-starter"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Get the source code!
-      </Button>
+      
       <Text mt="8" fontSize="xl">
         This page only works on the ROPSTEN Testnet or on a Local Chain.
       </Text>
