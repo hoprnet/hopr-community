@@ -12,9 +12,9 @@ import { ChainId, useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
 import { HoprStake as LOCAL_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
-import HoprStake from '../artifacts/contracts/HoprStake.sol/HoprStake.json'
+import HoprStakeABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprStake.json'
 import Layout from '../components/layout/Layout'
-import { HoprStake as HoprStakeType } from '../types'
+import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types'
 
 /**
  * Constants & Helpers
@@ -108,7 +108,7 @@ function HomeIndex(): JSX.Element {
     if (library) {
       // const contract = new ethers.Contract(
       //   CONTRACT_ADDRESS,
-      //   HoprStake.abi,
+      //   HoprStakeABI,
       //   library
       // ) as HoprStakeType
       try {
@@ -132,7 +132,7 @@ function HomeIndex(): JSX.Element {
       const signer = library.getSigner()
       // const contract = new ethers.Contract(
       //   CONTRACT_ADDRESS,
-      //   HoprStake.abi,
+      //   HoprStakeABI,
       //   signer
       // ) as HoprStakeType
       // const transaction = await contract.setGreeting(state.inputValue)
