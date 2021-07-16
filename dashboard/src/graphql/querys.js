@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_ACCOUNTS = gql`
-  query GetExchangeRates {
+  query GetAccounts {
     accounts(first: 5) {
       id
       multiaddr
