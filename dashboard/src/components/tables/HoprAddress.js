@@ -4,8 +4,14 @@ import { Table } from 'antd';
 //Hooks
 import { useNodeColumns } from '../../hooks/Columns.hook';
 import { useNavigation } from '../../hooks/Nav.hook';
+import { GET_ACCOUNTS } from '../../graphql';
+import { useQuery } from '@apollo/client';
 
 const HoprAddressTable = props => {
+  const { data } = useQuery(GET_ACCOUNTS);
+  // Getting CORS error
+  console.log(data);
+
   const [, getCol] = useNodeColumns();
   const [, nav] = useNavigation();
   const tableProps = {
