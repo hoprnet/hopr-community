@@ -23,8 +23,8 @@ export interface MetaProps {
 const Head = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
   const router = useRouter()
   const meta: MetaProps = {
-    title: 'Next.js Ethereum Starter',
-    description: 'Ethers.js - Hardhat - Next.js - Typescript',
+    title: 'HOPR Staking',
+    description: 'Lock your HOPR tokens and boost your rewards with collected NFTs!',
     image: `${WEBSITE_HOST_URL}/images/site-preview.png`,
     type: 'website',
     ...customMeta,
@@ -42,7 +42,7 @@ const Head = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
       <meta property="og:title" content={meta.title} />
       <meta property="og:image" content={meta.image} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@huntarosan" />
+      <meta name="twitter:site" content="@hoprnet" />
       <meta name="twitter:title" content={meta.title} />
       <meta name="twitter:description" content={meta.description} />
       <meta name="twitter:image" content={meta.image} />

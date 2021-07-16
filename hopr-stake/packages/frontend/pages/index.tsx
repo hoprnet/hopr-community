@@ -1,4 +1,13 @@
-import { Box, Button, Divider, Heading, Input, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Divider,
+  Heading,
+  Input,
+  Text,
+  Tag,
+  Link,
+} from '@chakra-ui/react'
 import { ChainId, useEthers, useSendTransaction } from '@usedapp/core'
 import { ethers, providers, utils } from 'ethers'
 import React, { useReducer } from 'react'
@@ -16,6 +25,7 @@ const localProvider = new providers.StaticJsonRpcProvider(
 )
 
 const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
+const XDAI_XHOPR_TOKEN_CONTRACT_ADDRESS = ''
 
 /**
  * Prop Types
@@ -83,6 +93,11 @@ function HomeIndex(): JSX.Element {
       ? ROPSTEN_CONTRACT_ADDRESS
       : LOCAL_CONTRACT_ADDRESS
 
+  const XHOPR_TOKEN_CONTRACT_ADDRESS =
+    chainId === ChainId.Ropsten
+      ? XDAI_XHOPR_TOKEN_CONTRACT_ADDRESS
+      : LOCAL_CONTRACT_ADDRESS
+
   // Use the localProvider as the signer to send ETH to our wallet
   const { sendTransaction } = useSendTransaction({
     signer: localProvider.getSigner(),
@@ -140,15 +155,22 @@ function HomeIndex(): JSX.Element {
   return (
     <Layout>
       <Heading as="h1" mb="8">
-        Next.js Ethereum Starter
+        HOPR Staking
       </Heading>
-      
+
       <Text mt="8" fontSize="xl">
-        This page only works on the ROPSTEN Testnet or on a Local Chain.
+        Lock your xHOPR tokens for <Tag size="lg">175 days</Tag> to earn up to
+        18.5% of your staked amount. Increase your APY % by activating NFTs on
+        your account, which can be earned by participating in HOPR testnets and
+        activities. Follow our{' '}
+        <Link href="https://twitter.com/hoprnet">Twitter</Link>
+        account to learn about new events.
       </Text>
       <Box maxWidth="container.sm" p="8" mt="8" bg="gray.100">
-        <Text fontSize="xl">Contract Address: {CONTRACT_ADDRESS}</Text>
-        <Divider my="8" borderColor="gray.400" />
+        <Text fontSize="xl" fontFamily="mono">
+          Contract Address {CONTRACT_ADDRESS}
+        </Text>
+        {/* <Divider my="8" borderColor="gray.400" />
         <Box>
           <Text fontSize="lg">Greeting: {state.greeting}</Text>
           <Button mt="2" colorScheme="teal" onClick={fetchContractGreeting}>
@@ -185,7 +207,7 @@ function HomeIndex(): JSX.Element {
           isDisabled={!isLocalChain}
         >
           Send Funds From Local Hardhat Chain
-        </Button>
+        </Button> */}
       </Box>
     </Layout>
   )

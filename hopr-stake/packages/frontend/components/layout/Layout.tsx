@@ -85,12 +85,12 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
               </NextLink>
               <NextLink href="/graph-example" passHref>
                 <Link px="4" py="1">
-                  Graph Example
+                  Website
                 </Link>
               </NextLink>
               <NextLink href="/signature-example" passHref>
                 <Link px="4" py="1">
-                  Signature Example
+                  Read more about HOPR staking
                 </Link>
               </NextLink>
             </Flex>
@@ -157,8 +157,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       <footer>
         <Container mt="8" py="8" maxWidth="container.xl">
           <Text>
-            Built by{' '}
-            <Link href="https://twitter.com/huntarosan">Hunter Chang</Link>
+            ©2021 HOPR Association, all rights reserved
           </Text>
         </Container>
       </footer>
