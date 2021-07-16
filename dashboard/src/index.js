@@ -7,18 +7,22 @@ import { persistor, store, history } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import Router from './components/Router';
 import ServiceWorkerWrapper from './components/ServiceWorkerWrapper';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './services';
 
 import './styles/index.less';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <ConnectedRouter history={history}>
-        <Router />
-        <ServiceWorkerWrapper />
-      </ConnectedRouter>
-    </PersistGate>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <ConnectedRouter history={history}>
+          <Router />
+          <ServiceWorkerWrapper />
+        </ConnectedRouter>
+      </PersistGate>
+    </Provider>
+  </ApolloProvider>,
   document.getElementById('root')
 );
 
