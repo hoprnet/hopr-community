@@ -6,6 +6,7 @@
     "dev": "yarn workspace frontend dev",
     "build": "yarn workspace frontend build",
     "start": "yarn workspace frontend start",
+    "export": "yarn workspace frontend export",
     "clean:contracts": "yarn workspace hopr-stake clean",
     "clean:frontend": "yarn workspace frontend clean",
     "clean": "yarn clean:contracts && yarn clean:frontend",
