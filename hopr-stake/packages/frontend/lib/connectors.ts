@@ -10,3 +10,14 @@ export const walletconnect = new WalletConnectConnector({
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
 })
+
+export const chainIdToNetwork = (chainId: number) => {
+  switch (chainId) {
+    case 5:
+      return "goerli";
+    case 31337:
+      return "hardhat";
+    default:
+      return "localhost";
+  }
+};

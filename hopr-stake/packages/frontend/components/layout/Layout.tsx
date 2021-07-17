@@ -20,6 +20,8 @@ import { useEthers, useNotifications } from '@usedapp/core'
 import blockies from 'blockies-ts'
 import NextLink from 'next/link'
 import React from 'react'
+import { useEffect, useState } from 'react'
+import { getContractAddresses, IContractAddress } from '../../lib/addresses'
 import Balance from '../Balance'
 import ConnectWallet from '../ConnectWallet'
 import Head, { MetaProps } from './Head'
@@ -58,13 +60,23 @@ interface LayoutProps {
  * Component
  */
 const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
-  const { account, deactivate } = useEthers()
+  const { account, deactivate, chainId } = useEthers()
+  const [ contractAddresses, setContractAddresses ] = useState<IContractAddress>({});
   const { notifications } = useNotifications()
 
   let blockieImageSrc
   if (typeof window !== 'undefined') {
     blockieImageSrc = blockies.create({ seed: account }).toDataURL()
   }
+
+  useEffect(() => {
+    const loadContracts = async() => {
+      console.log('ChainId', chainId)
+      const contractAddresses = await getContractAddresses(chainId);
+      setContractAddresses(contractAddresses);
+    }
+    loadContracts();
+  }, [chainId])
 
   return (
     <>
@@ -100,7 +112,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 alignItems={'center'}
                 justifyContent={['flex-start', null, null, 'flex-end']}
               >
-                <Balance />
+                <Balance xHOPRAddress={contractAddresses.xHOPR} chainId={chainId} account={account}/>
                 <Image ml="4" src={blockieImageSrc} alt="blockie" />
                 <Menu placement="bottom-end">
                   <MenuButton as={Button} ml="4">
