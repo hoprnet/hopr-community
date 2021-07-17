@@ -1,6 +1,7 @@
 import { Text, Tag } from '@chakra-ui/react'
 import { ChainId, useEtherBalance, useTokenBalance } from '@usedapp/core'
 import { utils, constants } from 'ethers'
+import { chainIdToNetwork } from '../lib/connectors'
 
 /**
  * Component
@@ -29,7 +30,7 @@ function Balance({
   return (
     <>
       <Tag mr="5" backgroundColor="lightblue">
-        Network {chainId}
+        {chainIdToNetwork(chainId) || 'Loading...'}
       </Tag>
       <Text fontFamily="mono">
         {xHOPRFinalBalance} <Tag>xHOPR</Tag>

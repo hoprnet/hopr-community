@@ -7,7 +7,7 @@ import {
 } from '@usedapp/core'
 import type { AppProps } from 'next/app'
 import React from 'react'
-import { MulticallContract } from '../artifacts/contracts/contractAddress'
+import Multicall from '@hoprnet/hopr-stake/deployments/localhost/Multicall.json'
 
 const config: Config = {
   readOnlyUrls: {
@@ -24,8 +24,8 @@ const config: Config = {
   ],
   multicallAddresses: {
     ...MULTICALL_ADDRESSES,
-    [ChainId.Hardhat]: MulticallContract,
-    [ChainId.Localhost]: MulticallContract,
+    [ChainId.Hardhat]: Multicall.address,
+    [ChainId.Localhost]: Multicall.address,
   },
 }
 
