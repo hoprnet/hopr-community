@@ -1,4 +1,3 @@
-import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import {
   ChainId,
@@ -9,7 +8,6 @@ import {
 import type { AppProps } from 'next/app'
 import React from 'react'
 import { MulticallContract } from '../artifacts/contracts/contractAddress'
-import { useApollo } from '../lib/apolloClient'
 
 const config: Config = {
   readOnlyUrls: {
@@ -32,15 +30,12 @@ const config: Config = {
 }
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
-  const apolloClient = useApollo(pageProps)
   return (
-    <ApolloProvider client={apolloClient}>
-      <DAppProvider config={config}>
-        <ChakraProvider>
-          <Component {...pageProps} />
-        </ChakraProvider>
-      </DAppProvider>
-    </ApolloProvider>
+    <DAppProvider config={config}>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </DAppProvider>
   )
 }
 

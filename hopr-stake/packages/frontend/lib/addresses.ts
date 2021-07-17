@@ -8,7 +8,15 @@ export type IContractAddress = {
   Multicall: string
 }
 
-export const getContractAddresses = async (chainId: number) => {
+export const emptyContractAddresses: IContractAddress = {
+  xHOPR: '',
+  wxHOPR: '',
+  HoprBoost: '',
+  HoprStake: '',
+  Multicall: ''
+}
+
+export const getContractAddresses = async (chainId: number): Promise<IContractAddress> => {
   const network = chainIdToNetwork(chainId)
   return {
     xHOPR: (

@@ -11,7 +11,7 @@ export const walletconnect = new WalletConnectConnector({
   pollingInterval: POLLING_INTERVAL,
 })
 
-export const chainIdToNetwork = (chainId: number) => {
+export const chainIdToNetwork = (chainId: number): string => {
   switch (chainId) {
     case 5:
       return "goerli";
