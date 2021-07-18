@@ -1,23 +1,46 @@
 import { Text, Tag } from '@chakra-ui/react'
-import { useEtherBalance, useEthers, useTokenBalance } from '@usedapp/core'
-import { xHOPR as LOCAL_XHOPR_TOKEN_CONTRACT_ADDRESS } from '../artifacts/contracts/contractAddress'
-import { utils } from 'ethers'
+import { ChainId, useEtherBalance, useTokenBalance } from '@usedapp/core'
+import { utils, constants } from 'ethers'
+import { chainIdToNetwork } from '../lib/connectors'
 
 /**
  * Component
  */
-function Balance(): JSX.Element {
-  const { account } = useEthers()
+function Balance({
+  chainId,
+  account,
+  xHOPRAddress,
+}: {
+  chainId: ChainId
+  account: string
+  xHOPRAddress: string
+}): JSX.Element {
   const etherBalance = useEtherBalance(account)
-  console.log('Account Address', account)
-  const xHOPRBalance = useTokenBalance(LOCAL_XHOPR_TOKEN_CONTRACT_ADDRESS, account)
-  const finalBalance = etherBalance ? Number(utils.formatEther(etherBalance)).toFixed(3) : '0.00'
-  const xHOPRFinalBalance = xHOPRBalance ? Number(utils.formatEther(xHOPRBalance)).toFixed(3) : '0.00'
+  const xHOPRBalance = useTokenBalance(
+    xHOPRAddress || constants.Zero.toHexString(),
+    account
+  )
+  const finalBalance = etherBalance
+    ? Number(utils.formatEther(etherBalance)).toFixed(3)
+    : '0.00'
+  const xHOPRFinalBalance = xHOPRBalance
+    ? Number(utils.formatEther(xHOPRBalance)).toFixed(3)
+    : '0.00'
 
-  return <>
-    <Text fontFamily="mono">{xHOPRFinalBalance} <Tag>xHOPR</Tag></Text>&nbsp;
-    <Text fontFamily="mono">{finalBalance} <Tag variant={"outline"}>ETH</Tag></Text>
-  </>
+  return (
+    <>
+      <Tag mr="5" textTransform="capitalize" bg='lightblue' color='#414141'>
+        {chainIdToNetwork(chainId) || 'Loading...'}
+      </Tag>
+      <Text fontFamily="mono">
+        {xHOPRFinalBalance} <Tag>xHOPR</Tag>
+      </Text>
+      &nbsp;
+      <Text fontFamily="mono">
+        {finalBalance} <Tag variant={'outline'}>ETH</Tag>
+      </Text>
+    </>
+  )
 }
 
 export default Balance
