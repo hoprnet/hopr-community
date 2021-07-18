@@ -1,6 +1,15 @@
-import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
-import { ChainId, useEthers } from '@usedapp/core'
+import {
+  Box,
+  Heading,
+  Text,
+  Tag,
+  Link,
+  useColorMode,
+  Button,
+} from '@chakra-ui/react'
+import { ChainId, useEthers, useTokenBalance } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
+import { utils, constants } from 'ethers'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
 import Layout from '../components/layout/Layout'
 import {
@@ -8,11 +17,12 @@ import {
   getContractAddresses,
   IContractAddress,
 } from '../lib/addresses'
+import { XHoprBalance } from '../components/XHoprBalance'
 
 const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
 
 function HomeIndex(): JSX.Element {
-  const { chainId } = useEthers()
+  const { chainId, account } = useEthers()
   const { colorMode } = useColorMode()
 
   const bgColor = { light: 'gray.50', dark: 'gray.900' }
@@ -28,6 +38,7 @@ function HomeIndex(): JSX.Element {
     }
     loadContracts()
   }, [chainId])
+
 
   const CONTRACT_ADDRESS =
     chainId === ChainId.Ropsten
@@ -49,14 +60,25 @@ function HomeIndex(): JSX.Element {
         account to learn about new events.
       </Text>
       <Box
-        maxWidth="container.sm"
+        maxWidth="container.l"
         p="8"
         mt="8"
         bg={bgColor[colorMode]}
         color={color[colorMode]}
       >
+        <Box d="flex" justifyContent="space-between" alignItems="center">
+          <Text fontSize="xl" fontWeight="900">
+            Stake xHOPR tokens
+          </Text>
+          <Button size="lg" variant="outline" onClick={() => {}}>
+            Stake
+          </Button>
+        </Box>
         <Text fontSize="xl" fontFamily="mono">
-          Contract Address {CONTRACT_ADDRESS}
+          Available: <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
+        </Text>
+        <Text fontSize="xl" fontFamily="mono">
+          Staked: 0.00
         </Text>
       </Box>
       <DarkModeSwitch />
