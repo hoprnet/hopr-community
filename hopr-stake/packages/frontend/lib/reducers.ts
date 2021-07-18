@@ -63,7 +63,7 @@ export async function fetchStakedXHOPRTokens(
   account: string,
   provider: Web3Provider,
   dispatch: React.Dispatch<ActionType>
-) {
+): Promise<void> {
   if (provider) {
     const contract = new Contract(
       HoprStakeContractAddress,
@@ -91,7 +91,7 @@ export async function setStaking(
 //   state: StateType,
   provider: Web3Provider,
   dispatch: React.Dispatch<ActionType>
-) {
+): Promise<void> {
   // @TODO Actually very the dispatched event and ignore if not amount was given.
   // if (!state.amount) return
   if (provider) {

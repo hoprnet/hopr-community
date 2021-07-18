@@ -1,5 +1,5 @@
 import { useEthers } from '@usedapp/core'
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { fetchStakedXHOPRTokens, initialState, reducer } from '../lib/reducers'
 
 export const HoprStakeBalance = ({
@@ -11,7 +11,6 @@ export const HoprStakeBalance = ({
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
     const loadStakedXHoprBalance = async () => {
-      console.log('Loading Staked Value...', state)
       await fetchStakedXHOPRTokens(
         HoprStakeContractAddress,
         account,
@@ -20,6 +19,6 @@ export const HoprStakeBalance = ({
       )
     }
     loadStakedXHoprBalance()
-  }, []) // @TODO: Ensure we update the UI after a state change.
+  }) // @TODO: Ensure we update the UI after a state change.
   return <>{state.amount || 'Loading...'}</>
 }

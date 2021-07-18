@@ -16,11 +16,10 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react'
-import { useEthers, useNotifications, useTokenBalance } from '@usedapp/core'
+import { useEthers, useNotifications } from '@usedapp/core'
 import blockies from 'blockies-ts'
 import NextLink from 'next/link'
 import React from 'react'
-import { utils, constants } from 'ethers'
 import { useEffect, useState } from 'react'
 import {
   emptyContractAddresses,
