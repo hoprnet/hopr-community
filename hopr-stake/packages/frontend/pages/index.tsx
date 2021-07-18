@@ -1,6 +1,7 @@
-import { Box, Heading, Text, Tag, Link } from '@chakra-ui/react'
+import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
 import { ChainId, useEthers } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
+import { DarkModeSwitch } from '../components/DarkModeSwitch'
 import Layout from '../components/layout/Layout'
 import {
   emptyContractAddresses,
@@ -12,6 +13,10 @@ const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
 
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
+  const { colorMode } = useColorMode()
+
+  const bgColor = { light: 'gray.50', dark: 'gray.900' }
+  const color = { light: '#414141', dark: 'white' }
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
     emptyContractAddresses
   )
@@ -43,11 +48,18 @@ function HomeIndex(): JSX.Element {
         <Link href="https://twitter.com/hoprnet">Twitter</Link>
         account to learn about new events.
       </Text>
-      <Box maxWidth="container.sm" p="8" mt="8" bg="gray.100">
+      <Box
+        maxWidth="container.sm"
+        p="8"
+        mt="8"
+        bg={bgColor[colorMode]}
+        color={color[colorMode]}
+      >
         <Text fontSize="xl" fontFamily="mono">
           Contract Address {CONTRACT_ADDRESS}
         </Text>
       </Box>
+      <DarkModeSwitch />
     </Layout>
   )
 }

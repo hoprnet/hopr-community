@@ -29,7 +29,7 @@ function Balance({
 
   return (
     <>
-      <Tag mr="5" backgroundColor="lightblue">
+      <Tag mr="5" textTransform="capitalize" bg='lightblue' color='#414141'>
         {chainIdToNetwork(chainId) || 'Loading...'}
       </Tag>
       <Text fontFamily="mono">
