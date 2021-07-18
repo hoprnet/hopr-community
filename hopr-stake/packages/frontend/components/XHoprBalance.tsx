@@ -1,4 +1,3 @@
-import { Text } from '@chakra-ui/react'
 import { utils, constants } from 'ethers'
 import { useEthers, useTokenBalance } from '@usedapp/core'
 

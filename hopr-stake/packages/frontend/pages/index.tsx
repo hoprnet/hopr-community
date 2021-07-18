@@ -7,9 +7,8 @@ import {
   useColorMode,
   Button,
 } from '@chakra-ui/react'
-import { ChainId, useEthers, useTokenBalance } from '@usedapp/core'
-import React, { useEffect, useState } from 'react'
-import { utils, constants } from 'ethers'
+import { ChainId, useEthers } from '@usedapp/core'
+import React, { useEffect, useReducer, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
 import Layout from '../components/layout/Layout'
 import {
@@ -19,12 +18,14 @@ import {
 } from '../lib/addresses'
 import { XHoprBalance } from '../components/XHoprBalance'
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
+import { initialState, reducer, setStaking } from '../lib/reducers'
 
 const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
 
 function HomeIndex(): JSX.Element {
-  const { chainId, account } = useEthers()
+  const { chainId, library } = useEthers()
   const { colorMode } = useColorMode()
+  const [_, dispatch] = useReducer(reducer, initialState)
 
   const bgColor = { light: 'gray.50', dark: 'gray.900' }
   const color = { light: '#414141', dark: 'white' }
@@ -39,7 +40,6 @@ function HomeIndex(): JSX.Element {
     }
     loadContracts()
   }, [chainId])
-
 
   const CONTRACT_ADDRESS =
     chainId === ChainId.Ropsten
@@ -71,15 +71,30 @@ function HomeIndex(): JSX.Element {
           <Text fontSize="xl" fontWeight="900">
             Stake xHOPR tokens
           </Text>
-          <Button size="lg" variant="outline" onClick={() => {}}>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => {
+              setStaking(
+                contractAddresses.xHOPR,
+                contractAddresses.HoprStake,
+                library,
+                dispatch
+              )
+            }}
+          >
             Stake
           </Button>
         </Box>
         <Text fontSize="xl" fontFamily="mono">
-          Available: <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
+          Available:{' '}
+          <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
         </Text>
         <Text fontSize="xl" fontFamily="mono">
-          Staked: <HoprStakeBalance HoprStakeContractAddress={contractAddresses.HoprStake }/>
+          Staked:{' '}
+          <HoprStakeBalance
+            HoprStakeContractAddress={contractAddresses.HoprStake}
+          />
         </Text>
       </Box>
       <DarkModeSwitch />
