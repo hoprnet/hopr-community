@@ -18,6 +18,7 @@ import {
   IContractAddress,
 } from '../lib/addresses'
 import { XHoprBalance } from '../components/XHoprBalance'
+import { HoprStakeBalance } from '../components/HoprStakeBalance'
 
 const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
 
@@ -78,7 +79,7 @@ function HomeIndex(): JSX.Element {
           Available: <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
         </Text>
         <Text fontSize="xl" fontFamily="mono">
-          Staked: 0.00
+          Staked: <HoprStakeBalance HoprStakeContractAddress={contractAddresses.HoprStake }/>
         </Text>
       </Box>
       <DarkModeSwitch />
