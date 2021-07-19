@@ -10,18 +10,26 @@ import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprSt
  * Prop Types
  */
 type StateType = {
-  amount: string
+  stakedHOPRTokens: string
+  yetToClaimRewards: string
+  lastSync: string
+  alreadyClaimedRewards: string
   amountValue: string
   isLoading: boolean
+  isLoadingSync: boolean
 }
 
 /**
  * Component
  */
 export const initialState: StateType = {
-  amount: '',
+  stakedHOPRTokens: '',
+  yetToClaimRewards: '',
+  lastSync: '',
+  alreadyClaimedRewards: '',
   amountValue: '',
   isLoading: false,
+  isLoadingSync: false,
 }
 
 type Accounts = {
@@ -34,29 +42,44 @@ type Accounts = {
 
 type ActionType =
   | {
-      type: 'SET_STAKING'
-      amount: StateType['amount']
+      type: 'SET_ACCOUNT_DATA'
+      stakedHOPRTokens: StateType['stakedHOPRTokens']
+      yetToClaimRewards: StateType['yetToClaimRewards']
+      lastSync: StateType['lastSync']
+      alreadyClaimedRewards: StateType['alreadyClaimedRewards']
     }
   | {
       type: 'SET_LOADING'
       isLoading: StateType['isLoading']
     }
-    | {
+  | {
+      type: 'SET_LOADING_SYNC'
+      isLoadingSync: StateType['isLoadingSync']
+    }
+  | {
       type: 'SET_STAKING_AMOUNT'
       amountValue: StateType['amountValue']
     }
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
-    case 'SET_STAKING':
+    case 'SET_ACCOUNT_DATA':
       return {
         ...state,
-        amount: action.amount,
+        stakedHOPRTokens: action.stakedHOPRTokens,
+        yetToClaimRewards: action.yetToClaimRewards,
+        lastSync: action.lastSync,
+        alreadyClaimedRewards: action.alreadyClaimedRewards,
       }
     case 'SET_LOADING':
       return {
         ...state,
         isLoading: action.isLoading,
+      }
+    case 'SET_LOADING_SYNC':
+      return {
+        ...state,
+        isLoadingSync: action.isLoadingSync
       }
     case 'SET_STAKING_AMOUNT':
       return {
@@ -68,7 +91,7 @@ export function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
-export async function fetchStakedXHOPRTokens(
+export async function fetchAccountData(
   HoprStakeContractAddress: string,
   account: string,
   provider: Web3Provider,
@@ -82,16 +105,67 @@ export async function fetchStakedXHOPRTokens(
     ) as unknown as HoprStakeType
     try {
       const accountStruct: Accounts = await contract.accounts(account)
-      const stakedHOPRTokens = accountStruct.actualLockedTokenAmount
-        ? Number(
-            utils.formatEther(accountStruct.actualLockedTokenAmount)
-          ).toFixed(3)
-        : '0.000'
-      dispatch({ type: 'SET_STAKING', amount: stakedHOPRTokens })
+      const {
+        actualLockedTokenAmount,
+        cumulatedRewards,
+        lastSyncTimestamp,
+        claimedRewards,
+      } = accountStruct
+      const [
+        stakedHOPRTokens,
+        yetToClaimRewards,
+        alreadyClaimedRewards,
+      ] = [
+        actualLockedTokenAmount,
+        cumulatedRewards,
+        claimedRewards,
+      ].map((dataPoint) =>
+        dataPoint ? Number(utils.formatEther(dataPoint)).toFixed(2) : '0.00'
+      )
+      dispatch({
+        type: 'SET_ACCOUNT_DATA',
+        stakedHOPRTokens,
+        yetToClaimRewards,
+        lastSync: lastSyncTimestamp.toString(),
+        alreadyClaimedRewards,
+      })
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log('Error: ', err)
     }
+  }
+}
+
+export async function setSync(
+  HoprStakeContractAddress: string,
+  state: StateType,
+  provider: Web3Provider,
+  dispatch: React.Dispatch<ActionType>
+): Promise<void> {
+  if (provider && HoprStakeContractAddress != '') {
+    dispatch({
+      type: 'SET_LOADING_SYNC',
+      isLoadingSync: true,
+    })
+    const signer = provider.getSigner()
+    const address = await signer.getAddress()
+    const contract = new ethers.Contract(
+      HoprStakeContractAddress,
+      HoprStakeABI,
+      signer
+    ) as unknown as HoprStakeType
+    const transaction = await contract.sync(address)
+    await transaction.wait()
+    fetchAccountData(
+      HoprStakeContractAddress,
+      address,
+      provider,
+      dispatch
+    )
+    dispatch({
+      type: 'SET_LOADING_SYNC',
+      isLoadingSync: false,
+    })
   }
 }
 
@@ -117,11 +191,11 @@ export async function setStaking(
     ) as unknown as xHOPRTokenType
     const transaction = await contract.transferAndCall(
       HoprStakeContractAddress,
-      utils.parseEther(state.amountValue), //@TODO: Replace this by state.amount
+      utils.parseEther(state.amountValue),
       constants.HashZero
     )
     await transaction.wait()
-    fetchStakedXHOPRTokens(
+    fetchAccountData(
       HoprStakeContractAddress,
       address,
       provider,
