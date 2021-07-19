@@ -2,7 +2,7 @@ import { useEthers } from '@usedapp/core'
 import { useEffect, useReducer } from 'react'
 import { fetchAccountData, initialState, reducer } from '../lib/reducers'
 
-export const HoprStakeBalance = ({
+export const LastTimeSynced = ({
   HoprStakeContractAddress,
 }: {
   HoprStakeContractAddress: string
@@ -20,5 +20,5 @@ export const HoprStakeBalance = ({
     }
     loadAccountData()
   })
-  return <>{state.stakedHOPRTokens || '0.00'}</>
+  return <>{state.lastSync ? state.lastSync == '0.00' ? 'Never' : state.lastSync : '--'}</>
 }

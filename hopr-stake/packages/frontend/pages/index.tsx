@@ -52,10 +52,10 @@ function HomeIndex(): JSX.Element {
         <Heading as="h1">HOPR Staking</Heading>
         <Box>
           <Tag size="lg" variant="outline" colorScheme="green">
-            Total APR (from NFTs): --%
+            APR boost (from NFTs): --%
           </Tag>
           <Tag ml="10px" size="lg" variant="outline" colorScheme="blue">
-            Your APR: --
+            Your total APR: --
           </Tag>
         </Box>
         <Box>

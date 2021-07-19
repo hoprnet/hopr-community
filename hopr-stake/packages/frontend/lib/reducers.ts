@@ -10,7 +10,10 @@ import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprSt
  * Prop Types
  */
 type StateType = {
-  amount: string
+  stakedHOPRTokens: string
+  yetToClaimRewards: string
+  lastSync: string
+  alreadyClaimedRewards: string
   amountValue: string
   isLoading: boolean
 }
@@ -19,7 +22,10 @@ type StateType = {
  * Component
  */
 export const initialState: StateType = {
-  amount: '',
+  stakedHOPRTokens: '',
+  yetToClaimRewards: '',
+  lastSync: '',
+  alreadyClaimedRewards: '',
   amountValue: '',
   isLoading: false,
 }
@@ -34,8 +40,11 @@ type Accounts = {
 
 type ActionType =
   | {
-      type: 'SET_STAKING'
-      amount: StateType['amount']
+      type: 'SET_ACCOUNT_DATA'
+      stakedHOPRTokens: StateType['stakedHOPRTokens'],
+      yetToClaimRewards: StateType['yetToClaimRewards'],
+      lastSync: StateType['lastSync'],
+      alreadyClaimedRewards: StateType['alreadyClaimedRewards']
     }
   | {
       type: 'SET_LOADING'
@@ -48,10 +57,13 @@ type ActionType =
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
-    case 'SET_STAKING':
+    case 'SET_ACCOUNT_DATA':
       return {
         ...state,
-        amount: action.amount,
+        stakedHOPRTokens: action.stakedHOPRTokens,
+        yetToClaimRewards: action.yetToClaimRewards,
+        lastSync: action.lastSync,
+        alreadyClaimedRewards: action.alreadyClaimedRewards
       }
     case 'SET_LOADING':
       return {
@@ -68,7 +80,7 @@ export function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
-export async function fetchStakedXHOPRTokens(
+export async function fetchAccountData(
   HoprStakeContractAddress: string,
   account: string,
   provider: Web3Provider,
@@ -82,12 +94,12 @@ export async function fetchStakedXHOPRTokens(
     ) as unknown as HoprStakeType
     try {
       const accountStruct: Accounts = await contract.accounts(account)
-      const stakedHOPRTokens = accountStruct.actualLockedTokenAmount
-        ? Number(
-            utils.formatEther(accountStruct.actualLockedTokenAmount)
-          ).toFixed(3)
-        : '0.000'
-      dispatch({ type: 'SET_STAKING', amount: stakedHOPRTokens })
+      const { actualLockedTokenAmount, cumulatedRewards, lastSyncTimestamp, claimedRewards } = accountStruct;
+      const [ stakedHOPRTokens, yetToClaimRewards, lastSync, alreadyClaimedRewards ] = [actualLockedTokenAmount, cumulatedRewards, lastSyncTimestamp, claimedRewards].map(dataPoint => dataPoint ? Number(
+            utils.formatEther(dataPoint)
+          ).toFixed(2)
+        : '0.00')
+      dispatch({ type: 'SET_ACCOUNT_DATA', stakedHOPRTokens, yetToClaimRewards, lastSync, alreadyClaimedRewards })
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log('Error: ', err)

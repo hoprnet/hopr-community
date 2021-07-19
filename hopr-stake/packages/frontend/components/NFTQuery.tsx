@@ -31,17 +31,21 @@ export const NFTQuery = ({
   useEffect(() => {
     const loadStakedXHoprBalance = async () => {
       if (HoprBoostContractAddress != '') {
-        const HoprBoost = new Contract(
-          HoprBoostContractAddress,
-          HoprBoostABI,
-          library
-        ) as unknown as HoprBoostType
-        const events = await HoprBoost.queryFilter(
-          HoprBoost.filters.BoostMinted(),
-          fromBlock,
-          'latest'
-        )
-        setEvents(events)
+        try {
+          const HoprBoost = new Contract(
+            HoprBoostContractAddress,
+            HoprBoostABI,
+            library
+          ) as unknown as HoprBoostType
+          const events = await HoprBoost.queryFilter(
+            HoprBoost.filters.BoostMinted(),
+            fromBlock,
+            'latest'
+          )
+          setEvents(events)
+        } catch (e) {
+          console.error('Unable to create contract or parse past events', e)
+        }
       }
     }
     loadStakedXHoprBalance()
