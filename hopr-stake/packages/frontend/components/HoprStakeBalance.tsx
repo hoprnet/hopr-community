@@ -19,6 +19,6 @@ export const HoprStakeBalance = ({
       )
     }
     loadStakedXHoprBalance()
-  }) // @TODO: Ensure we update the UI after a state change.
+  })
   return <>{state.amount || 'Loading...'}</>
 }
