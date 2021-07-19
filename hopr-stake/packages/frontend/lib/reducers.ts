@@ -11,6 +11,7 @@ import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprSt
  */
 type StateType = {
   amount: string
+  amountValue: string
   isLoading: boolean
 }
 
@@ -19,6 +20,7 @@ type StateType = {
  */
 export const initialState: StateType = {
   amount: '',
+  amountValue: '',
   isLoading: false,
 }
 
@@ -39,10 +41,13 @@ type ActionType =
       type: 'SET_LOADING'
       isLoading: StateType['isLoading']
     }
+    | {
+      type: 'SET_STAKING_AMOUNT'
+      amountValue: StateType['amountValue']
+    }
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
-    // Track the greeting from the blockchain
     case 'SET_STAKING':
       return {
         ...state,
@@ -52,6 +57,11 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         isLoading: action.isLoading,
+      }
+    case 'SET_STAKING_AMOUNT':
+      return {
+        ...state,
+        amountValue: action.amountValue,
       }
     default:
       throw new Error()
@@ -88,12 +98,11 @@ export async function fetchStakedXHOPRTokens(
 export async function setStaking(
   xHOPRContractAddress: string,
   HoprStakeContractAddress: string,
-//   state: StateType,
+  state: StateType,
   provider: Web3Provider,
   dispatch: React.Dispatch<ActionType>
 ): Promise<void> {
-  // @TODO Actually very the dispatched event and ignore if not amount was given.
-  // if (!state.amount) return
+  if (!state.amountValue) return
   if (provider) {
     dispatch({
       type: 'SET_LOADING',
@@ -108,7 +117,7 @@ export async function setStaking(
     ) as unknown as xHOPRTokenType
     const transaction = await contract.transferAndCall(
       HoprStakeContractAddress,
-      utils.parseEther('0.1'), //@TODO: Replace this by state.amount
+      utils.parseEther(state.amountValue), //@TODO: Replace this by state.amount
       constants.HashZero
     )
     await transaction.wait()

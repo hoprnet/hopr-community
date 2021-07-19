@@ -1,7 +1,7 @@
 import { Text, Tag } from '@chakra-ui/react'
 import { ChainId, useEtherBalance } from '@usedapp/core'
 import { utils } from 'ethers'
-import { chainIdToNetwork } from '../lib/connectors'
+import { chainIdToNetwork, RPC_COLOURS } from '../lib/connectors'
 import { XHoprBalance } from './XHoprBalance'
 
 /**
@@ -21,9 +21,11 @@ function Balance({
     ? Number(utils.formatEther(etherBalance)).toFixed(3)
     : '0.00'
 
+  const colours = RPC_COLOURS[chainId]
+
   return (
     <>
-      <Tag mr="5" textTransform="capitalize" bg="lightblue" color="#414141">
+      <Tag mr="5" textTransform="capitalize" {...colours}>
         {chainIdToNetwork(chainId) || 'Loading...'}
       </Tag>
       <Text fontFamily="mono">

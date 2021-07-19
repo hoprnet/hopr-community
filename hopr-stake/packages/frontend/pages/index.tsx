@@ -6,6 +6,9 @@ import {
   Link,
   useColorMode,
   Button,
+  InputGroup,
+  Input,
+  InputRightElement,
 } from '@chakra-ui/react'
 import { useEthers } from '@usedapp/core'
 import React, { useEffect, useReducer, useState } from 'react'
@@ -19,11 +22,12 @@ import {
 import { XHoprBalance } from '../components/XHoprBalance'
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { initialState, reducer, setStaking } from '../lib/reducers'
+import { RPC_COLOURS } from '../lib/connectors'
 
 function HomeIndex(): JSX.Element {
   const { chainId, library } = useEthers()
   const { colorMode } = useColorMode()
-  const [, dispatch] = useReducer(reducer, initialState)
+  const [ state, dispatch] = useReducer(reducer, initialState)
 
   const bgColor = { light: 'gray.50', dark: 'gray.900' }
   const color = { light: '#414141', dark: 'white' }
@@ -39,6 +43,8 @@ function HomeIndex(): JSX.Element {
     loadContracts()
   }, [chainId])
 
+  const colours = RPC_COLOURS[chainId]
+  
   return (
     <Layout>
       <Heading as="h1" mb="8">
@@ -64,31 +70,48 @@ function HomeIndex(): JSX.Element {
           <Text fontSize="xl" fontWeight="900">
             Stake xHOPR tokens
           </Text>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={() => {
-              setStaking(
-                contractAddresses.xHOPR,
-                contractAddresses.HoprStake,
-                library,
-                dispatch
-              )
-            }}
-          >
-            Stake
-          </Button>
-        </Box>
-        <Text fontSize="xl" fontFamily="mono">
-          Available:{' '}
-          <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
-        </Text>
-        <Text fontSize="xl" fontFamily="mono">
+          <Text fontSize="xl" fontFamily="mono">
+            Available:{' '}
+            <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
+          </Text>
+          <Text fontSize="xl" fontFamily="mono">
           Staked:{' '}
           <HoprStakeBalance
             HoprStakeContractAddress={contractAddresses.HoprStake}
           />
         </Text>
+        </Box>
+        <Box d="flex" justifyContent="space-between" alignItems="center" mt="10px">
+          <InputGroup size="md">
+            <Input pr="10.5rem" type={'number'} placeholder="Enter amount" onChange={(e) => {
+              dispatch({
+                type: 'SET_STAKING_AMOUNT',
+                amountValue: e.target.value,
+              })
+            }}/>
+            <InputRightElement width="10.5rem">
+              <Button
+                width="10rem"
+                size="sm"
+                isLoading={state.isLoading}
+                onClick={() => {
+                  setStaking(
+                    contractAddresses.xHOPR,
+                    contractAddresses.HoprStake,
+                    state,
+                    library,
+                    dispatch
+                  )
+                }}
+                {...colours}
+              >
+                {
+                  state.isLoading ? 'Loading...' : 'Stake xHOPR tokens'
+                }
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </Box>
       </Box>
       <DarkModeSwitch />
     </Layout>
