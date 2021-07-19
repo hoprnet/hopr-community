@@ -21,7 +21,11 @@ import blockies from 'blockies-ts'
 import NextLink from 'next/link'
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { emptyContractAddresses, getContractAddresses, IContractAddress } from '../../lib/addresses'
+import {
+  emptyContractAddresses,
+  getContractAddresses,
+  IContractAddress,
+} from '../../lib/addresses'
 import Balance from '../Balance'
 import ConnectWallet from '../ConnectWallet'
 import Head, { MetaProps } from './Head'
@@ -61,7 +65,9 @@ interface LayoutProps {
  */
 const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   const { account, deactivate, chainId } = useEthers()
-  const [ contractAddresses, setContractAddresses ] = useState<IContractAddress>(emptyContractAddresses);
+  const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
+    emptyContractAddresses
+  )
   const { notifications } = useNotifications()
 
   let blockieImageSrc
@@ -70,11 +76,11 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   }
 
   useEffect(() => {
-    const loadContracts = async() => {
-      const contractAddresses = await getContractAddresses(chainId);
-      setContractAddresses(contractAddresses);
+    const loadContracts = async () => {
+      const contractAddresses = await getContractAddresses(chainId)
+      setContractAddresses(contractAddresses)
     }
-    loadContracts();
+    loadContracts()
   }, [chainId])
 
   return (
@@ -89,19 +95,12 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             py="8"
           >
             <Flex py={[4, null, null, 0]}>
+              <Link px="4" py="1" href="https://medium.com/hoprnet/hopr-staking-program-full-details-d0a4eb12d2c" isExternal>
+                Read more about HOPR staking
+              </Link>
               <NextLink href="/" passHref>
                 <Link px="4" py="1">
-                  Home
-                </Link>
-              </NextLink>
-              <NextLink href="/graph-example" passHref>
-                <Link px="4" py="1">
-                  Website
-                </Link>
-              </NextLink>
-              <NextLink href="/signature-example" passHref>
-                <Link px="4" py="1">
-                  Read more about HOPR staking
+                Contract Address {contractAddresses.HoprStake || 'Loading...'}
                 </Link>
               </NextLink>
             </Flex>
@@ -111,7 +110,11 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 alignItems={'center'}
                 justifyContent={['flex-start', null, null, 'flex-end']}
               >
-                <Balance xHOPRAddress={contractAddresses.xHOPR} chainId={chainId} account={account}/>
+                <Balance
+                  xHOPRContractAddress={contractAddresses.xHOPR}
+                  chainId={chainId}
+                  account={account}
+                />
                 <Image ml="4" src={blockieImageSrc} alt="blockie" />
                 <Menu placement="bottom-end">
                   <MenuButton as={Button} ml="4">
@@ -167,9 +170,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       </main>
       <footer>
         <Container mt="8" py="8" maxWidth="container.xl">
-          <Text>
-            ©2021 HOPR Association, all rights reserved
-          </Text>
+          <Text>©2021 HOPR Association, all rights reserved</Text>
         </Container>
       </footer>
     </>

@@ -1,6 +1,17 @@
-import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
-import { ChainId, useEthers } from '@usedapp/core'
-import React, { useEffect, useState } from 'react'
+import {
+  Box,
+  Heading,
+  Text,
+  Tag,
+  Link,
+  useColorMode,
+  Button,
+  InputGroup,
+  Input,
+  InputRightElement,
+} from '@chakra-ui/react'
+import { useEthers } from '@usedapp/core'
+import React, { useEffect, useReducer, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
 import Layout from '../components/layout/Layout'
 import {
@@ -8,12 +19,15 @@ import {
   getContractAddresses,
   IContractAddress,
 } from '../lib/addresses'
-
-const ROPSTEN_CONTRACT_ADDRESS = '0x6b61a52b1EA15f4b8dB186126e980208E1E18864'
+import { XHoprBalance } from '../components/XHoprBalance'
+import { HoprStakeBalance } from '../components/HoprStakeBalance'
+import { initialState, reducer, setStaking } from '../lib/reducers'
+import { RPC_COLOURS } from '../lib/connectors'
 
 function HomeIndex(): JSX.Element {
-  const { chainId } = useEthers()
+  const { chainId, library } = useEthers()
   const { colorMode } = useColorMode()
+  const [ state, dispatch] = useReducer(reducer, initialState)
 
   const bgColor = { light: 'gray.50', dark: 'gray.900' }
   const color = { light: '#414141', dark: 'white' }
@@ -29,11 +43,8 @@ function HomeIndex(): JSX.Element {
     loadContracts()
   }, [chainId])
 
-  const CONTRACT_ADDRESS =
-    chainId === ChainId.Ropsten
-      ? ROPSTEN_CONTRACT_ADDRESS
-      : contractAddresses.HoprStake
-
+  const colours = RPC_COLOURS[chainId]
+  
   return (
     <Layout>
       <Heading as="h1" mb="8">
@@ -49,15 +60,58 @@ function HomeIndex(): JSX.Element {
         account to learn about new events.
       </Text>
       <Box
-        maxWidth="container.sm"
+        maxWidth="container.l"
         p="8"
         mt="8"
         bg={bgColor[colorMode]}
         color={color[colorMode]}
       >
-        <Text fontSize="xl" fontFamily="mono">
-          Contract Address {CONTRACT_ADDRESS}
+        <Box d="flex" justifyContent="space-between" alignItems="center">
+          <Text fontSize="xl" fontWeight="900">
+            Stake xHOPR tokens
+          </Text>
+          <Text fontSize="xl" fontFamily="mono">
+            Available:{' '}
+            <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} />
+          </Text>
+          <Text fontSize="xl" fontFamily="mono">
+          Staked:{' '}
+          <HoprStakeBalance
+            HoprStakeContractAddress={contractAddresses.HoprStake}
+          />
         </Text>
+        </Box>
+        <Box d="flex" justifyContent="space-between" alignItems="center" mt="10px">
+          <InputGroup size="md">
+            <Input pr="10.5rem" type={'number'} placeholder="Enter amount" onChange={(e) => {
+              dispatch({
+                type: 'SET_STAKING_AMOUNT',
+                amountValue: e.target.value,
+              })
+            }}/>
+            <InputRightElement width="10.5rem">
+              <Button
+                width="10rem"
+                size="sm"
+                isLoading={state.isLoading}
+                onClick={() => {
+                  setStaking(
+                    contractAddresses.xHOPR,
+                    contractAddresses.HoprStake,
+                    state,
+                    library,
+                    dispatch
+                  )
+                }}
+                {...colours}
+              >
+                {
+                  state.isLoading ? 'Loading...' : 'Stake xHOPR tokens'
+                }
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </Box>
       </Box>
       <DarkModeSwitch />
     </Layout>
