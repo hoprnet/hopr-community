@@ -74,7 +74,7 @@ export async function fetchStakedXHOPRTokens(
   provider: Web3Provider,
   dispatch: React.Dispatch<ActionType>
 ): Promise<void> {
-  if (provider) {
+  if (provider && HoprStakeContractAddress != '') {
     const contract = new Contract(
       HoprStakeContractAddress,
       HoprStakeABI,
@@ -103,7 +103,7 @@ export async function setStaking(
   dispatch: React.Dispatch<ActionType>
 ): Promise<void> {
   if (!state.amountValue) return
-  if (provider) {
+  if (provider && HoprStakeContractAddress != '') {
     dispatch({
       type: 'SET_LOADING',
       isLoading: true,

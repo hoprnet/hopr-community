@@ -4,11 +4,15 @@ import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
 
 import Layout from '../components/layout/Layout'
+import { NFTQuery } from '../components/NFTQuery'
 import { StakeXHoprTokens } from '../components/StakeXHoprTokens'
 import {
   emptyContractAddresses,
+  emptyFromBlockNumbers,
+  getBlockNumberFromDeploymentTransactionHashReceipt,
   getContractAddresses,
   IContractAddress,
+  IContractFromBlockNumbers,
 } from '../lib/addresses'
 
 function HomeIndex(): JSX.Element {
@@ -20,11 +24,16 @@ function HomeIndex(): JSX.Element {
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
     emptyContractAddresses
   )
+  const [fromBlockNumbers, setFromBlockNumbers] =
+    useState<IContractFromBlockNumbers>(emptyFromBlockNumbers)
 
   useEffect(() => {
     const loadContracts = async () => {
       const contractAddresses = await getContractAddresses(chainId)
+      const fromBlockNumbers =
+        await getBlockNumberFromDeploymentTransactionHashReceipt(chainId)
       setContractAddresses(contractAddresses)
+      setFromBlockNumbers(fromBlockNumbers)
     }
     loadContracts()
   }, [chainId])
@@ -53,6 +62,18 @@ function HomeIndex(): JSX.Element {
         <StakeXHoprTokens
           XHOPRContractAddress={contractAddresses.xHOPR}
           HoprStakeContractAddress={contractAddresses.HoprStake}
+        />
+      </Box>
+      <Box
+        maxWidth="container.l"
+        p="8"
+        mt="8"
+        bg={bgColor[colorMode]}
+        color={color[colorMode]}
+      >
+        <NFTQuery
+          HoprBoostContractAddress={contractAddresses.HoprBoost}
+          fromBlock={fromBlockNumbers.HoprBoost}
         />
       </Box>
       <DarkModeSwitch />
