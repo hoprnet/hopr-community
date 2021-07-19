@@ -20,5 +20,5 @@ export const LastTimeSynced = ({
     }
     loadAccountData()
   })
-  return <>{state.lastSync ? state.lastSync == '0.00' ? 'Never' : state.lastSync : '--'}</>
+  return <>{state.lastSync ? state.lastSync == '0.00' ? 'Never' : new Date(+state.lastSync * 1000).toUTCString() : '--'}</>
 }

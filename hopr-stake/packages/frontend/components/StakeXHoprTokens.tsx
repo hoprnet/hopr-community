@@ -37,13 +37,13 @@ export const StakeXHoprTokens = ({
           />
         </Text>
         <Text fontSize="md" fontFamily="mono">
+          Current Rewards (in xHOPR tokens): --
+        </Text>
+        <Text fontSize="sm" fontFamily="mono">
           Last time synced:{' '}
           <LastTimeSynced
             HoprStakeContractAddress={HoprStakeContractAddress}
           />
-        </Text>
-        <Text fontSize="md" fontFamily="mono">
-          Current Rewards (in xHOPR tokens): --
         </Text>
       </Box>
       <Box

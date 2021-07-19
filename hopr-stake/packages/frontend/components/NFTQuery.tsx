@@ -73,7 +73,7 @@ export const NFTQuery = ({
             </Text>
             <Text>
               Redeem Deadline -{' '}
-              <code>{(event.args[2] as BigNumber).toString()}</code>
+              <code>{new Date(+(event.args[2] as BigNumber).toString() * 1000).toUTCString()}</code>
             </Text>
             <Link
               isExternal

@@ -14,6 +14,7 @@ import { DarkModeSwitch } from '../components/DarkModeSwitch'
 import Layout from '../components/layout/Layout'
 import { NFTQuery } from '../components/NFTQuery'
 import { StakeXHoprTokens } from '../components/StakeXHoprTokens'
+import { SyncButton } from '../components/SyncButton'
 import {
   emptyContractAddresses,
   emptyFromBlockNumbers,
@@ -59,10 +60,13 @@ function HomeIndex(): JSX.Element {
           </Tag>
         </Box>
         <Box>
-          <Button size="md" bg="blackAlpha.900" color="whiteAlpha.900">
-            Sync Rewards
-          </Button>
-          <Button size="md" ml="10px" bg="blackAlpha.900" color="whiteAlpha.900">
+          <SyncButton HoprStakeContractAddress={contractAddresses.HoprStake} />
+          <Button
+            size="md"
+            ml="10px"
+            bg="blackAlpha.900"
+            color="whiteAlpha.900"
+          >
             Claim Rewards
           </Button>
         </Box>
