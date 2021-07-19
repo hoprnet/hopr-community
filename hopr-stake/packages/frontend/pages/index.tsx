@@ -1,6 +1,6 @@
 import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
 import { useEthers } from '@usedapp/core'
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
 
 import Layout from '../components/layout/Layout'
