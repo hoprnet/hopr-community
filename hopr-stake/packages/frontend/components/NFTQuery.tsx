@@ -1,12 +1,12 @@
 import { useEthers } from '@usedapp/core'
 import { Text, Box, Link } from '@chakra-ui/react'
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
 import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
 import { TypedEvent } from '@hoprnet/hopr-stake/lib/types/commons'
 import { BigNumber, Contract } from 'ethers'
-import { initialState, reducer } from '../lib/reducers'
-import { RPC_COLOURS } from '../lib/connectors'
+// import { initialState, reducer } from '../lib/reducers'
+// import { RPC_COLOURS } from '../lib/connectors'
 
 export const NFTQuery = ({
   HoprBoostContractAddress,
@@ -15,9 +15,9 @@ export const NFTQuery = ({
   HoprBoostContractAddress: string
   fromBlock: number
 }): JSX.Element => {
-  const { library, chainId } = useEthers()
-  const [state] = useReducer(reducer, initialState)
-  const colours = RPC_COLOURS[chainId]
+  const { library } = useEthers()
+  //   const [state] = useReducer(reducer, initialState)
+  //   const colours = RPC_COLOURS[chainId]
   const [events, setEvents] = useState<
     TypedEvent<
       [BigNumber, BigNumber, BigNumber] & {
@@ -53,18 +53,30 @@ export const NFTQuery = ({
       </Text>
       {events.map((event) => {
         return (
-          <Box key={event.transactionHash} d="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            key={event.transactionHash}
+            d="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Text>
-              BoostType Index - <code>{(event.args[0] as BigNumber).toString()}</code>
+              BoostType Index -{' '}
+              <code>{(event.args[0] as BigNumber).toString()}</code>
             </Text>
             <Text>
-              Boost Numerator - <code>{(event.args[1] as BigNumber).toString()}</code>
+              Boost Numerator -{' '}
+              <code>{(event.args[1] as BigNumber).toString()}</code>
             </Text>
             <Text>
-              Redeem Deadline - <code>{(event.args[2] as BigNumber).toString()}</code>
+              Redeem Deadline -{' '}
+              <code>{(event.args[2] as BigNumber).toString()}</code>
             </Text>
-            <Link isExternal href={`https://blockscout.com/xdai/mainnet/tx/${event.transactionHash}`}>
-              Transaction Hash - <code>{`${event.transactionHash.substr(0, 10)}...`}</code>
+            <Link
+              isExternal
+              href={`https://blockscout.com/xdai/mainnet/tx/${event.transactionHash}`}
+            >
+              Transaction Hash -{' '}
+              <code>{`${event.transactionHash.substr(0, 10)}...`}</code>
             </Link>
             {/* <Button
               width="10rem"
