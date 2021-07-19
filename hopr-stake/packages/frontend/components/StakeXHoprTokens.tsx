@@ -6,7 +6,6 @@ import {
   Text,
   Box,
 } from '@chakra-ui/react'
-import { XHoprBalance } from '../components/XHoprBalance'
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { initialState, reducer, setStaking } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
@@ -31,14 +30,13 @@ export const StakeXHoprTokens = ({
           Stake xHOPR tokens
         </Text>
         <Text fontSize="xl" fontFamily="mono">
-          Available:{' '}
-          <XHoprBalance xHOPRContractAddress={XHOPRContractAddress} />
-        </Text>
-        <Text fontSize="xl" fontFamily="mono">
           Staked:{' '}
           <HoprStakeBalance
             HoprStakeContractAddress={HoprStakeContractAddress}
           />
+        </Text>
+        <Text fontSize="xl" fontFamily="mono">
+          Current Rewards (in xHOPR tokens): --
         </Text>
       </Box>
       <Box

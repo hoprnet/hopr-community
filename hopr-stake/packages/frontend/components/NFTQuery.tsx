@@ -1,12 +1,12 @@
 import { useEthers } from '@usedapp/core'
-import { Text, Box, Link } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Text, Box, Link, Button } from '@chakra-ui/react'
+import { useEffect, useState, useReducer } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
 import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
 import { TypedEvent } from '@hoprnet/hopr-stake/lib/types/commons'
 import { BigNumber, Contract } from 'ethers'
-// import { initialState, reducer } from '../lib/reducers'
-// import { RPC_COLOURS } from '../lib/connectors'
+import { initialState, reducer } from '../lib/reducers'
+import { RPC_COLOURS } from '../lib/connectors'
 
 export const NFTQuery = ({
   HoprBoostContractAddress,
@@ -15,9 +15,9 @@ export const NFTQuery = ({
   HoprBoostContractAddress: string
   fromBlock: number
 }): JSX.Element => {
-  const { library } = useEthers()
-  //   const [state] = useReducer(reducer, initialState)
-  //   const colours = RPC_COLOURS[chainId]
+  const { library, chainId } = useEthers()
+  const [state] = useReducer(reducer, initialState)
+  const colours = RPC_COLOURS[chainId]
   const [events, setEvents] = useState<
     TypedEvent<
       [BigNumber, BigNumber, BigNumber] & {
@@ -78,15 +78,15 @@ export const NFTQuery = ({
               Transaction Hash -{' '}
               <code>{`${event.transactionHash.substr(0, 10)}...`}</code>
             </Link>
-            {/* <Button
+            <Button
               width="10rem"
               size="sm"
               isLoading={state.isLoading}
               isDisabled={true}
               {...colours}
             >
-              {state.isLoading ? 'Loading...' : 'Lock NFT'}
-            </Button> */}
+              {state.isLoading ? 'Loading...' : 'Redeem NFT'}
+            </Button>
           </Box>
         )
       })}

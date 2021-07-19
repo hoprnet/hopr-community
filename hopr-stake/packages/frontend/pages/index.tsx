@@ -1,4 +1,12 @@
-import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
+import {
+  Box,
+  Heading,
+  Text,
+  Tag,
+  Link,
+  useColorMode,
+  Button,
+} from '@chakra-ui/react'
 import { useEthers } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
@@ -40,17 +48,33 @@ function HomeIndex(): JSX.Element {
 
   return (
     <Layout>
-      <Heading as="h1" mb="8">
-        HOPR Staking
-      </Heading>
+      <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
+        <Heading as="h1">HOPR Staking</Heading>
+        <Box>
+          <Tag size="lg" variant="outline" colorScheme="green">
+            Total APR (from NFTs): --%
+          </Tag>
+          <Tag ml="10px" size="lg" variant="outline" colorScheme="blue">
+            Your APR: --
+          </Tag>
+        </Box>
+        <Box>
+          <Button size="md" bg="blackAlpha.900" color="whiteAlpha.900">
+            Sync Rewards
+          </Button>
+          <Button size="md" ml="10px" bg="blackAlpha.900" color="whiteAlpha.900">
+            Claim Rewards
+          </Button>
+        </Box>
+      </Box>
 
       <Text mt="8" fontSize="xl">
         Lock your xHOPR tokens for <Tag size="lg">175 days</Tag> to earn up to
         18.5% of your staked amount. Increase your APR % by activating NFTs on
         your account, which can be earned by participating in HOPR testnets and
-        activities. Follow our {' '}
-        <Link href="https://twitter.com/hoprnet">Twitter</Link>{' '}
-        account to learn about new events.
+        activities. Follow our{' '}
+        <Link href="https://twitter.com/hoprnet">Twitter</Link> account to learn
+        about new events.
       </Text>
       <Box
         maxWidth="container.l"
