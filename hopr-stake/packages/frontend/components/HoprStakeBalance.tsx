@@ -19,6 +19,6 @@ export const HoprStakeBalance = ({
       )
     }
     loadStakedXHoprBalance()
-  }, [state])
+  })
   return <>{state.amount || 'Loading...'}</>
 }
