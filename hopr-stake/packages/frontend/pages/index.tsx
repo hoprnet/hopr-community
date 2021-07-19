@@ -46,10 +46,10 @@ function HomeIndex(): JSX.Element {
 
       <Text mt="8" fontSize="xl">
         Lock your xHOPR tokens for <Tag size="lg">175 days</Tag> to earn up to
-        18.5% of your staked amount. Increase your APY % by activating NFTs on
+        18.5% of your staked amount. Increase your APR % by activating NFTs on
         your account, which can be earned by participating in HOPR testnets and
-        activities. Follow our{' '}
-        <Link href="https://twitter.com/hoprnet">Twitter</Link>
+        activities. Follow our {' '}
+        <Link href="https://twitter.com/hoprnet">Twitter</Link>{' '}
         account to learn about new events.
       </Text>
       <Box

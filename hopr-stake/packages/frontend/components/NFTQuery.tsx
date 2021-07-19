@@ -49,7 +49,7 @@ export const NFTQuery = ({
   return (
     <>
       <Text fontSize="xl" fontWeight="900">
-        Stake NFT tokens
+        Redeem HOPR NFTs
       </Text>
       {events.map((event) => {
         return (
