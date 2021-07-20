@@ -18,7 +18,7 @@ export const NFTQuery = ({
   const { library, chainId } = useEthers()
   const [state] = useReducer(reducer, initialState)
   const colours = RPC_COLOURS[chainId]
-  const [events, setEvents] = useState<
+  const [, setEvents] = useState<
     TypedEvent<
       [BigNumber, BigNumber, BigNumber] & {
         boostTypeIndex: BigNumber
@@ -52,10 +52,13 @@ export const NFTQuery = ({
   })
   return (
     <>
+      <Box d="flex" alignItems="center">
       <Text fontSize="xl" fontWeight="900">
         Redeemable HOPR NFTs
       </Text>
-      {events.map((event) => {
+      <Text ml="10px" fontSize="sm" fontWeight="400">Your NFTs will show up here. Earn them by participating in our activities.</Text>
+      </Box>
+      {[].map((event) => {
         return (
           <Box
             key={event.transactionHash}
