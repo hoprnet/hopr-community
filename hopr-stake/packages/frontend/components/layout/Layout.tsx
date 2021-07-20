@@ -167,8 +167,8 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
         </Container>
       </main>
       <footer>
-        <Container mt="8" py="8" maxWidth="container.xl">
-          <Text>©2021 HOPR Association, all rights reserved</Text>
+        <Container py="8" maxWidth="container.xl">
+          <Text>©2021 HOPR Association, all rights reserved.</Text>
         </Container>
       </footer>
     </>

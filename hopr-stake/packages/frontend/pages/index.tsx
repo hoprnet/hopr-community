@@ -5,7 +5,6 @@ import {
   Tag,
   Link,
   useColorMode,
-  Button,
 } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useEthers } from '@usedapp/core'
@@ -15,7 +14,6 @@ import { DarkModeSwitch } from '../components/DarkModeSwitch'
 import Layout from '../components/layout/Layout'
 import { NFTQuery } from '../components/NFTQuery'
 import { StakeXHoprTokens } from '../components/StakeXHoprTokens'
-import { SyncButton } from '../components/SyncButton'
 import {
   emptyContractAddresses,
   emptyFromBlockNumbers,
@@ -24,9 +22,10 @@ import {
   IContractAddress,
   IContractFromBlockNumbers,
 } from '../lib/addresses'
+import { XHoprBalance } from '../components/XHoprBalance'
 
 function HomeIndex(): JSX.Element {
-  const { chainId, account } = useEthers()
+  const { chainId } = useEthers()
   const { colorMode } = useColorMode()
 
   const bgColor = { light: 'gray.50', dark: 'gray.900' }
@@ -52,21 +51,14 @@ function HomeIndex(): JSX.Element {
     <Layout>
       <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
         <Heading as="h1">HOPR Staking</Heading>
-        {account && (
-          <Box>
-            <SyncButton
-              HoprStakeContractAddress={contractAddresses.HoprStake}
-            />
-            <Button
-              size="md"
-              ml="10px"
-              bg="blackAlpha.900"
-              color="whiteAlpha.900"
-            >
-              Claim Rewards
-            </Button>
-          </Box>
-        )}
+        <Box d="flex">
+          <Tag size="lg" colorScheme="green">
+            Available Rewards (in wxHOPR): <XHoprBalance xHOPRContractAddress={contractAddresses.wxHOPR} givenAccount={contractAddresses.HoprStake} />
+          </Tag>
+          <Tag ml="10px" size="lg" colorScheme="blue">
+            Total Locked (in xHOPR): <XHoprBalance xHOPRContractAddress={contractAddresses.xHOPR} givenAccount={contractAddresses.HoprStake} />
+          </Tag>
+        </Box>
       </Box>
 
       <Text mt="8" fontSize="xl">
@@ -84,7 +76,7 @@ function HomeIndex(): JSX.Element {
         participating in HOPR testnets and activities. xHOPR staked today will
         be locked for <Tag size="lg">175 days</Tag>. You can swap xHOPR tokens
         via
-        <Link px="1" href={`https://app.honeyswap.org/#/swap`} isExternal>
+        <Link px="1" href={`https://app.honeyswap.org/#/swap?inputCurrency=0xd057604a14982fe8d88c5fc25aac3267ea142a08&chainId=100`} isExternal>
           HoneySwap <ExternalLinkIcon />
         </Link>{' '}or
         <Link

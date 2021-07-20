@@ -29,3 +29,16 @@ export const chainIdToNetwork = (chainId: number): string => {
       return "xdai";
   }
 };
+
+export const chainToNativeToken = (chainId: number): string => {
+  switch (chainId) {
+    case 5:
+      return "gETH";
+    case 100:
+      return "xDAI";
+    case 31337:
+      return "hETH";
+    default:
+      return "xDAI";
+  }
+};

@@ -2,18 +2,20 @@ import { utils, constants } from 'ethers'
 import { useEthers, useTokenBalance } from '@usedapp/core'
 
 export const XHoprBalance = ({
-  xHOPRContractAddress
+  xHOPRContractAddress,
+  givenAccount
 }: {
   xHOPRContractAddress: string,
+  givenAccount?: string,
 }): JSX.Element => {
   const { account } = useEthers();
   const xHOPRBalance = useTokenBalance(
     xHOPRContractAddress || constants.Zero.toHexString(),
-    account
+    givenAccount || account
   )
   const xHOPRFinalBalance = xHOPRBalance
-    ? Number(utils.formatEther(xHOPRBalance)).toFixed(3)
-    : '0.00'
+    ? Number(utils.formatEther(xHOPRBalance)).toFixed(2)
+    : '--'
 
   return <>{xHOPRFinalBalance}</>
 }

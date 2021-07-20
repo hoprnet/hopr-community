@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { LastTimeSynced } from '../components/LastTimeSynced'
+import { SyncButton } from '../components/SyncButton'
 import { initialState, reducer, setStaking } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useEthers } from '@usedapp/core'
@@ -33,7 +34,8 @@ export const StakeXHoprTokens = ({
             Stake xHOPR tokens
           </Text>
           <Text ml="10px" fontSize="sm" fontWeight="400">
-            Your xHOPR tokens will be sent to our smart contract upon locking.
+            You won’t be able to recover your stake until the staking program
+            ends.
           </Text>
         </Box>
         <Box d="flex">
@@ -98,6 +100,12 @@ export const StakeXHoprTokens = ({
             </Button>
           </InputRightElement>
         </InputGroup>
+      </Box>
+      <Box mt="20px" textAlign="right">
+        <SyncButton HoprStakeContractAddress={HoprStakeContractAddress} />
+        <Button size="md" ml="10px" bg="blackAlpha.900" color="whiteAlpha.900">
+          Claim Rewards
+        </Button>
       </Box>
     </>
   )
