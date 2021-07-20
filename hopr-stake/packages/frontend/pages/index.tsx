@@ -75,7 +75,7 @@ function HomeIndex(): JSX.Element {
         >
           xHOPR <ExternalLinkIcon />
         </Link>{' '}
-        tokens to earn a base APR of <b>18.5%</b>. Starting{' '}
+        tokens to earn a base APR of <b>18.25%</b>. Starting{' '}
         <b>July 27th 2021</b>, rewards can be claimed on each block. All rewards
         will be returned as{' '}
         <Link
