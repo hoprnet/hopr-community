@@ -5,7 +5,7 @@ import React from 'react'
 /**
  * Constants & Helpers
  */
-export const WEBSITE_HOST_URL = 'https://nextjs-ethereum-starter.vercel.app/'
+export const WEBSITE_HOST_URL = 'https://stake.hoprnet.org'
 
 /**
  * Prop Types
