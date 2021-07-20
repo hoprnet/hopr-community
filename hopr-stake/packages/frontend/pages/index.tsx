@@ -57,7 +57,7 @@ function HomeIndex(): JSX.Element {
             />
           </Tag>
           <Tag ml="10px" size="lg" colorScheme="blue">
-            Total Locked (in xHOPR):{' '}
+            Total Staked (in xHOPR):{' '}
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.xHOPR}
               givenAccount={contractAddresses.HoprStake}
@@ -107,7 +107,7 @@ function HomeIndex(): JSX.Element {
           href={`https://ascendex.com/en/cashtrade-spottrading/usdt/hopr`}
           isExternal
         >
-          AscenDEX <ExternalLinkIcon />
+          AscendEX <ExternalLinkIcon />
         </Link>
         , and buy xDAI (needed for transactions) via{' '}
         <Link px="1" href={`https://buy.ramp.network/`} isExternal>
@@ -119,7 +119,7 @@ function HomeIndex(): JSX.Element {
           href={`https://ascendex.com/en/cashtrade-spottrading/usdt/xdai`}
           isExternal
         >
-          AscenDEX <ExternalLinkIcon />
+          AscendEX <ExternalLinkIcon />
         </Link>
         . Unwrap wxHOPR rewards to xHOPR for restaking via{' '}
         <Link px="1" href={`https://wrapper.hoprnet.org/`} isExternal>
