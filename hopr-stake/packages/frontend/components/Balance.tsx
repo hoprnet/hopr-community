@@ -18,7 +18,7 @@ function Balance({
 }): JSX.Element {
   const etherBalance = useEtherBalance(account)
   const finalBalance = etherBalance
-    ? Number(utils.formatEther(etherBalance)).toFixed(3)
+    ? Number(utils.formatEther(etherBalance)).toFixed(4)
     : '0.00'
 
   const colours = RPC_COLOURS[chainId]

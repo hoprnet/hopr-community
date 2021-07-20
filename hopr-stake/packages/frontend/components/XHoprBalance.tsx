@@ -14,7 +14,7 @@ export const XHoprBalance = ({
     givenAccount || account
   )
   const xHOPRFinalBalance = xHOPRBalance
-    ? Number(utils.formatEther(xHOPRBalance)).toFixed(2)
+    ? Number(utils.formatEther(xHOPRBalance)).toFixed(4)
     : '--'
 
   return <>{xHOPRFinalBalance}</>
