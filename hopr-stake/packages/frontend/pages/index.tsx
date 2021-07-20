@@ -76,11 +76,8 @@ function HomeIndex(): JSX.Element {
           xHOPR <ExternalLinkIcon />
         </Link>{' '}
         tokens to earn a base APR of <b>18.5%</b>. Starting{' '}
-        <b>July 27th 2021</b>, rewards can be claimed on each block. Increase
-        your APR by redeeming NFTs to your account. HOPR NFTs can be earned by
-        participating in HOPR testnets and activities. xHOPR staked today will
-        be locked for <Tag size="lg">{daysUntilProgramEnd} days</Tag>, and after
-        claiming will be returned as{' '}
+        <b>July 27th 2021</b>, rewards can be claimed on each block. All rewards
+        will be returned as{' '}
         <Link
           px="1"
           href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.wxHOPR}/transactions`}
@@ -88,7 +85,12 @@ function HomeIndex(): JSX.Element {
         >
           wxHOPR <ExternalLinkIcon />
         </Link>{' '}
-        tokens.
+        tokens. xHOPR staked today will be locked for{' '}
+        <b>{daysUntilProgramEnd} days</b>.
+      </Text>
+      <Text mt="2" fontSize="xl">
+        Increase your APR by redeeming NFTs to your account. HOPR NFTs can be
+        earned by participating in HOPR testnets and activities.
       </Text>
       <Text mt="2" fontSize="xl">
         You can swap xHOPR tokens via
@@ -118,12 +120,19 @@ function HomeIndex(): JSX.Element {
           isExternal
         >
           AscenDEX <ExternalLinkIcon />
-        </Link>.
-        Follow our{' '}
+        </Link>
+        . Unwrap wxHOPR rewards to xHOPR for restaking via{' '}
+        <Link px="1" href={`https://wrapper.hoprnet.org/`} isExternal>
+          our token wrapper <ExternalLinkIcon />
+        </Link>
+        . Follow our{' '}
         <Link href="https://twitter.com/hoprnet">
           Twitter <ExternalLinkIcon />
         </Link>{' '}
-        account to learn about new events.
+        to learn about new events.
+      </Text>
+      <Text mt="2" fontSize="xl">
+        
       </Text>
       <Box
         maxWidth="container.l"
