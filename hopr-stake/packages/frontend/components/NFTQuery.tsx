@@ -52,9 +52,12 @@ export const NFTQuery = ({
   })
   return (
     <>
+      <Box d="flex" alignItems="center">
       <Text fontSize="xl" fontWeight="900">
         Redeemable HOPR NFTs
       </Text>
+      <Text ml="10px" fontSize="sm" fontWeight="400">Your NFTs will show up here. Earn them by participating our activities.</Text>
+      </Box>
       {events.map((event) => {
         return (
           <Box

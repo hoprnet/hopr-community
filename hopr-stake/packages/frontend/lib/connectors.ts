@@ -26,6 +26,6 @@ export const chainIdToNetwork = (chainId: number): string => {
     case 31337:
       return "hardhat";
     default:
-      return "localhost";
+      return "xdai";
   }
 };

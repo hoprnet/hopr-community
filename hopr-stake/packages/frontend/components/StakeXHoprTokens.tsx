@@ -5,6 +5,7 @@ import {
   InputRightElement,
   Text,
   Box,
+  Tag,
 } from '@chakra-ui/react'
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { LastTimeSynced } from '../components/LastTimeSynced'
@@ -26,10 +27,25 @@ export const StakeXHoprTokens = ({
 
   return (
     <>
+      <Box d="flex" justifyContent="space-between" mb="10px">
+        <Box d="flex" alignItems="center">
+          <Text fontSize="xl" fontWeight="900">
+            Stake xHOPR tokens
+          </Text>
+          <Text ml="10px" fontSize="sm" fontWeight="400">
+            Your xHOPR tokens will be sent to our smart contract upon locking.
+          </Text>
+        </Box>
+        <Box d="flex">
+          <Tag size="lg" variant="outline" colorScheme="green">
+            APR boost (from NFTs): --%
+          </Tag>
+          <Tag ml="10px" size="lg" variant="outline" colorScheme="blue">
+            Your total APR: --
+          </Tag>
+        </Box>
+      </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">
-        <Text fontSize="xl" fontWeight="900">
-          Stake xHOPR tokens
-        </Text>
         <Text fontSize="md" fontFamily="mono">
           Staked:{' '}
           <HoprStakeBalance
@@ -41,9 +57,7 @@ export const StakeXHoprTokens = ({
         </Text>
         <Text fontSize="sm" fontFamily="mono">
           Last time synced:{' '}
-          <LastTimeSynced
-            HoprStakeContractAddress={HoprStakeContractAddress}
-          />
+          <LastTimeSynced HoprStakeContractAddress={HoprStakeContractAddress} />
         </Text>
       </Box>
       <Box

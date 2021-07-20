@@ -20,5 +20,5 @@ export const HoprStakeBalance = ({
     }
     loadAccountData()
   })
-  return <>{state.stakedHOPRTokens || '0.00'}</>
+  return <>{state.stakedHOPRTokens || '--'}</>
 }

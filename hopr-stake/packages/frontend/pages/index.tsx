@@ -7,6 +7,7 @@ import {
   useColorMode,
   Button,
 } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useEthers } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
@@ -25,7 +26,7 @@ import {
 } from '../lib/addresses'
 
 function HomeIndex(): JSX.Element {
-  const { chainId } = useEthers()
+  const { chainId, account } = useEthers()
   const { colorMode } = useColorMode()
 
   const bgColor = { light: 'gray.50', dark: 'gray.900' }
@@ -51,34 +52,61 @@ function HomeIndex(): JSX.Element {
     <Layout>
       <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
         <Heading as="h1">HOPR Staking</Heading>
-        <Box>
-          <Tag size="lg" variant="outline" colorScheme="green">
-            APR boost (from NFTs): --%
-          </Tag>
-          <Tag ml="10px" size="lg" variant="outline" colorScheme="blue">
-            Your total APR: --
-          </Tag>
-        </Box>
-        <Box>
-          <SyncButton HoprStakeContractAddress={contractAddresses.HoprStake} />
-          <Button
-            size="md"
-            ml="10px"
-            bg="blackAlpha.900"
-            color="whiteAlpha.900"
-          >
-            Claim Rewards
-          </Button>
-        </Box>
+        {account && (
+          <Box>
+            <SyncButton
+              HoprStakeContractAddress={contractAddresses.HoprStake}
+            />
+            <Button
+              size="md"
+              ml="10px"
+              bg="blackAlpha.900"
+              color="whiteAlpha.900"
+            >
+              Claim Rewards
+            </Button>
+          </Box>
+        )}
       </Box>
 
       <Text mt="8" fontSize="xl">
-        Lock your xHOPR tokens for <Tag size="lg">175 days</Tag> to earn up to
-        18.5% of your staked amount. Increase your APR % by activating NFTs on
-        your account, which can be earned by participating in HOPR testnets and
-        activities. Follow our{' '}
-        <Link href="https://twitter.com/hoprnet">Twitter</Link> account to learn
-        about new events.
+        Stake{' '}
+        <Link
+          px="1"
+          href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.xHOPR}/transactions`}
+          isExternal
+        >
+          xHOPR <ExternalLinkIcon />
+        </Link>{' '}
+        tokens to earn a base APR of <b>18.5%</b>. Starting{' '}
+        <b>July 27th 2021</b>, rewards can be claimed on each block. Increase
+        your APR by redeeming NFTs to your account. HOPR NFTs can be earned by
+        participating in HOPR testnets and activities. xHOPR staked today will
+        be locked for <Tag size="lg">175 days</Tag>. You can swap xHOPR tokens
+        via
+        <Link px="1" href={`https://app.honeyswap.org/#/swap`} isExternal>
+          HoneySwap <ExternalLinkIcon />
+        </Link>{' '}or
+        <Link
+            px="1"
+            href={`https://ascendex.com/en/cashtrade-spottrading/usdt/hopr`}
+            isExternal
+          >
+            AscenDEX <ExternalLinkIcon />
+          </Link>, and buy xDAI via <Link
+            px="1"
+            href={`https://buy.ramp.network/`}
+            isExternal
+          >
+            Ramp <ExternalLinkIcon />
+          </Link>
+      </Text>
+      <Text mt="2" fontSize="xl">
+        Follow our{' '}
+        <Link href="https://twitter.com/hoprnet">
+          Twitter <ExternalLinkIcon />
+        </Link>{' '}
+        account to learn about new events.
       </Text>
       <Box
         maxWidth="container.l"

@@ -25,7 +25,7 @@ const Head = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {
   const meta: MetaProps = {
     title: 'HOPR Staking',
     description: 'Lock your HOPR tokens and boost your rewards with collected NFTs!',
-    image: `${WEBSITE_HOST_URL}/images/site-preview.png`,
+    image: `${WEBSITE_HOST_URL}/images/site-preview.jpeg`,
     type: 'website',
     ...customMeta,
   }

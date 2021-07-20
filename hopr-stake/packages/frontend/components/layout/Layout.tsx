@@ -16,9 +16,9 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useEthers, useNotifications } from '@usedapp/core'
 import blockies from 'blockies-ts'
-import NextLink from 'next/link'
 import React from 'react'
 import { useEffect, useState } from 'react'
 import {
@@ -95,14 +95,12 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
             py="8"
           >
             <Flex py={[4, null, null, 0]}>
-              <Link px="4" py="1" href="https://medium.com/hoprnet/hopr-staking-program-full-details-d0a4eb12d2c" isExternal>
-                Read more about HOPR staking
+              <Link py="1" href="https://medium.com/hoprnet/hopr-staking-program-full-details-d0a4eb12d2c" isExternal>
+                Read about HOPR staking <ExternalLinkIcon />
               </Link>
-              <NextLink href="/" passHref>
-                <Link px="4" py="1">
-                Contract Address {contractAddresses.HoprStake || 'Loading...'}
+                <Link px="4" py="1" href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.HoprStake}/transactions`} isExternal>
+                Contract Address <ExternalLinkIcon />
                 </Link>
-              </NextLink>
             </Flex>
             {account ? (
               <Flex
