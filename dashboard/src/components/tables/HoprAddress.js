@@ -9,8 +9,6 @@ import { useQuery } from '@apollo/client';
 
 const HoprAddressTable = props => {
   const { data } = useQuery(GET_ACCOUNTS);
-  // Getting CORS error
-  console.log(data);
 
   const [, getCol] = useNodeColumns();
   const [, nav] = useNavigation();
@@ -26,6 +24,7 @@ const HoprAddressTable = props => {
       },
       {
         ...getCol('hopr_address'),
+        dataIndex: 'id',
         render(value) {
           return (
             <span
@@ -40,14 +39,17 @@ const HoprAddressTable = props => {
       {
         ...getCol('hopr_staked_amount'),
         align: 'center',
-        render(value) {
-          return <>{value} HOPR</>;
+        render(value, record) {
+          const { channels } = record;
+          const nStacked = channels.reduce((a, b) => a + b.balance, 0);
+          return <>{nStacked} HOPR</>;
         },
       },
       {
         ...getCol('hopr_total_channels'),
-        render(text) {
-          return text + ' HOPR';
+        render(text, record) {
+          const { channels } = record;
+          return channels.length;
         },
       },
     ],
@@ -65,7 +67,8 @@ const HoprAddressTable = props => {
     },
     ...props,
   };
-  return <Table {...tableProps} />;
+
+  return <Table {...tableProps} dataSource={data.accounts} />;
 };
 
 HoprAddressTable.propTypes = {

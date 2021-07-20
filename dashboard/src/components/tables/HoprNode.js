@@ -20,6 +20,7 @@ const HoprNodeTable = props => {
       },
       {
         ...getCol('hopr_channel_id'),
+        dataIndex: 'id',
         render(value) {
           return (
             <span
@@ -34,8 +35,9 @@ const HoprNodeTable = props => {
       {
         ...getCol('hopr_status'),
         align: 'center',
+        dataIndex: 'status',
         width: 100,
-        render() {
+        render(value) {
           return (
             <div>
               <Tag
@@ -43,7 +45,7 @@ const HoprNodeTable = props => {
                 text="Open"
                 style={{ width: '100%', height: '100%' }}
               >
-                <span style={{ color: '#000' }}>Open</span>
+                <span style={{ color: '#000' }}>{value}</span>
               </Tag>
             </div>
           );
@@ -52,17 +54,24 @@ const HoprNodeTable = props => {
       {
         ...getCol('hopr_epoch'),
         align: 'center',
+        dataIndex: 'ticketEpoch',
         render(value) {
-          return parseInt(Math.random() * value);
+          // Maybe parse to data
+          return value;
         },
       },
       {
         ...getCol('deposit'),
         align: 'center',
+        dataIndex: 'balance',
       },
       {
         ...getCol('party'),
         align: 'center',
+        dataIndex: 'destination',
+        render(value) {
+          return value.id;
+        },
       },
     ],
     onRow: (record, rowIndex) => {

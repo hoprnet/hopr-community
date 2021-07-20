@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -10,28 +10,31 @@ import BrandLogo from '../../assets/brand/logo.svg';
 //Hooks
 import { useI18n } from '../../hooks/i18n.hook';
 import { useNavigation } from '../../hooks/Nav.hook';
+import { useQuery } from '@apollo/client';
+import { GET_ADDRESS } from '../../graphql';
 
-function generateData() {
-  let data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      hopr_address: '10x' + parseInt(Math.random() * 1000000000000),
-      hopr_staked_amount: parseInt(Math.random() * 100),
-      hopr_total_amount: parseInt(Math.random() * 1000),
-    });
-  }
-  return data;
-}
 const NodeScreen = () => {
+  const [channels, setChannels] = useState([]);
   const [, t] = useI18n();
   const [total] = useState(348);
-  const [data] = useState(generateData());
   const [
     {
       query: { address },
     },
     nav,
   ] = useNavigation();
+  const { data } = useQuery(GET_ADDRESS, {
+    variables: {
+      id: address,
+    },
+  });
+
+  useEffect(() => {
+    if (data?.channels) {
+      setChannels(data.channels);
+    }
+  }, [data]);
+
   return (
     <div className="node-screen fadeIn">
       <SettingsModal />
@@ -61,7 +64,7 @@ const NodeScreen = () => {
           </Col>
         </Row>
         <div className="hopr-table">
-          <HoprNodeTable dataSource={data} />
+          <HoprNodeTable dataSource={channels} />
         </div>
         <div className="social-section">
           <div className="container">
