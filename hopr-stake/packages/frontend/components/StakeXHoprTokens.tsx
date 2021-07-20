@@ -55,7 +55,7 @@ export const StakeXHoprTokens = ({
           />
         </Text>
         <Text fontSize="md" fontFamily="mono">
-          Current Rewards (in xHOPR tokens): --
+          Current Rewards (in wxHOPR tokens): --
         </Text>
         <Text fontSize="sm" fontFamily="mono">
           Last time synced:{' '}
