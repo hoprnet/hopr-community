@@ -120,7 +120,7 @@ export async function fetchAccountData(
         cumulatedRewards,
         claimedRewards,
       ].map((dataPoint) =>
-        dataPoint ? Number(utils.formatEther(dataPoint)).toFixed(2) : '0.00'
+        dataPoint ? Number(utils.formatEther(dataPoint)).toFixed(4) : '0.0000'
       )
       dispatch({
         type: 'SET_ACCOUNT_DATA',
