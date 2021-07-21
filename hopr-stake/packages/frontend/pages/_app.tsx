@@ -10,6 +10,7 @@ import React from 'react'
 import Multicall from '@hoprnet/hopr-stake/deployments/localhost/Multicall.json'
 
 const config: Config = {
+  readOnlyChainId: ChainId.xDai,
   readOnlyUrls: {
     [ChainId.Goerli]: `https://goerli-light.eth.linkpool.io/`,
     [ChainId.xDai]: `https://rpc.xdaichain.com/`,

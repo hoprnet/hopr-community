@@ -1,12 +1,19 @@
-import { useEthers } from '@usedapp/core'
-import { Text, Box, Link, Button } from '@chakra-ui/react'
+import { useEthers, useTokenBalance } from '@usedapp/core'
+import { Text, Box, Button } from '@chakra-ui/react'
 import { useEffect, useState, useReducer } from 'react'
-// import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
-// import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
-import { TypedEvent } from '@hoprnet/hopr-stake/lib/types/commons'
-import { BigNumber } from 'ethers'
+import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
+import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
+import { Contract, constants } from 'ethers'
 import { initialState, reducer } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
+
+type NFT = {
+  tokenId: string
+  typeOfBoost: string
+  typeName: string
+  factor: number
+  deadline: number
+}
 
 export const NFTQuery = ({
   HoprBoostContractAddress,
@@ -14,76 +21,79 @@ export const NFTQuery = ({
   HoprBoostContractAddress: string
   fromBlock?: number
 }): JSX.Element => {
-  const { chainId } = useEthers()
+  const { chainId, library, account } = useEthers()
   const [state] = useReducer(reducer, initialState)
   const colours = RPC_COLOURS[chainId]
-  const [events, setEvents] = useState<
-    TypedEvent<
-      [BigNumber, BigNumber, BigNumber] & {
-        boostTypeIndex: BigNumber
-        boostNumerator: BigNumber
-        redeemDeadline: BigNumber
-      }
-    >[]
-  >([])
+  const [nfts, setNFTS] = useState<NFT[]>([])
+
+  const NFTBalance = useTokenBalance(
+    HoprBoostContractAddress || constants.Zero.toHexString(),
+    account
+  )
 
   useEffect(() => {
-    const loadStakedXHoprBalance = async () => {
-      if (HoprBoostContractAddress != '') {
-        try {
-          // const HoprBoost = new Contract(
-          //   HoprBoostContractAddress,
-          //   HoprBoostABI,
-          //   library
-          // ) as unknown as HoprBoostType
-          // const events = await HoprBoost.queryFilter(
-          //   HoprBoost.filters.BoostMinted(),
-          //   fromBlock,
-          //   'latest'
-          // )
-          setEvents([]) //@TODO Replace for actual events.
-        } catch (e) {
-          console.error('Unable to create contract or parse past events', e)
-        }
+    const loadNFTBalance = async () => {
+      const amountofNFTS = NFTBalance
+        ? [...Array(Number(NFTBalance.toString()))]
+        : []
+      if (amountofNFTS.length > 0) {
+        const HoprBoost = new Contract(
+          HoprBoostContractAddress,
+          HoprBoostABI,
+          library
+        ) as unknown as HoprBoostType
+        const nftsPromises = amountofNFTS.map(async (_, index) => {
+          const tokenId = await HoprBoost.tokenOfOwnerByIndex(account, index)
+          const typeOfBoost = await HoprBoost.typeIndexOf(tokenId)
+          const typeName = await HoprBoost.typeOf(tokenId)
+          const [factor, deadline] = await HoprBoost.boostOf(tokenId)
+
+          return {
+            tokenId: tokenId.toString(),
+            typeOfBoost: typeOfBoost.toString(),
+            typeName,
+            factor: factor.toNumber(),
+            deadline: deadline.toNumber(),
+          }
+        })
+        const nfts = await Promise.all(nftsPromises)
+        setNFTS(nfts)
       }
     }
-    loadStakedXHoprBalance()
+    loadNFTBalance()
   })
   return (
     <>
       <Box d="flex" alignItems="center">
-      <Text fontSize="xl" fontWeight="900">
-        Redeemable HOPR NFTs
-      </Text>
-      <Text ml="10px" fontSize="sm" fontWeight="400">Your NFTs will show up here. Earn them by participating in our activities.</Text>
+        <Text fontSize="xl" fontWeight="900">
+          Redeemable HOPR NFTs
+        </Text>
+        <Text ml="10px" fontSize="sm" fontWeight="400">
+          Your NFTs will show up here. Earn them by participating in our
+          activities.
+        </Text>
       </Box>
-      {events.map((event) => {
+      {nfts.map((nft) => {
         return (
           <Box
-            key={event.transactionHash}
+            key={nft.tokenId}
             d="flex"
             justifyContent="space-between"
             alignItems="center"
           >
             <Text>
-              BoostType Index -{' '}
-              <code>{(event.args[0] as BigNumber).toString()}</code>
+              Name - <code>{nft.typeName}</code>
             </Text>
             <Text>
-              Boost Numerator -{' '}
-              <code>{(event.args[1] as BigNumber).toString()}</code>
+              Boost Type - <code>{nft.typeOfBoost}</code>
+            </Text>
+            <Text>
+              Boost Factor - <code>{nft.factor}</code>
             </Text>
             <Text>
               Redeem Deadline -{' '}
-              <code>{new Date(+(event.args[2] as BigNumber).toString() * 1000).toUTCString()}</code>
+              <code>{new Date(nft.deadline * 1000).toUTCString()}</code>
             </Text>
-            <Link
-              isExternal
-              href={`https://blockscout.com/xdai/mainnet/tx/${event.transactionHash}`}
-            >
-              Transaction Hash -{' '}
-              <code>{`${event.transactionHash.substr(0, 10)}...`}</code>
-            </Link>
             <Button
               width="10rem"
               size="sm"

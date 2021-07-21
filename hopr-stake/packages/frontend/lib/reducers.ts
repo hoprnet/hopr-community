@@ -5,6 +5,7 @@ import xHOPRTokenABI from '@hoprnet/hopr-stake/lib/chain/abis/ERC677Mock.json'
 import { ERC677Mock as xHOPRTokenType } from '@hoprnet/hopr-stake/lib/types/ERC677Mock'
 import HoprStakeABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprStake.json'
 import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprStake'
+import { round } from './helpers'
 
 /**
  * Prop Types
@@ -120,7 +121,7 @@ export async function fetchAccountData(
         cumulatedRewards,
         claimedRewards,
       ].map((dataPoint) =>
-        dataPoint ? Number(utils.formatEther(dataPoint)).toFixed(4) : '0.0000'
+        dataPoint ? round(Number(utils.formatEther(dataPoint)), 4) : '0.0000'
       )
       dispatch({
         type: 'SET_ACCOUNT_DATA',
