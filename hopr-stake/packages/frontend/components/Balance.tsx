@@ -2,6 +2,7 @@ import { Text, Tag } from '@chakra-ui/react'
 import { ChainId, useEtherBalance } from '@usedapp/core'
 import { utils } from 'ethers'
 import { chainIdToNetwork, chainToNativeToken, RPC_COLOURS } from '../lib/connectors'
+import { round } from '../lib/helpers'
 import { XHoprBalance } from './XHoprBalance'
 
 /**
@@ -18,7 +19,7 @@ function Balance({
 }): JSX.Element {
   const etherBalance = useEtherBalance(account)
   const finalBalance = etherBalance
-    ? Number(utils.formatEther(etherBalance)).toFixed(4)
+    ? round(Number(utils.formatEther(etherBalance)), 4)
     : '0.00'
 
   const colours = RPC_COLOURS[chainId]
