@@ -48,7 +48,7 @@ export const NFTQuery = ({
       }
     }
     loadStakedXHoprBalance()
-  })
+  }, [])
   return (
     <>
       <Box d="flex" alignItems="center">
