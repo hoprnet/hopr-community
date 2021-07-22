@@ -8,7 +8,8 @@ const RPC_URLS: { [chainId: number]: string } = {
 
 export const RPC_COLOURS: { [chainId: number]: { bg: string, color: string} } = {
   5: { bg:"lightblue", color:"#414141" },
-  100: { bg:"yellow.500", color:"#414141" }
+  100: { bg:"yellow.500", color:"#414141" },
+  1337: { bg:"blackAlpha.500", color:"#414141" }
 }
 
 export const walletconnect = new WalletConnectConnector({
@@ -23,6 +24,8 @@ export const chainIdToNetwork = (chainId: number): string => {
       return "goerli";
     case 100:
       return "xdai";
+    case 1337:
+      return "localhost";
     case 31337:
       return "hardhat";
     default:
@@ -38,6 +41,8 @@ export const chainToNativeToken = (chainId: number): string => {
       return "xDAI";
     case 31337:
       return "hETH";
+      case 1337:
+        return "lETH";
     default:
       return "xDAI";
   }
