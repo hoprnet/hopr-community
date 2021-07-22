@@ -33,7 +33,7 @@ function Balance({
       <Text mr="5" fontFamily="mono">
         {finalBalance} <Tag variant={'outline'}>{chainToNativeToken(chainId)}</Tag>
       </Text>
-      <Tag ml="10" textTransform="uppercase" {...colours}>
+      <Tag minW="100px" ml="10" textTransform="uppercase" {...colours}>
         {chainIdToNetwork(chainId) || 'Loading...'}
       </Tag>
     </>

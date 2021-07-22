@@ -13,6 +13,7 @@ type NFT = {
   typeName: string
   factor: number
   deadline: number
+  tokenURI: string
 }
 
 export const NFTQuery = ({
@@ -47,6 +48,7 @@ export const NFTQuery = ({
           const typeOfBoost = await HoprBoost.typeIndexOf(tokenId)
           const typeName = await HoprBoost.typeOf(tokenId)
           const [factor, deadline] = await HoprBoost.boostOf(tokenId)
+          const tokenURI = await HoprBoost.tokenURI(tokenId)
 
           return {
             tokenId: tokenId.toString(),
@@ -54,6 +56,7 @@ export const NFTQuery = ({
             typeName,
             factor: factor.toNumber(),
             deadline: deadline.toNumber(),
+            tokenURI
           }
         })
         const nfts = await Promise.all(nftsPromises)
@@ -80,15 +83,17 @@ export const NFTQuery = ({
             d="flex"
             justifyContent="space-between"
             alignItems="center"
+            my="2"
           >
+            {/* <Image src={nft.tokenURI} width="250px"/> */}
             <Text>
-              Name - <code>{nft.typeName}</code>
+              <code>{nft.typeName}</code>
             </Text>
             <Text>
               Boost Type - <code>{nft.typeOfBoost}</code>
             </Text>
             <Text>
-              Boost Factor - <code>{nft.factor}</code>
+              Boost Factor - <code>{nft.factor / 317}%</code>
             </Text>
             <Text>
               Redeem Deadline -{' '}

@@ -22,7 +22,7 @@ export const StakeXHoprTokens = ({
   XHOPRContractAddress: string
   HoprStakeContractAddress: string
 }): JSX.Element => {
-  const { chainId, library } = useEthers()
+  const { chainId, library, account } = useEthers()
   const [state, dispatch] = useReducer(reducer, initialState)
   const colours = RPC_COLOURS[chainId]
 
@@ -84,6 +84,7 @@ export const StakeXHoprTokens = ({
             <Button
               width="10rem"
               size="sm"
+              isDisabled={!account}
               isLoading={state.isLoading}
               onClick={() => {
                 setStaking(
