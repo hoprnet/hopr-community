@@ -134,6 +134,7 @@ export const NFTQuery = ({
   const [redeemedNFTs, setRedeeemedNFTS] = useState<NFT[]>([])
 
   const { colorMode } = useColorMode()
+  const block = useBlock()
 
   const NFTBalance = useTokenBalance(
     HoprBoostContractAddress || constants.Zero.toHexString(),
@@ -183,7 +184,7 @@ export const NFTQuery = ({
       }
     }
     library && loadNFTBalance()
-  })
+  }, [block])
   return (
     <>
       <Box
@@ -233,3 +234,7 @@ export const NFTQuery = ({
     </>
   )
 }
+function useBlock() {
+  throw new Error('Function not implemented.')
+}
+
