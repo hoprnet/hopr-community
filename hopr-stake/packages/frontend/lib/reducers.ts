@@ -185,6 +185,7 @@ export async function setSync(
 
 export async function setRedeemNFT(
   HoprBoostContractAddress: string,
+  HoprStakeContractAddress: string,
   tokenId: string,
   provider: Web3Provider,
   dispatch: React.Dispatch<ActionType>
@@ -201,7 +202,7 @@ export async function setRedeemNFT(
       HoprBoostABI,
       signer
     ) as unknown as HoprBoostType
-    const transaction = await contract.transferFrom(address, HoprBoostContractAddress, tokenId)
+    const transaction = await contract['safeTransferFrom(address,address,uint256)'](address, HoprStakeContractAddress, tokenId)
     await transaction.wait()
     dispatch({
       type: 'SET_LOADING_REDEEM',
