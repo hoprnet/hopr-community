@@ -4,7 +4,7 @@ import { useEffect, useState, useReducer } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
 import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
 import { Contract, constants } from 'ethers'
-import { initialState, reducer } from '../lib/reducers'
+import { initialState, reducer, setRedeemNFT } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 
 type NFT = {
@@ -23,7 +23,7 @@ export const NFTQuery = ({
   fromBlock?: number
 }): JSX.Element => {
   const { chainId, library, account } = useEthers()
-  const [state] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const colours = RPC_COLOURS[chainId]
   const [nfts, setNFTS] = useState<NFT[]>([])
 
@@ -102,9 +102,17 @@ export const NFTQuery = ({
             <Button
               width="10rem"
               size="sm"
-              isLoading={state.isLoading}
-              isDisabled={true}
+              isLoading={state.isLoadingRedeem}
+              isDisabled={state.isLoadingRedeem}
               {...colours}
+              onClick={() => {
+                setRedeemNFT(
+                  HoprBoostContractAddress,
+                  nft.tokenId,
+                  library,
+                  dispatch
+                )
+              }}
             >
               {state.isLoading ? 'Loading...' : 'Redeem NFT'}
             </Button>
