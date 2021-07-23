@@ -114,7 +114,7 @@ export const NFTQuery = ({
                 )
               }}
             >
-              {state.isLoading ? 'Loading...' : 'Redeem NFT'}
+              {state.isLoading ? 'Loading...' : 'Lock NFT'}
             </Button>
           </Box>
         )
