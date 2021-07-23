@@ -9,3 +9,10 @@ export const round = (num: number, precision: number): string => {
   const base = 10 ** precision
   return (Math.floor(num * base) / base).toFixed(precision)
 }
+
+export const bgColor = { light: 'gray.50', dark: 'gray.900' }
+export const color = { light: '#414141', dark: 'white' }
+
+export const nonEmptyAccount = (account:string) => {
+  return account && account.length > 0
+}

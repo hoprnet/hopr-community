@@ -16,13 +16,14 @@ import {
   IContractFromBlockNumbers,
 } from '../lib/addresses'
 import { XHoprBalance } from '../components/XHoprBalance'
+import { bgColor, color } from '../lib/helpers'
+
 
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
   const { colorMode } = useColorMode()
 
-  const bgColor = { light: 'gray.50', dark: 'gray.900' }
-  const color = { light: '#414141', dark: 'white' }
+  
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
     emptyContractAddresses
   )
@@ -146,18 +147,11 @@ function HomeIndex(): JSX.Element {
           HoprStakeContractAddress={contractAddresses.HoprStake}
         />
       </Box>
-      <Box
-        maxWidth="container.l"
-        p="8"
-        mt="8"
-        bg={bgColor[colorMode]}
-        color={color[colorMode]}
-      >
-        <NFTQuery
-          HoprBoostContractAddress={contractAddresses.HoprBoost}
-          fromBlock={fromBlockNumbers.HoprBoost}
-        />
-      </Box>
+      <NFTQuery
+        HoprBoostContractAddress={contractAddresses.HoprBoost}
+        HoprStakeContractAddress={contractAddresses.HoprStake}
+        fromBlock={fromBlockNumbers.HoprBoost}
+      />
       <DarkModeSwitch />
     </Layout>
   )

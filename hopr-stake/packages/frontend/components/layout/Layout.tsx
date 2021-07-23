@@ -110,8 +110,6 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
               >
                 <Balance
                   xHOPRContractAddress={contractAddresses.xHOPR}
-                  chainId={chainId}
-                  account={account}
                 />
                 <Image ml="4" src={blockieImageSrc} alt="blockie" />
                 <Menu placement="bottom-end">

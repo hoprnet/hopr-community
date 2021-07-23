@@ -5,6 +5,8 @@ import xHOPRTokenABI from '@hoprnet/hopr-stake/lib/chain/abis/ERC677Mock.json'
 import { ERC677Mock as xHOPRTokenType } from '@hoprnet/hopr-stake/lib/types/ERC677Mock'
 import HoprStakeABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprStake.json'
 import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprStake'
+import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
+import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
 import { round } from './helpers'
 
 /**
@@ -18,6 +20,7 @@ type StateType = {
   amountValue: string
   isLoading: boolean
   isLoadingSync: boolean
+  isLoadingRedeem: boolean
 }
 
 /**
@@ -31,6 +34,7 @@ export const initialState: StateType = {
   amountValue: '',
   isLoading: false,
   isLoadingSync: false,
+  isLoadingRedeem: false,
 }
 
 type Accounts = {
@@ -57,6 +61,10 @@ type ActionType =
       type: 'SET_LOADING_SYNC'
       isLoadingSync: StateType['isLoadingSync']
     }
+    | {
+      type: 'SET_LOADING_REDEEM'
+      isLoadingRedeem: StateType['isLoadingRedeem']
+    }
   | {
       type: 'SET_STAKING_AMOUNT'
       amountValue: StateType['amountValue']
@@ -81,6 +89,11 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         isLoadingSync: action.isLoadingSync
+      }
+    case 'SET_LOADING_REDEEM':
+      return {
+        ...state,
+        isLoadingRedeem: action.isLoadingRedeem
       }
     case 'SET_STAKING_AMOUNT':
       return {
@@ -166,6 +179,34 @@ export async function setSync(
     dispatch({
       type: 'SET_LOADING_SYNC',
       isLoadingSync: false,
+    })
+  }
+}
+
+export async function setRedeemNFT(
+  HoprBoostContractAddress: string,
+  HoprStakeContractAddress: string,
+  tokenId: string,
+  provider: Web3Provider,
+  dispatch: React.Dispatch<ActionType>
+): Promise<void> {
+  if (provider && HoprBoostContractAddress != '') {
+    dispatch({
+      type: 'SET_LOADING_REDEEM',
+      isLoadingRedeem: true,
+    })
+    const signer = provider.getSigner()
+    const address = await signer.getAddress()
+    const contract = new ethers.Contract(
+      HoprBoostContractAddress,
+      HoprBoostABI,
+      signer
+    ) as unknown as HoprBoostType
+    const transaction = await contract['safeTransferFrom(address,address,uint256)'](address, HoprStakeContractAddress, tokenId)
+    await transaction.wait()
+    dispatch({
+      type: 'SET_LOADING_REDEEM',
+      isLoadingRedeem: false,
     })
   }
 }
