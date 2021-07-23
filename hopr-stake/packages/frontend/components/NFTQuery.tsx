@@ -1,4 +1,4 @@
-import { useEthers, useTokenBalance } from '@usedapp/core'
+import { useEthers, useBlockNumber, useTokenBalance } from '@usedapp/core'
 import { Text, Box, Button, useColorMode } from '@chakra-ui/react'
 import { useEffect, useState, useReducer } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
@@ -8,7 +8,7 @@ import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprSt
 import { Contract, constants, BigNumber } from 'ethers'
 import { initialState, reducer, setRedeemNFT } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
-import { bgColor, color } from '../lib/helpers'
+import { bgColor, color, nonEmptyAccount } from '../lib/helpers'
 
 type NFT = {
   tokenId: string
@@ -134,15 +134,17 @@ export const NFTQuery = ({
   const [redeemedNFTs, setRedeeemedNFTS] = useState<NFT[]>([])
 
   const { colorMode } = useColorMode()
-  const block = useBlock()
-
+  const block = useBlockNumber()
   const NFTBalance = useTokenBalance(
-    HoprBoostContractAddress || constants.Zero.toHexString(),
-    account
+    HoprBoostContractAddress,
+    account || constants.AddressZero
   )
 
   useEffect(() => {
     const loadNFTBalance = async () => {
+      if (!(HoprStakeContractAddress && account) || HoprStakeContractAddress.length == 0 || account.length == 0) {
+        return;
+      }
       const amountofNFTS = NFTBalance
         ? [...Array(Number(NFTBalance.toString()))]
         : []
@@ -152,25 +154,19 @@ export const NFTQuery = ({
         library
       ) as unknown as HoprStakeType
       const redeemedNFTsAmountScalar = (
-        await HoprStake.redeemedNftIndex(account)
+        nonEmptyAccount(account) ? await HoprStake.redeemedNftIndex(account): constants.Zero
       ).toString()
-
       if (amountofNFTS.length > 0 || +redeemedNFTsAmountScalar > 0) {
         const HoprBoost = new Contract(
           HoprBoostContractAddress,
           HoprBoostABI,
           library
         ) as unknown as HoprBoostType
-
         const redeemedNFTsAmount = [...Array(Number(redeemedNFTsAmountScalar))]
         const redeemedNFTSPromises = redeemedNFTsAmount.map(
           async (_, index) => {
-            const redeemedNFT = await HoprStake.redeemedNft(account, index)
-            const tokenId = await HoprBoost.tokenOfOwnerByIndex(
-              HoprStakeContractAddress,
-              redeemedNFT
-            )
-            return await getNFTFromTokenId(HoprBoost, tokenId, true)
+            const tokenId = nonEmptyAccount(account) ? await HoprStake.redeemedNft(account, index) : constants.NegativeOne
+            return +tokenId >= 0 ? await getNFTFromTokenId(HoprBoost, tokenId, true) : undefined;
           }
         )
         const nftsPromises = amountofNFTS.map(async (_, index) => {
@@ -183,8 +179,8 @@ export const NFTQuery = ({
         setRedeeemedNFTS(redemeedNfts)
       }
     }
-    library && loadNFTBalance()
-  }, [block])
+    loadNFTBalance()
+  }, [account, HoprBoostContractAddress, block])
   return (
     <>
       <Box
@@ -234,7 +230,3 @@ export const NFTQuery = ({
     </>
   )
 }
-function useBlock() {
-  throw new Error('Function not implemented.')
-}
-

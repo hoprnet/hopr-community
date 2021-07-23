@@ -19,6 +19,6 @@ export const LastTimeSynced = ({
       )
     }
     loadAccountData()
-  })
+  }, [account, library, HoprStakeContractAddress])
   return <>{state.lastSync ? state.lastSync != "" ? 'Never' : new Date(+state.lastSync * 1000).toUTCString() : '--'}</>
 }

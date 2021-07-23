@@ -19,6 +19,6 @@ export const HoprStakeBalance = ({
       )
     }
     loadAccountData()
-  })
+  }, [account, library, HoprStakeContractAddress])
   return <>{state.stakedHOPRTokens || '--'}</>
 }
