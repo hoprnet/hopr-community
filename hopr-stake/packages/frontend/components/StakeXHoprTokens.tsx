@@ -5,14 +5,13 @@ import {
   InputRightElement,
   Text,
   Box,
-  Tag,
 } from '@chakra-ui/react'
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { LastTimeSynced } from '../components/LastTimeSynced'
 import { SyncButton } from '../components/SyncButton'
 import { initialState, reducer, setStaking } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
-import { useEthers } from '@usedapp/core'
+import { useBlockNumber, useEthers } from '@usedapp/core'
 import { useReducer } from 'react'
 
 export const StakeXHoprTokens = ({
@@ -23,6 +22,7 @@ export const StakeXHoprTokens = ({
   HoprStakeContractAddress: string
 }): JSX.Element => {
   const { chainId, library, account } = useEthers()
+  const block = useBlockNumber();
   const [state, dispatch] = useReducer(reducer, initialState)
   const colours = RPC_COLOURS[chainId]
 
@@ -38,16 +38,13 @@ export const StakeXHoprTokens = ({
             ends.
           </Text>
         </Box>
-        <Box d="flex">
-          <Tag size="lg" variant="outline">
-            Base boost: 18.25%
-          </Tag>
-          <Tag ml="10px" size="lg" variant="outline" colorScheme="green">
-            APR boost: 10%
-          </Tag>
-          <Tag ml="10px" size="lg" variant="outline" colorScheme="blue">
-            Total APR: 28.25%
-          </Tag>
+        <Box d="flex" alignItems="center">
+        <Text fontWeight="600" fontSize="md" mr="5px">
+            Blocks
+          </Text>
+          <Text ml="6px" fontSize="sm" fontFamily="mono">
+            {block}
+          </Text>
         </Box>
       </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">
@@ -126,7 +123,7 @@ export const StakeXHoprTokens = ({
             Last time synced:{' '}
             <LastTimeSynced
               HoprStakeContractAddress={HoprStakeContractAddress}
-            />
+            /> (X time ago)
           </Text>
           <Box d="flex" alignItems="center">
             <Text fontWeight="600" fontSize="md" mr="5px">

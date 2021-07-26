@@ -5,9 +5,8 @@ import {
   Tag,
   Link,
   useColorMode,
-  Tooltip,
 } from '@chakra-ui/react'
-import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
@@ -56,28 +55,22 @@ function HomeIndex(): JSX.Element {
     <Layout>
       <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
         <Heading as="h1">HOPR Staking</Heading>
-        <Box d="flex">
-          <Tag size="lg" colorScheme="green" fontFamily="mono">
-            Available Rewards:{' '}
+        <Box d="flex" alignItems="center">
+          <Text mr="10px" fontWeight="600">Available Rewards{'  '}</Text>
+          <Tag mr="20px" colorScheme="green" fontFamily="mono">
+            
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.wxHOPR}
               givenAccount={contractAddresses.HoprStake}
             />{' '}
             wxHOPR
           </Tag>
-          <Tag ml="10px" size="lg" colorScheme="blue" fontFamily="mono">
-            Total Staked:{' '}
+          <Text mr="10px" fontWeight="600">Total Staked{'  '}</Text>
+          <Tag ml="10px" colorScheme="blue" fontFamily="mono">
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.xHOPR}
               givenAccount={contractAddresses.HoprStake}
-            />{' '}
-            + 10 xHOPR
-            <Tooltip
-              label="Non-circulating supply HOPR holders"
-              aria-label="Staked information"
-            >
-              <InfoIcon ml="5px" boxSize="16px" />
-            </Tooltip>
+            /> xHOPR
           </Tag>
         </Box>
       </Box>
@@ -91,7 +84,7 @@ function HomeIndex(): JSX.Element {
         >
           xHOPR <ExternalLinkIcon />
         </Link>{' '}
-        tokens to earn a base APR of <b>18.25%</b>. Starting{' '}
+        tokens to earn a base APR of <Text d="inline" fontWeight="700" color="blue.600">18.25%</Text><b> (18.25% + <Text d="inline" fontWeight="700" color="green.600">0.00%</Text>)</b>. Starting{' '}
         <b>July 27th 2021</b>, rewards can be claimed on each block. All rewards
         will be returned as{' '}
         <Link
