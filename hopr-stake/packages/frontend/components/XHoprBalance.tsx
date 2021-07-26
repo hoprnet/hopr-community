@@ -11,9 +11,9 @@ export const XHoprBalance = ({
 }): JSX.Element => {
   const { account } = useEthers()
   const xHOPRBalance = useTokenBalance(
-    xHOPRContractAddress || constants.Zero.toHexString(),
+    xHOPRContractAddress,
     givenAccount || account
-  )
+  ) || constants.Zero
   const xHOPRFinalBalance = xHOPRBalance
     ? round(Number(utils.formatEther(xHOPRBalance)), 4)
     : '--'

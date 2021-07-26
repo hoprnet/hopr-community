@@ -1,6 +1,6 @@
 import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { useEthers } from '@usedapp/core'
+import { useBlockNumber, useEthers } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
 
@@ -22,7 +22,7 @@ import { bgColor, color } from '../lib/helpers'
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
   const { colorMode } = useColorMode()
-
+  const block = useBlockNumber()
   
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
     emptyContractAddresses
@@ -39,7 +39,7 @@ function HomeIndex(): JSX.Element {
       setFromBlockNumbers(fromBlockNumbers)
     }
     loadContracts()
-  }, [chainId])
+  }, [chainId, block])
 
   const PROGRAM_END = 1642424400 * 1000 // From smart contract
   const timeDiff = PROGRAM_END - new Date().getTime()
@@ -50,19 +50,19 @@ function HomeIndex(): JSX.Element {
       <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
         <Heading as="h1">HOPR Staking</Heading>
         <Box d="flex">
-          <Tag size="lg" colorScheme="green">
-            Available Rewards (in wxHOPR):{' '}
+          <Tag size="lg" colorScheme="green" fontFamily="mono">
+            Available Rewards:{' '}
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.wxHOPR}
               givenAccount={contractAddresses.HoprStake}
-            />
+            /> wxHOPR
           </Tag>
-          <Tag ml="10px" size="lg" colorScheme="blue">
-            Total Staked (in xHOPR):{' '}
+          <Tag ml="10px" size="lg" colorScheme="blue" fontFamily="mono">
+            Total Staked:{' '}
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.xHOPR}
               givenAccount={contractAddresses.HoprStake}
-            />
+            /> xHOPR
           </Tag>
         </Box>
       </Box>
