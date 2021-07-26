@@ -113,7 +113,7 @@ const NFTContainer = ({
               </Text>
               <Box>
                 <Text>
-                  Boost Factor - <code>{nft.factor / 317}%</code>
+                  Boost Factor - <code>{(nft.factor / 317).toFixed(2)}%</code>
                 </Text>
               </Box>
               <Box isTruncated>
