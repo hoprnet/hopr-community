@@ -13,6 +13,10 @@ export const round = (num: number, precision: number): string => {
 export const bgColor = { light: 'gray.50', dark: 'gray.900' }
 export const color = { light: '#414141', dark: 'white' }
 
-export const nonEmptyAccount = (account:string): boolean => {
+export const nonEmptyAccount = (account: string): boolean => {
   return account && account.length > 0
 }
+
+const PROGRAM_END = 1642424400 * 1000 // From smart contract
+const timeDiff = PROGRAM_END - new Date().getTime()
+export const daysUntilProgramEnd = Math.floor(timeDiff / (1000 * 60 * 60 * 24))

@@ -12,7 +12,7 @@ import { round } from './helpers'
 /**
  * Prop Types
  */
-type StateType = {
+export type StateType = {
   stakedHOPRTokens: string
   yetToClaimRewards: string
   lastSync: string
@@ -21,6 +21,7 @@ type StateType = {
   isLoading: boolean
   isLoadingSync: boolean
   isLoadingRedeem: boolean
+  totalAPRBoost: number
 }
 
 /**
@@ -35,6 +36,7 @@ export const initialState: StateType = {
   isLoading: false,
   isLoadingSync: false,
   isLoadingRedeem: false,
+  totalAPRBoost: 0
 }
 
 type Accounts = {
@@ -45,7 +47,7 @@ type Accounts = {
   claimedRewards: BigNumber
 }
 
-type ActionType =
+export type ActionType =
   | {
       type: 'SET_ACCOUNT_DATA'
       stakedHOPRTokens: StateType['stakedHOPRTokens']
@@ -68,6 +70,10 @@ type ActionType =
   | {
       type: 'SET_STAKING_AMOUNT'
       amountValue: StateType['amountValue']
+    }
+    | {
+      type: 'SET_TOTAL_APR_BOOST'
+      totalAPRBoost: StateType['totalAPRBoost']
     }
 
 export function reducer(state: StateType, action: ActionType): StateType {
@@ -99,6 +105,11 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         amountValue: action.amountValue,
+      }
+    case 'SET_TOTAL_APR_BOOST':
+      return {
+        ...state,
+        totalAPRBoost: action.totalAPRBoost
       }
     default:
       throw new Error()

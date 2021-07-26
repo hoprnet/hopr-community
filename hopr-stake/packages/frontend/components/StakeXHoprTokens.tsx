@@ -9,21 +9,29 @@ import {
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { LastTimeSynced } from '../components/LastTimeSynced'
 import { SyncButton } from '../components/SyncButton'
-import { initialState, reducer, setStaking } from '../lib/reducers'
+import {
+  ActionType,
+  setStaking,
+  StateType,
+} from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useBlockNumber, useEthers } from '@usedapp/core'
-import { useReducer } from 'react'
+import { Dispatch } from 'react'
+import { daysUntilProgramEnd } from '../lib/helpers'
 
 export const StakeXHoprTokens = ({
   XHOPRContractAddress,
   HoprStakeContractAddress,
+  state,
+  dispatch,
 }: {
   XHOPRContractAddress: string
   HoprStakeContractAddress: string
+  state: StateType
+  dispatch: Dispatch<ActionType>
 }): JSX.Element => {
   const { chainId, library, account } = useEthers()
-  const block = useBlockNumber();
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const block = useBlockNumber()
   const colours = RPC_COLOURS[chainId]
 
   return (
@@ -39,7 +47,7 @@ export const StakeXHoprTokens = ({
           </Text>
         </Box>
         <Box d="flex" alignItems="center">
-        <Text fontWeight="600" fontSize="md" mr="5px">
+          <Text fontWeight="600" fontSize="md" mr="5px">
             Blocks
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono">
@@ -55,6 +63,8 @@ export const StakeXHoprTokens = ({
           <Text fontFamily="mono" fontSize="sm">
             <HoprStakeBalance
               HoprStakeContractAddress={HoprStakeContractAddress}
+              state={state}
+              dispatch={dispatch}
             />{' '}
             xHOPR
           </Text>
@@ -123,7 +133,10 @@ export const StakeXHoprTokens = ({
             Last time synced:{' '}
             <LastTimeSynced
               HoprStakeContractAddress={HoprStakeContractAddress}
-            /> (X time ago)
+              state={state}
+              dispatch={dispatch}
+            />{' '}
+            (X time ago)
           </Text>
           <Box d="flex" alignItems="center">
             <Text fontWeight="600" fontSize="md" mr="5px">
@@ -139,7 +152,11 @@ export const StakeXHoprTokens = ({
         </Box>
         {account && (
           <Box textAlign="right">
-            <SyncButton HoprStakeContractAddress={HoprStakeContractAddress} />
+            <SyncButton
+              HoprStakeContractAddress={HoprStakeContractAddress}
+              state={state}
+              dispatch={dispatch}
+            />
             <Button
               size="md"
               ml="10px"
@@ -147,7 +164,7 @@ export const StakeXHoprTokens = ({
               color="whiteAlpha.900"
               isDisabled={true}
             >
-              Claim Rewards (175 days to go)
+              Claim Rewards ({daysUntilProgramEnd} days to go)
             </Button>
           </Box>
         )}

@@ -1,12 +1,12 @@
 import { useEthers, useBlockNumber, useTokenBalance } from '@usedapp/core'
 import { Text, Box, Button, useColorMode, Image, Tag } from '@chakra-ui/react'
-import { useEffect, useState, useReducer } from 'react'
+import { useEffect, useState, Dispatch } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
 import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
 import HoprStakeABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprStake.json'
 import { HoprStake as HoprStakeType } from '@hoprnet/hopr-stake/lib/types/HoprStake'
 import { Contract, constants, BigNumber } from 'ethers'
-import { initialState, reducer, setRedeemNFT } from '../lib/reducers'
+import { ActionType, setRedeemNFT, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { bgColor, color, nonEmptyAccount } from '../lib/helpers'
 
@@ -62,13 +62,16 @@ const NFTLockButton = ({
   tokenId,
   HoprBoostContractAddress,
   HoprStakeContractAddress,
+  state,
+  dispatch,
 }: {
   tokenId: string
   HoprBoostContractAddress: string
   HoprStakeContractAddress: string
+  state: StateType
+  dispatch: Dispatch<ActionType>
 }) => {
   const { chainId, library } = useEthers()
-  const [state, dispatch] = useReducer(reducer, initialState)
   const colours = RPC_COLOURS[chainId]
   return (
     <Button
@@ -96,10 +99,14 @@ const NFTContainer = ({
   nfts,
   HoprBoostContractAddress,
   HoprStakeContractAddress,
+  state,
+  dispatch,
 }: {
   nfts: NFT[]
   HoprBoostContractAddress: string
   HoprStakeContractAddress: string
+  state: StateType
+  dispatch: Dispatch<ActionType>
 }) => (
   <>
     {nfts.map((nft) => {
@@ -123,7 +130,8 @@ const NFTContainer = ({
                   <code>{(nft.factor / 317).toFixed(2)}%</code>
                 </Text>
                 <Text>
-                  <b>APR</b> - <code>{((nft.factor * 3600 * 24) / 1e12) * 365}%</code>
+                  <b>APR</b> -{' '}
+                  <code>{((nft.factor * 3600 * 24) / 1e12) * 365}%</code>
                 </Text>
               </Box>
               <Box isTruncated mt="5px">
@@ -138,6 +146,8 @@ const NFTContainer = ({
                   tokenId={nft.tokenId}
                   HoprBoostContractAddress={HoprBoostContractAddress}
                   HoprStakeContractAddress={HoprStakeContractAddress}
+                  state={state}
+                  dispatch={dispatch}
                 />
               )}
             </Box>
@@ -151,9 +161,13 @@ const NFTContainer = ({
 export const NFTQuery = ({
   HoprBoostContractAddress,
   HoprStakeContractAddress,
+  state,
+  dispatch,
 }: {
   HoprBoostContractAddress: string
   HoprStakeContractAddress: string
+  state: StateType
+  dispatch: Dispatch<ActionType>
   fromBlock?: number
 }): JSX.Element => {
   const { library, account } = useEthers()
@@ -212,10 +226,27 @@ export const NFTQuery = ({
         const redemeedNfts = await Promise.all(redeemedNFTSPromises)
         setNFTS(nfts)
         setRedeeemedNFTS(redemeedNfts)
+        const totalAPRBoost = redeemedNFTs.reduce(
+          (acc, val) => acc + val.factor / 317,
+          0
+        )
+        dispatch({
+          type: 'SET_TOTAL_APR_BOOST',
+          totalAPRBoost,
+        })
       }
     }
     loadNFTBalance()
-  }, [HoprStakeContractAddress, HoprBoostContractAddress, account, block])
+  }, [
+    NFTBalance,
+    dispatch,
+    redeemedNFTs,
+    HoprStakeContractAddress,
+    HoprBoostContractAddress,
+    account,
+    block,
+    library,
+  ])
   return (
     <>
       <Box
@@ -239,6 +270,8 @@ export const NFTQuery = ({
             nfts={nfts}
             HoprBoostContractAddress={HoprBoostContractAddress}
             HoprStakeContractAddress={HoprStakeContractAddress}
+            state={state}
+            dispatch={dispatch}
           />
         </Box>
       </Box>
@@ -263,6 +296,8 @@ export const NFTQuery = ({
             nfts={redeemedNFTs}
             HoprBoostContractAddress={HoprBoostContractAddress}
             HoprStakeContractAddress={HoprStakeContractAddress}
+            state={state}
+            dispatch={dispatch}
           />
         </Box>
       </Box>
