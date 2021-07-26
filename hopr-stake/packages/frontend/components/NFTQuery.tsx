@@ -115,6 +115,9 @@ const NFTContainer = ({
                 <Text>
                   Boost Factor - <code>{(nft.factor / 317).toFixed(2)}%</code>
                 </Text>
+                <Text>
+                  APR - { nft.factor * 3600 * 24 / 1e12 * 365 }
+                </Text>
               </Box>
               <Box isTruncated>
                 Redeem Deadline
@@ -203,7 +206,7 @@ export const NFTQuery = ({
       }
     }
     loadNFTBalance()
-  }, [library, HoprStakeContractAddress, NFTBalance, account, HoprBoostContractAddress, block])
+  }, [HoprStakeContractAddress, HoprBoostContractAddress, account, block])
   return (
     <>
       <Box

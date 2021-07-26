@@ -1,4 +1,4 @@
-import { useEthers } from '@usedapp/core'
+import { useBlockNumber, useEthers } from '@usedapp/core'
 import { useEffect, useReducer } from 'react'
 import { nonEmptyAccount } from '../lib/helpers'
 import { fetchAccountData, initialState, reducer } from '../lib/reducers'
@@ -10,6 +10,7 @@ export const LastTimeSynced = ({
 }): JSX.Element => {
   const { account, library } = useEthers()
   const [state, dispatch] = useReducer(reducer, initialState)
+  const block = useBlockNumber();
   useEffect(() => {
     const loadAccountData = async () => {
       nonEmptyAccount(account) && await fetchAccountData(
@@ -20,6 +21,6 @@ export const LastTimeSynced = ({
       )
     }
     loadAccountData()
-  }, [account, library, HoprStakeContractAddress])
-  return <>{state.lastSync ? state.lastSync != "" ? 'Never' : new Date(+state.lastSync * 1000).toUTCString() : '--'}</>
+  }, [state.lastSync, account, library, HoprStakeContractAddress, block])
+  return <>{state.lastSync ? state.lastSync == "" ? 'Never' : new Date(+state.lastSync * 1000).toUTCString() : '--'}</>
 }

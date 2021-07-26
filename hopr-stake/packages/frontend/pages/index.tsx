@@ -1,5 +1,13 @@
-import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  Heading,
+  Text,
+  Tag,
+  Link,
+  useColorMode,
+  Tooltip,
+} from '@chakra-ui/react'
+import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import React, { useEffect, useState } from 'react'
 import { DarkModeSwitch } from '../components/DarkModeSwitch'
@@ -18,12 +26,11 @@ import {
 import { XHoprBalance } from '../components/XHoprBalance'
 import { bgColor, color } from '../lib/helpers'
 
-
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
   const { colorMode } = useColorMode()
   const block = useBlockNumber()
-  
+
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
     emptyContractAddresses
   )
@@ -55,14 +62,22 @@ function HomeIndex(): JSX.Element {
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.wxHOPR}
               givenAccount={contractAddresses.HoprStake}
-            /> wxHOPR
+            />{' '}
+            wxHOPR
           </Tag>
           <Tag ml="10px" size="lg" colorScheme="blue" fontFamily="mono">
             Total Staked:{' '}
             <XHoprBalance
               xHOPRContractAddress={contractAddresses.xHOPR}
               givenAccount={contractAddresses.HoprStake}
-            /> xHOPR
+            />{' '}
+            + 10 xHOPR
+            <Tooltip
+              label="Non-circulating supply HOPR holders"
+              aria-label="Staked information"
+            >
+              <InfoIcon ml="5px" boxSize="16px" />
+            </Tooltip>
           </Tag>
         </Box>
       </Box>
@@ -132,9 +147,7 @@ function HomeIndex(): JSX.Element {
         </Link>{' '}
         to learn about new events.
       </Text>
-      <Text mt="2" fontSize="xl">
-        
-      </Text>
+      <Text mt="2" fontSize="xl"></Text>
       <Box
         maxWidth="container.l"
         p="8"

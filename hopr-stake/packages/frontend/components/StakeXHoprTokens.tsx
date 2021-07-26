@@ -39,28 +39,40 @@ export const StakeXHoprTokens = ({
           </Text>
         </Box>
         <Box d="flex">
-          <Tag size="lg" variant="outline" colorScheme="green">
-            APR boost (from NFTs): --%
+          <Tag size="lg" variant="outline">
+            Base boost: 18.25%
+          </Tag>
+          <Tag ml="10px" size="lg" variant="outline" colorScheme="green">
+            APR boost: 10%
           </Tag>
           <Tag ml="10px" size="lg" variant="outline" colorScheme="blue">
-            Your total APR: --
+            Total APR: 28.25%
           </Tag>
         </Box>
       </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">
-        <Text fontSize="md" fontFamily="mono">
-          Staked:{' '}
-          <HoprStakeBalance
-            HoprStakeContractAddress={HoprStakeContractAddress}
-          />
-        </Text>
-        <Text fontSize="md" fontFamily="mono">
-          Current Rewards (in wxHOPR tokens): --
-        </Text>
-        <Text fontSize="sm" fontFamily="mono">
-          Last time synced:{' '}
-          <LastTimeSynced HoprStakeContractAddress={HoprStakeContractAddress} />
-        </Text>
+        <Box d="flex" alignItems="center">
+          <Text fontWeight="600" fontSize="md" mr="5px">
+            Staked -{' '}
+          </Text>
+          <Text fontFamily="mono" fontSize="sm">
+            <HoprStakeBalance
+              HoprStakeContractAddress={HoprStakeContractAddress}
+            />{' '}
+            xHOPR
+          </Text>
+        </Box>
+        <Box d="flex" alignItems="center">
+          <Text fontWeight="600" fontSize="md" mr="5px">
+            Rewards (every sec)
+          </Text>
+          <Text ml="6px" fontSize="sm" fontFamily="mono">
+            +0.000010% Base
+          </Text>
+          <Text ml="6px" fontSize="sm" fontFamily="mono" color="green.600">
+            +0.0000025% Boost
+          </Text>
+        </Box>
       </Box>
       <Box
         d="flex"
@@ -103,19 +115,46 @@ export const StakeXHoprTokens = ({
           )}
         </InputGroup>
       </Box>
-      {account && (
-        <Box mt="20px" textAlign="right">
-          <SyncButton HoprStakeContractAddress={HoprStakeContractAddress} />
-          <Button
-            size="md"
-            ml="10px"
-            bg="blackAlpha.900"
-            color="whiteAlpha.900"
-          >
-            Claim Rewards
-          </Button>
+      <Box
+        mt="20px"
+        d="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Box>
+          <Text fontSize="sm" fontFamily="mono">
+            Last time synced:{' '}
+            <LastTimeSynced
+              HoprStakeContractAddress={HoprStakeContractAddress}
+            />
+          </Text>
+          <Box d="flex" alignItems="center">
+            <Text fontWeight="600" fontSize="md" mr="5px">
+              Claimable -
+            </Text>
+            <Text ml="6px" fontSize="sm" fontFamily="mono">
+              0.12 wxHOPR (Since last sync)
+            </Text>
+            <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
+              + 0.0016831 Boost (Estimated)
+            </Text>
+          </Box>
         </Box>
-      )}
+        {account && (
+          <Box textAlign="right">
+            <SyncButton HoprStakeContractAddress={HoprStakeContractAddress} />
+            <Button
+              size="md"
+              ml="10px"
+              bg="blackAlpha.900"
+              color="whiteAlpha.900"
+              isDisabled={true}
+            >
+              Claim Rewards (175 days to go)
+            </Button>
+          </Box>
+        )}
+      </Box>
     </>
   )
 }
