@@ -227,7 +227,7 @@ export const NFTQuery = ({
         setNFTS(nfts)
         setRedeeemedNFTS(redemeedNfts)
         const totalAPRBoost = redeemedNFTs.reduce(
-          (acc, val) => acc + val.factor / 317,
+          (acc, val) => acc + val.factor,
           0
         )
         dispatch({

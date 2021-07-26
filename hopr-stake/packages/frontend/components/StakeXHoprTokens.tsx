@@ -10,15 +10,12 @@ import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { LastTimeSynced } from '../components/LastTimeSynced'
 import { SyncButton } from '../components/SyncButton'
 import { ClaimableRewards } from '../components/ClaimableRewards'
-import {
-  ActionType,
-  setStaking,
-  StateType,
-} from '../lib/reducers'
+import { ActionType, setStaking, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import { Dispatch } from 'react'
 import { daysUntilProgramEnd } from '../lib/helpers'
+import { format } from 'timeago.js'
 
 export const StakeXHoprTokens = ({
   XHOPRContractAddress,
@@ -34,6 +31,12 @@ export const StakeXHoprTokens = ({
   const { chainId, library, account } = useEthers()
   const block = useBlockNumber()
   const colours = RPC_COLOURS[chainId]
+
+  const timeDiff = (new Date().getTime() - (+state.lastSync * 1000)) / 1000 // to seconds
+  const baseBoost = 1/1e12
+  const bonusBoost = ((state.totalAPRBoost * 3600 * 24) / 1e12) * 365
+  const totalBoost = bonusBoost + baseBoost;
+  const estimatedRewards = timeDiff * (+state.stakedHOPRTokens * totalBoost)
 
   return (
     <>
@@ -75,10 +78,10 @@ export const StakeXHoprTokens = ({
             Rewards (every sec)
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono">
-            +0.000010% Base
+            +{baseBoost}% Base
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono" color="green.600">
-            +0.0000025% Boost
+            +{bonusBoost}% Boost
           </Text>
         </Box>
       </Box>
@@ -137,15 +140,19 @@ export const StakeXHoprTokens = ({
               state={state}
               dispatch={dispatch}
             />{' '}
-            (X time ago)
+            {+state.lastSync > 0 && `(${format(+state.lastSync * 1000)})`}
           </Text>
           <Box d="flex" alignItems="center">
             <Text fontWeight="600" fontSize="md" mr="5px">
               Claimable -
             </Text>
-            <ClaimableRewards HoprStakeContractAddress={HoprStakeContractAddress} state={state} dispatch={dispatch}/>
+            <ClaimableRewards
+              HoprStakeContractAddress={HoprStakeContractAddress}
+              state={state}
+              dispatch={dispatch}
+            />
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
-              + 0.0016831 Boost (Estimated)
+              + {estimatedRewards.toFixed(18)} (Estimated)
             </Text>
           </Box>
         </Box>
