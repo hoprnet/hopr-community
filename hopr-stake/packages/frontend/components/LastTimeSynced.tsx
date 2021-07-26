@@ -1,5 +1,6 @@
 import { useEthers } from '@usedapp/core'
 import { useEffect, useReducer } from 'react'
+import { nonEmptyAccount } from '../lib/helpers'
 import { fetchAccountData, initialState, reducer } from '../lib/reducers'
 
 export const LastTimeSynced = ({
@@ -11,7 +12,7 @@ export const LastTimeSynced = ({
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
     const loadAccountData = async () => {
-      await fetchAccountData(
+      nonEmptyAccount(account) && await fetchAccountData(
         HoprStakeContractAddress,
         account,
         library,

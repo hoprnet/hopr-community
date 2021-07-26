@@ -13,6 +13,6 @@ export const round = (num: number, precision: number): string => {
 export const bgColor = { light: 'gray.50', dark: 'gray.900' }
 export const color = { light: '#414141', dark: 'white' }
 
-export const nonEmptyAccount = (account:string) => {
+export const nonEmptyAccount = (account:string): boolean => {
   return account && account.length > 0
 }

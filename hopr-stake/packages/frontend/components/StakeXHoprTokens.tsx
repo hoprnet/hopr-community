@@ -80,34 +80,42 @@ export const StakeXHoprTokens = ({
               })
             }}
           />
-          <InputRightElement width="10.5rem">
-            <Button
-              width="10rem"
-              size="sm"
-              isDisabled={!account}
-              isLoading={state.isLoading}
-              onClick={() => {
-                setStaking(
-                  XHOPRContractAddress,
-                  HoprStakeContractAddress,
-                  state,
-                  library,
-                  dispatch
-                )
-              }}
-              {...colours}
-            >
-              {state.isLoading ? 'Loading...' : 'Stake xHOPR tokens'}
-            </Button>
-          </InputRightElement>
+          {account && (
+            <InputRightElement width="10.5rem">
+              <Button
+                width="10rem"
+                size="sm"
+                isLoading={state.isLoading}
+                onClick={() => {
+                  setStaking(
+                    XHOPRContractAddress,
+                    HoprStakeContractAddress,
+                    state,
+                    library,
+                    dispatch
+                  )
+                }}
+                {...colours}
+              >
+                {state.isLoading ? 'Loading...' : 'Stake xHOPR tokens'}
+              </Button>
+            </InputRightElement>
+          )}
         </InputGroup>
       </Box>
-      <Box mt="20px" textAlign="right">
-        <SyncButton HoprStakeContractAddress={HoprStakeContractAddress} />
-        <Button size="md" ml="10px" bg="blackAlpha.900" color="whiteAlpha.900">
-          Claim Rewards
-        </Button>
-      </Box>
+      {account && (
+        <Box mt="20px" textAlign="right">
+          <SyncButton HoprStakeContractAddress={HoprStakeContractAddress} />
+          <Button
+            size="md"
+            ml="10px"
+            bg="blackAlpha.900"
+            color="whiteAlpha.900"
+          >
+            Claim Rewards
+          </Button>
+        </Box>
+      )}
     </>
   )
 }

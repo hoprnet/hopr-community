@@ -118,7 +118,7 @@ export async function fetchAccountData(
       provider
     ) as unknown as HoprStakeType
     try {
-      const accountStruct: Accounts = await contract.accounts(account)
+      const accountStruct: Accounts = account && await contract.accounts(account)
       const {
         actualLockedTokenAmount,
         cumulatedRewards,

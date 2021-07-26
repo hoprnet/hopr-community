@@ -7,6 +7,7 @@ import {
   reducer,
   setSync,
 } from '../lib/reducers'
+import { nonEmptyAccount } from '../lib/helpers'
 
 export const SyncButton = ({
   HoprStakeContractAddress,
@@ -17,7 +18,7 @@ export const SyncButton = ({
   const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
     const loadAccountData = async () => {
-      await fetchAccountData(
+      nonEmptyAccount(account) && await fetchAccountData(
         HoprStakeContractAddress,
         account,
         library,
