@@ -36,7 +36,7 @@ export const initialState: StateType = {
   isLoading: false,
   isLoadingSync: false,
   isLoadingRedeem: false,
-  totalAPRBoost: 0
+  totalAPRBoost: 0,
 }
 
 type Accounts = {
@@ -49,32 +49,32 @@ type Accounts = {
 
 export type ActionType =
   | {
-      type: 'SET_ACCOUNT_DATA'
-      stakedHOPRTokens: StateType['stakedHOPRTokens']
-      yetToClaimRewards: StateType['yetToClaimRewards']
-      lastSync: StateType['lastSync']
-      alreadyClaimedRewards: StateType['alreadyClaimedRewards']
-    }
+    type: 'SET_ACCOUNT_DATA'
+    stakedHOPRTokens: StateType['stakedHOPRTokens']
+    yetToClaimRewards: StateType['yetToClaimRewards']
+    lastSync: StateType['lastSync']
+    alreadyClaimedRewards: StateType['alreadyClaimedRewards']
+  }
   | {
-      type: 'SET_LOADING'
-      isLoading: StateType['isLoading']
-    }
+    type: 'SET_LOADING'
+    isLoading: StateType['isLoading']
+  }
   | {
-      type: 'SET_LOADING_SYNC'
-      isLoadingSync: StateType['isLoadingSync']
-    }
-    | {
-      type: 'SET_LOADING_REDEEM'
-      isLoadingRedeem: StateType['isLoadingRedeem']
-    }
+    type: 'SET_LOADING_SYNC'
+    isLoadingSync: StateType['isLoadingSync']
+  }
   | {
-      type: 'SET_STAKING_AMOUNT'
-      amountValue: StateType['amountValue']
-    }
-    | {
-      type: 'SET_TOTAL_APR_BOOST'
-      totalAPRBoost: StateType['totalAPRBoost']
-    }
+    type: 'SET_LOADING_REDEEM'
+    isLoadingRedeem: StateType['isLoadingRedeem']
+  }
+  | {
+    type: 'SET_STAKING_AMOUNT'
+    amountValue: StateType['amountValue']
+  }
+  | {
+    type: 'SET_TOTAL_APR_BOOST'
+    totalAPRBoost: StateType['totalAPRBoost']
+  }
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
@@ -116,6 +116,7 @@ export function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
+
 export async function fetchAccountData(
   HoprStakeContractAddress: string,
   account: string,
@@ -138,21 +139,17 @@ export async function fetchAccountData(
       } = accountStruct
       const [
         stakedHOPRTokens,
-        yetToClaimRewards,
-        alreadyClaimedRewards,
       ] = [
         actualLockedTokenAmount,
-        cumulatedRewards,
-        claimedRewards,
       ].map((dataPoint) =>
         dataPoint ? round(Number(utils.formatEther(dataPoint)), 4) : '0.0000'
       )
       dispatch({
         type: 'SET_ACCOUNT_DATA',
         stakedHOPRTokens,
-        yetToClaimRewards,
+        yetToClaimRewards: cumulatedRewards.toString(),
         lastSync: lastSyncTimestamp.toString(),
-        alreadyClaimedRewards,
+        alreadyClaimedRewards: claimedRewards.toString(),
       })
     } catch (err) {
       // eslint-disable-next-line no-console

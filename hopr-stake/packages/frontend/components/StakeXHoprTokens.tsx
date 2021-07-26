@@ -9,6 +9,7 @@ import {
 import { HoprStakeBalance } from '../components/HoprStakeBalance'
 import { LastTimeSynced } from '../components/LastTimeSynced'
 import { SyncButton } from '../components/SyncButton'
+import { ClaimableRewards } from '../components/ClaimableRewards'
 import {
   ActionType,
   setStaking,
@@ -142,9 +143,7 @@ export const StakeXHoprTokens = ({
             <Text fontWeight="600" fontSize="md" mr="5px">
               Claimable -
             </Text>
-            <Text ml="6px" fontSize="sm" fontFamily="mono">
-              0.12 wxHOPR (Since last sync)
-            </Text>
+            <ClaimableRewards HoprStakeContractAddress={HoprStakeContractAddress} state={state} dispatch={dispatch}/>
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
               + 0.0016831 Boost (Estimated)
             </Text>
