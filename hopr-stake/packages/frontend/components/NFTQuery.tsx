@@ -23,10 +23,10 @@ type NFT = {
 }
 
 const NFT_TYPE_COLOURS: { [boostType: string]: string } = {
-  'silver': '#A8A8B3',
-  'bronze': '#5F4919',
-  'gold': '#F9E82B',
-  'diamond': '#C5CDD0'
+  silver: '#A8A8B3',
+  bronze: '#5F4919',
+  gold: '#F9E82B',
+  diamond: '#C5CDD0',
 }
 
 const getNFTFromTokenId = async (
@@ -43,7 +43,7 @@ const getNFTFromTokenId = async (
   const gateway = 'https://cloudflare-ipfs.com/ipfs/'
   const [, ipfsCID] = json.image.split('ipfs://')
   const image = `${gateway}${ipfsCID}`
-  const typeOfBoostName = tokenURI.split('/').pop();
+  const typeOfBoostName = tokenURI.split('/').pop()
 
   return {
     tokenId: tokenId.toString(),
@@ -54,7 +54,7 @@ const getNFTFromTokenId = async (
     tokenURI,
     redeemed,
     image,
-    typeOfBoostName
+    typeOfBoostName,
   }
 }
 
@@ -109,20 +109,29 @@ const NFTContainer = ({
           <Box p="6">
             <Box d="flex" alignItems="baseline" flexDirection="column">
               <Text fontWeight="bold" as="h3" fontSize="large">
-                <code>{nft.typeName}</code> <Tag bg={NFT_TYPE_COLOURS[nft.typeOfBoostName]} textTransform="capitalize">{nft.typeOfBoostName}</Tag>
+                <code>{nft.typeName}</code>{' '}
+                <Tag
+                  bg={NFT_TYPE_COLOURS[nft.typeOfBoostName]}
+                  textTransform="capitalize"
+                >
+                  {nft.typeOfBoostName}
+                </Tag>
               </Text>
               <Box>
                 <Text>
-                  Boost Factor - <code>{(nft.factor / 317).toFixed(2)}%</code>
+                  <b>Boost Factor</b> -{' '}
+                  <code>{(nft.factor / 317).toFixed(2)}%</code>
                 </Text>
                 <Text>
-                  APR - { nft.factor * 3600 * 24 / 1e12 * 365 }
+                  <b>APR</b> - <code>{((nft.factor * 3600 * 24) / 1e12) * 365}%</code>
                 </Text>
               </Box>
-              <Box isTruncated>
+              <Box isTruncated mt="5px">
                 Redeem Deadline
               </Box>
-              <Text fontSize="xs" fontFamily="mono">{new Date(nft.deadline * 1000).toUTCString()}</Text>
+              <Text fontSize="xs" fontFamily="mono">
+                {new Date(nft.deadline * 1000).toUTCString()}
+              </Text>
 
               {!nft.redeemed && (
                 <NFTLockButton
