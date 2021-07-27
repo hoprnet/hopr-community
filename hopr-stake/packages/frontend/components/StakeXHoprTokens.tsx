@@ -61,18 +61,35 @@ export const StakeXHoprTokens = ({
         </Box>
       </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">
-        <Box d="flex" alignItems="center">
-          <Text fontWeight="600" fontSize="md" mr="5px">
-            Staked -{' '}
-          </Text>
-          <BalanceWithCurrency
-            balanceElement={
-              <Tag mr="5px" colorScheme="gray" fontFamily="mono">
-                {state.stakedHOPRTokens}
-              </Tag>
-            }
-            currencyElement={<CurrencyTag tag={'xHOPR'} />}
-          />
+        <Box d="flex" alignItems="center" justifyContent="space-between" width="50%">
+          {[
+            {
+              value: state.stakedHOPRTokens,
+              currency: 'xHOPR',
+              label: 'Staked',
+            },
+            {
+              value: state.alreadyClaimedRewards,
+              currency: 'wxHOPR',
+              label: 'Claimed',
+            },
+          ].map((item) => {
+            return (
+              <Box d="flex" key={item.currency}>
+                <Text fontWeight="600" fontSize="md" mr="5px">
+                  {item.label}
+                </Text>
+                <BalanceWithCurrency
+                  balanceElement={
+                    <Tag mr="5px" colorScheme="gray" fontFamily="mono">
+                      {item.value || '--'}
+                    </Tag>
+                  }
+                  currencyElement={<CurrencyTag tag={item.currency} />}
+                />
+              </Box>
+            )
+          })}
         </Box>
         <Box d="flex" alignItems="center">
           <Text fontWeight="600" fontSize="md" mr="5px">
@@ -148,7 +165,7 @@ export const StakeXHoprTokens = ({
               Claimable -
             </Text>
             <Text ml="6px" fontSize="sm" fontFamily="mono">
-              {state.yetToClaimRewards} wxHOPR (Since last sync)
+              {state.yetToClaimRewards || '--'} wxHOPR (Since last sync)
             </Text>
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
               + {estimatedRewards.toFixed(18)} (Estimated)
@@ -170,12 +187,22 @@ export const StakeXHoprTokens = ({
               color="whiteAlpha.900"
               isDisabled={true}
             >
-              Claim Rewards (
+              Unlock (
               <EndProgramDateDays
                 HoprStakeContractAddress={HoprStakeContractAddress}
               />{' '}
               to go)
             </Button>
+            <Button
+              size="md"
+              ml="10px"
+              bg="blackAlpha.900"
+              color="whiteAlpha.900"
+              isDisabled={true}
+            >
+              Claim Rewards
+            </Button>
+            
           </Box>
         )}
       </Box>
