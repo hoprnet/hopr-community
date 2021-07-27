@@ -92,11 +92,13 @@ function HomeIndex(): JSX.Element {
       <APRBalance totalAPRBoost={state.totalAPRBoost} />.
       <Text mt="8" fontSize="xl" d="inline">
         Starting{' '}
-        <BoldText>
-          <StartProgramDate
-            HoprStakeContractAddress={contractAddresses.HoprStake}
-          />
-        </BoldText>
+      </Text>
+      <BoldText>
+        <StartProgramDate
+          HoprStakeContractAddress={contractAddresses.HoprStake}
+        />
+      </BoldText>
+      <Text mt="8" fontSize="xl" d="inline">
         , rewards can be claimed on each block. All rewards will be returned as{' '}
         <Link
           px="1"
@@ -106,12 +108,15 @@ function HomeIndex(): JSX.Element {
           wxHOPR <ExternalLinkIcon />
         </Link>{' '}
         tokens. xHOPR staked today will be locked for{' '}
-        <BoldText>
+      </Text>
+      <BoldText>
+        <>
           <EndProgramDateDays
             HoprStakeContractAddress={contractAddresses.HoprStake}
           />
-        </BoldText>
-      </Text>
+          .
+        </>
+      </BoldText>
       <Text mt="2" fontSize="xl">
         Increase your APR by redeeming NFTs to your account. HOPR NFTs can be
         earned by participating in HOPR testnets and activities.

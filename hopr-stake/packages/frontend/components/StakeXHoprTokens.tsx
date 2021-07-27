@@ -33,8 +33,9 @@ export const StakeXHoprTokens = ({
   const colours = RPC_COLOURS[chainId]
 
   const timeDiff = (new Date().getTime() - (+state.lastSync * 1000)) / 1000 // to seconds
-  const baseBoost = 1/1e12
-  const bonusBoost = ((state.totalAPRBoost / 317 * 3600 * 24) / 1e12) * 365
+  const FACTOR_DENOMINATOR = 1e12
+  const baseBoost = 5787 / FACTOR_DENOMINATOR
+  const bonusBoost = (state.totalAPRBoost) / FACTOR_DENOMINATOR
   const totalBoost = bonusBoost + baseBoost;
   const estimatedRewards = timeDiff * (+state.stakedHOPRTokens * totalBoost)
 
@@ -75,13 +76,13 @@ export const StakeXHoprTokens = ({
         </Box>
         <Box d="flex" alignItems="center">
           <Text fontWeight="600" fontSize="md" mr="5px">
-            Rewards (every sec)
+            Rewards (wxHOPR/sec)
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono">
-            +{baseBoost.toFixed(18)}% Base
+            +{(baseBoost * +state.stakedHOPRTokens).toFixed(10)} (Base)
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono" color="green.600">
-            +{bonusBoost}% Boost
+            +{(bonusBoost * +state.stakedHOPRTokens).toFixed(10)} (Boost)
           </Text>
         </Box>
       </Box>

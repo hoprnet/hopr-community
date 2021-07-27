@@ -79,6 +79,7 @@ export type ActionType =
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case 'SET_ACCOUNT_DATA':
+      console.log("Account Data", action)
       return {
         ...state,
         stakedHOPRTokens: action.stakedHOPRTokens,
