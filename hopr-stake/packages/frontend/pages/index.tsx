@@ -15,11 +15,12 @@ import {
   IContractAddress,
   IContractFromBlockNumbers,
 } from '../lib/addresses'
-import { XHoprBalance } from '../components/XHoprBalance'
 import { bgColor, color, daysUntilProgramEnd } from '../lib/helpers'
 import { APRBalance } from '../components/APRBalance'
 import { reducer, initialState } from '../lib/reducers'
 import { ParagraphLinks } from '../components/ParagraphLinks'
+import { TokenBalance } from '../components/atoms/TokenBalance'
+import { CurrencyTag } from '../components/atoms/CurrencyTag'
 
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
@@ -49,26 +50,27 @@ function HomeIndex(): JSX.Element {
       <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
         <Heading as="h1">HOPR Staking</Heading>
         <Box d="flex" alignItems="center">
-          <Text mr="10px" fontWeight="600">
-            Available Rewards{'  '}
-          </Text>
-          <Tag mr="20px" colorScheme="green" fontFamily="mono">
-            <XHoprBalance
-              xHOPRContractAddress={contractAddresses.wxHOPR}
+          <Box d="flex" alignItems="baseline" mr="20px">
+            <Text fontWeight="600" mr="10px">
+              Available Rewards{'  '}
+            </Text>
+            <TokenBalance
+              tokenContract={contractAddresses.wxHOPR}
               givenAccount={contractAddresses.HoprStake}
             />{' '}
-            wxHOPR
-          </Tag>
-          <Text mr="10px" fontWeight="600">
-            Total Staked{'  '}
-          </Text>
-          <Tag ml="10px" colorScheme="blue" fontFamily="mono">
-            <XHoprBalance
-              xHOPRContractAddress={contractAddresses.xHOPR}
+            <Text fontSize="xs">wxHOPR</Text>
+          </Box>
+          <Box d="flex" alignItems="baseline">
+            <Text fontWeight="600" mr="10px">
+              Total Staked{'  '}
+            </Text>
+            <TokenBalance
+              tokenContract={contractAddresses.xHOPR}
               givenAccount={contractAddresses.HoprStake}
-            />{' '}
-            xHOPR
-          </Tag>
+              colorScheme="blue"
+            />
+            <CurrencyTag tag="xHOPR" />
+          </Box>
         </Box>
       </Box>
       <Text mt="8" fontSize="xl" d="inline">
@@ -83,7 +85,7 @@ function HomeIndex(): JSX.Element {
         tokens to earn a base APR of{' '}
       </Text>
       <APRBalance totalAPRBoost={state.totalAPRBoost} />.
-      <Text mt="8" fontSize="xl" d="inline" >
+      <Text mt="8" fontSize="xl" d="inline">
         Starting <b>July 27th 2021</b>, rewards can be claimed on each block.
         All rewards will be returned as{' '}
         <Link

@@ -26,7 +26,7 @@ import {
   getContractAddresses,
   IContractAddress,
 } from '../../lib/addresses'
-import Balance from '../Balance'
+import Balance from '../UserBalance'
 import ConnectWallet from '../ConnectWallet'
 import Head, { MetaProps } from './Head'
 
