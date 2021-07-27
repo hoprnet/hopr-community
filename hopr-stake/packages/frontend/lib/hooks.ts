@@ -1,9 +1,10 @@
 import HoprStakeABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprStake.json'
 import { useContractCall } from '@usedapp/core'
 import { Falsy } from '@usedapp/core/dist/esm/src/model/types'
+import { BigNumber } from 'ethers'
 import { Interface } from 'ethers/lib/utils'
 
-export function useStartProgramDate(stakeContractAddress: string | Falsy) {
+export function useStartProgramDate(stakeContractAddress: string | Falsy): BigNumber {
     const [startProgramDate] =
       useContractCall(
         stakeContractAddress && {
@@ -16,7 +17,7 @@ export function useStartProgramDate(stakeContractAddress: string | Falsy) {
     return startProgramDate
 }
 
-export function useEndProgramDate(stakeContractAddress: string | Falsy) {
+export function useEndProgramDate(stakeContractAddress: string | Falsy): BigNumber {
     const [endProgramDate] =
       useContractCall(
         stakeContractAddress && {

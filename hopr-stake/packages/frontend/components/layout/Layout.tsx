@@ -26,8 +26,8 @@ import {
   getContractAddresses,
   IContractAddress,
 } from '../../lib/addresses'
-import Balance from '../UserBalance'
-import ConnectWallet from '../ConnectWallet'
+import Balance from '../atoms/UserBalance'
+import ConnectWallet from '../atoms/ConnectWallet'
 import Head, { MetaProps } from './Head'
 
 // Extends `window` to add `ethereum`.

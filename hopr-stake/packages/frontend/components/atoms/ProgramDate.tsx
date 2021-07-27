@@ -1,21 +1,20 @@
-import { Text } from '@chakra-ui/react'
 import { constants } from 'ethers'
 import { useEndProgramDate, useStartProgramDate } from '../../lib/hooks'
 export const StartProgramDate = ({
   HoprStakeContractAddress,
 }: {
   HoprStakeContractAddress: string
-}) => {
+}): JSX.Element => {
   const startProgramDate =
     useStartProgramDate(HoprStakeContractAddress) || constants.Zero
-  return <>{new Date(startProgramDate.toString() * 1000).toDateString()}</>
+  return <>{new Date(+startProgramDate.toString() * 1000).toDateString()}</>
 }
 
 export const EndProgramDateDays = ({
   HoprStakeContractAddress,
 }: {
   HoprStakeContractAddress: string
-}) => {
+}): JSX.Element => {
   const endProgramDateInSeconds =
     useEndProgramDate(HoprStakeContractAddress) || constants.Zero
   const endProgramDateInMs = +endProgramDateInSeconds.toString() * 1000

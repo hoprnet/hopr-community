@@ -1,6 +1,6 @@
-import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
+import { Box, Heading, Text, Link, useColorMode } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { useBlockNumber, useEthers } from '@usedapp/core'
+import { useEthers } from '@usedapp/core'
 import React, { useEffect, useReducer, useState } from 'react'
 import { DarkModeSwitch } from '../components/atoms/DarkModeSwitch'
 
@@ -18,7 +18,7 @@ import {
 import { bgColor, color } from '../lib/helpers'
 import { APRBalance } from '../components/atoms/APRBalance'
 import { reducer, initialState } from '../lib/reducers'
-import { ParagraphLinks } from '../components/ParagraphLinks'
+import { ParagraphLinks } from '../components/atoms/ParagraphLinks'
 import { TokenBalance } from '../components/atoms/TokenBalance'
 import { CurrencyTag } from '../components/atoms/CurrencyTag'
 import {
@@ -30,7 +30,6 @@ import { BoldText } from '../components/atoms/BoldText'
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
   const { colorMode } = useColorMode()
-  const block = useBlockNumber()
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
@@ -109,13 +108,10 @@ function HomeIndex(): JSX.Element {
         </Link>{' '}
         tokens. xHOPR staked today will be locked for{' '}
       </Text>
-      <BoldText>
-        <>
-          <EndProgramDateDays
-            HoprStakeContractAddress={contractAddresses.HoprStake}
-          />
-          .
-        </>
+      <BoldText fullstop>
+        <EndProgramDateDays
+          HoprStakeContractAddress={contractAddresses.HoprStake}
+        />
       </BoldText>
       <Text mt="2" fontSize="xl">
         Increase your APR by redeeming NFTs to your account. HOPR NFTs can be

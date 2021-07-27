@@ -5,16 +5,16 @@ import {
   InputRightElement,
   Text,
   Box,
+  Tag,
 } from '@chakra-ui/react'
-import { HoprStakeBalance } from '../components/HoprStakeBalance'
-import { LastTimeSynced } from '../components/LastTimeSynced'
-import { SyncButton } from '../components/SyncButton'
-import { ClaimableRewards } from '../components/ClaimableRewards'
-import { ActionType, setStaking, StateType } from '../lib/reducers'
+import { CurrencyTag } from '../components/atoms/CurrencyTag'
+import { SyncButton } from './atoms/SyncButton'
+import { ActionType, setStaking, setSync, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import { Dispatch } from 'react'
 import { EndProgramDateDays } from './atoms/ProgramDate'
+import { BalanceWithCurrency } from './molecules/BalanceWithCurrency'
 import { format } from 'timeago.js'
 
 export const StakeXHoprTokens = ({
@@ -32,11 +32,11 @@ export const StakeXHoprTokens = ({
   const block = useBlockNumber()
   const colours = RPC_COLOURS[chainId]
 
-  const timeDiff = (new Date().getTime() - (+state.lastSync * 1000)) / 1000 // to seconds
+  const timeDiff = (new Date().getTime() - +state.lastSync * 1000) / 1000 // to seconds
   const FACTOR_DENOMINATOR = 1e12
   const baseBoost = 5787 / FACTOR_DENOMINATOR
-  const bonusBoost = (state.totalAPRBoost) / FACTOR_DENOMINATOR
-  const totalBoost = bonusBoost + baseBoost;
+  const bonusBoost = state.totalAPRBoost / FACTOR_DENOMINATOR
+  const totalBoost = bonusBoost + baseBoost
   const estimatedRewards = timeDiff * (+state.stakedHOPRTokens * totalBoost)
 
   return (
@@ -65,14 +65,14 @@ export const StakeXHoprTokens = ({
           <Text fontWeight="600" fontSize="md" mr="5px">
             Staked -{' '}
           </Text>
-          <Text fontFamily="mono" fontSize="sm">
-            <HoprStakeBalance
-              HoprStakeContractAddress={HoprStakeContractAddress}
-              state={state}
-              dispatch={dispatch}
-            />{' '}
-            xHOPR
-          </Text>
+          <BalanceWithCurrency
+            balanceElement={
+              <Tag mr="5px" colorScheme="gray" fontFamily="mono">
+                {state.stakedHOPRTokens}
+              </Tag>
+            }
+            currencyElement={<CurrencyTag tag={'xHOPR'} />}
+          />
         </Box>
         <Box d="flex" alignItems="center">
           <Text fontWeight="600" fontSize="md" mr="5px">
@@ -136,22 +136,20 @@ export const StakeXHoprTokens = ({
         <Box>
           <Text fontSize="sm" fontFamily="mono">
             Last time synced:{' '}
-            <LastTimeSynced
-              HoprStakeContractAddress={HoprStakeContractAddress}
-              state={state}
-              dispatch={dispatch}
-            />{' '}
+            {state.lastSync
+              ? state.lastSync == '0'
+                ? 'Never'
+                : new Date(+state.lastSync * 1000).toUTCString()
+              : '--'}
             {+state.lastSync > 0 && `(${format(+state.lastSync * 1000)})`}
           </Text>
           <Box d="flex" alignItems="center">
             <Text fontWeight="600" fontSize="md" mr="5px">
               Claimable -
             </Text>
-            <ClaimableRewards
-              HoprStakeContractAddress={HoprStakeContractAddress}
-              state={state}
-              dispatch={dispatch}
-            />
+            <Text ml="6px" fontSize="sm" fontFamily="mono">
+              {state.yetToClaimRewards} wxHOPR (Since last sync)
+            </Text>
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
               + {estimatedRewards.toFixed(18)} (Estimated)
             </Text>
@@ -160,9 +158,10 @@ export const StakeXHoprTokens = ({
         {account && (
           <Box textAlign="right">
             <SyncButton
-              HoprStakeContractAddress={HoprStakeContractAddress}
-              state={state}
-              dispatch={dispatch}
+              isLoading={state.isLoadingSync}
+              syncHandler={() => {
+                setSync(HoprStakeContractAddress, state, library, dispatch)
+              }}
             />
             <Button
               size="md"
@@ -171,7 +170,11 @@ export const StakeXHoprTokens = ({
               color="whiteAlpha.900"
               isDisabled={true}
             >
-              Claim Rewards (<EndProgramDateDays HoprStakeContractAddress={HoprStakeContractAddress} />  to go)
+              Claim Rewards (
+              <EndProgramDateDays
+                HoprStakeContractAddress={HoprStakeContractAddress}
+              />{' '}
+              to go)
             </Button>
           </Box>
         )}

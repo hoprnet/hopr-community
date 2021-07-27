@@ -1,4 +1,4 @@
-import { useEthers, useBlockNumber, useTokenBalance } from '@usedapp/core'
+import { useEthers, useTokenBalance } from '@usedapp/core'
 import { Text, Box, Button, useColorMode, Image, Tag } from '@chakra-ui/react'
 import { useEffect, useState, Dispatch } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
@@ -175,7 +175,6 @@ export const NFTQuery = ({
   const [redeemedNFTs, setRedeeemedNFTS] = useState<NFT[]>([])
 
   const { colorMode } = useColorMode()
-  const block = useBlockNumber()
   const NFTBalance =
     useTokenBalance(HoprBoostContractAddress, account) || constants.Zero
 
@@ -201,8 +200,7 @@ export const NFTQuery = ({
           ? await HoprStake.redeemedNftIndex(account)
           : constants.Zero
       ).toString()
-      console.log(" AMOUNT OF NFTS ", amountofNFTS)
-      console.log(" REDEEMED NFTS ", redeemedNFTsAmountScalar)
+
       if (amountofNFTS.length > 0 || +redeemedNFTsAmountScalar > 0) {
         const HoprBoost = new Contract(
           HoprBoostContractAddress,
@@ -232,7 +230,6 @@ export const NFTQuery = ({
           (acc, val) => acc + val.factor,
           0
         )
-        console.log("TOTAL APR BOOST", totalAPRBoost)
         dispatch({
           type: 'SET_TOTAL_APR_BOOST',
           totalAPRBoost,

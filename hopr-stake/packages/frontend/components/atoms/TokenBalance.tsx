@@ -2,7 +2,6 @@ import { utils, constants } from 'ethers'
 import { useEthers, useTokenBalance } from '@usedapp/core'
 import { Skeleton, Tag } from '@chakra-ui/react'
 import { round } from '../../lib/helpers'
-import { useEffect, useState } from 'react'
 
 export const TokenBalance = ({
   tokenContract,
