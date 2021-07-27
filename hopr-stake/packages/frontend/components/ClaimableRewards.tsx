@@ -1,9 +1,10 @@
-import { useBlockNumber, useEthers } from '@usedapp/core'
+import { Text } from '@chakra-ui/react'
 import { Dispatch, useEffect } from 'react'
-import { nonEmptyAccount } from '../lib/helpers'
 import { ActionType, fetchAccountData, StateType } from '../lib/reducers'
+import { useEthers } from '@usedapp/core'
+import { nonEmptyAccount } from '../lib/helpers'
 
-export const LastTimeSynced = ({
+export const ClaimableRewards = ({
   HoprStakeContractAddress,
   state,
   dispatch,
@@ -12,8 +13,7 @@ export const LastTimeSynced = ({
   state: StateType
   dispatch: Dispatch<ActionType>
 }): JSX.Element => {
-  const { account, library } = useEthers()
-  const block = useBlockNumber()
+  const { library, account } = useEthers()
   useEffect(() => {
     const loadAccountData = async () => {
       nonEmptyAccount(account) &&
@@ -25,14 +25,12 @@ export const LastTimeSynced = ({
         ))
     }
     loadAccountData()
-  }, [dispatch, state.lastSync, account, library, HoprStakeContractAddress, block])
+  }, [state.lastSync, HoprStakeContractAddress, state, dispatch])
   return (
     <>
-      {state.lastSync
-        ? state.lastSync == '0'
-          ? 'Never'
-          : new Date(+state.lastSync * 1000).toUTCString()
-        : '--'}
+      <Text ml="6px" fontSize="sm" fontFamily="mono">
+        {state.yetToClaimRewards} wxHOPR (Since last sync)
+      </Text>
     </>
   )
 }

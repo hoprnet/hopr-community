@@ -1,32 +1,36 @@
 import { useEthers } from '@usedapp/core'
 import { Button } from '@chakra-ui/react'
-import { useEffect, useReducer } from 'react'
+import { Dispatch, useEffect } from 'react'
 import {
+  ActionType,
   fetchAccountData,
-  initialState,
-  reducer,
   setSync,
+  StateType,
 } from '../lib/reducers'
 import { nonEmptyAccount } from '../lib/helpers'
 
 export const SyncButton = ({
   HoprStakeContractAddress,
+  state,
+  dispatch,
 }: {
   HoprStakeContractAddress: string
+  state: StateType
+  dispatch: Dispatch<ActionType>
 }): JSX.Element => {
   const { account, library } = useEthers()
-  const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
     const loadAccountData = async () => {
-      nonEmptyAccount(account) && await fetchAccountData(
-        HoprStakeContractAddress,
-        account,
-        library,
-        dispatch
-      )
+      nonEmptyAccount(account) &&
+        (await fetchAccountData(
+          HoprStakeContractAddress,
+          account,
+          library,
+          dispatch
+        ))
     }
     loadAccountData()
-  }, [state.lastSync, account, library, HoprStakeContractAddress])
+  }, [state.lastSync, account, library, HoprStakeContractAddress, dispatch])
   return (
     <Button
       size="md"
