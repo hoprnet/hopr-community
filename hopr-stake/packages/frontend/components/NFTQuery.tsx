@@ -261,8 +261,7 @@ export const NFTQuery = ({
             HOPR NFTs
           </Text>
           <Text ml="10px" fontSize="sm" fontWeight="400">
-            Your NFTs will show up here. Earn them by participating in our
-            activities.
+            Your NFTs will show up here. Earn them by participating in activities. Lock them to boost your APR (one per NFT type).
           </Text>
         </Box>
         <Box d="flex" alignItems="center">
@@ -287,8 +286,7 @@ export const NFTQuery = ({
             Locked HOPR NFTs
           </Text>
           <Text ml="10px" fontSize="sm" fontWeight="400">
-            Your locked NFTs will show up here. By activating them you’ll
-            benefit from its bonuses.
+            Your locked NFTs will show up here. The combined NFT boost (one per NFT type) will be added to your base APR.
           </Text>
         </Box>
         <Box d="flex" alignItems="center">
