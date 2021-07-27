@@ -42,7 +42,7 @@ function HomeIndex(): JSX.Element {
       setFromBlockNumbers(fromBlockNumbers)
     }
     loadContracts()
-  }, [chainId, block])
+  }, [chainId])
 
   return (
     <Layout>
@@ -71,8 +71,7 @@ function HomeIndex(): JSX.Element {
           </Tag>
         </Box>
       </Box>
-
-      <Text mt="8" fontSize="xl">
+      <Text mt="8" fontSize="xl" d="inline">
         Stake{' '}
         <Link
           px="1"
@@ -82,9 +81,11 @@ function HomeIndex(): JSX.Element {
           xHOPR <ExternalLinkIcon />
         </Link>{' '}
         tokens to earn a base APR of{' '}
-        <APRBalance totalAPRBoost={state.totalAPRBoost} />. Starting{' '}
-        <b>July 27th 2021</b>, rewards can be claimed on each block. All rewards
-        will be returned as{' '}
+      </Text>
+      <APRBalance totalAPRBoost={state.totalAPRBoost} />.
+      <Text mt="8" fontSize="xl" d="inline" >
+        Starting <b>July 27th 2021</b>, rewards can be claimed on each block.
+        All rewards will be returned as{' '}
         <Link
           px="1"
           href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.wxHOPR}/transactions`}

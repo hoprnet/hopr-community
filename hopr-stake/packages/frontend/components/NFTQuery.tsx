@@ -201,6 +201,8 @@ export const NFTQuery = ({
           ? await HoprStake.redeemedNftIndex(account)
           : constants.Zero
       ).toString()
+      console.log(" AMOUNT OF NFTS ", amountofNFTS)
+      console.log(" REDEEMED NFTS ", redeemedNFTsAmountScalar)
       if (amountofNFTS.length > 0 || +redeemedNFTsAmountScalar > 0) {
         const HoprBoost = new Contract(
           HoprBoostContractAddress,
@@ -230,6 +232,7 @@ export const NFTQuery = ({
           (acc, val) => acc + val.factor,
           0
         )
+        console.log("TOTAL APR BOOST", totalAPRBoost)
         dispatch({
           type: 'SET_TOTAL_APR_BOOST',
           totalAPRBoost,
@@ -237,16 +240,7 @@ export const NFTQuery = ({
       }
     }
     loadNFTBalance()
-  }, [
-    NFTBalance,
-    dispatch,
-    redeemedNFTs,
-    HoprStakeContractAddress,
-    HoprBoostContractAddress,
-    account,
-    block,
-    library,
-  ])
+  }, [])
   return (
     <>
       <Box

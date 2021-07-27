@@ -30,7 +30,7 @@ export const SyncButton = ({
         ))
     }
     loadAccountData()
-  }, [state.lastSync, account, library, HoprStakeContractAddress, dispatch])
+  }, [])
   return (
     <Button
       size="md"

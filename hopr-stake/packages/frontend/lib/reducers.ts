@@ -116,6 +116,11 @@ export function reducer(state: StateType, action: ActionType): StateType {
   }
 }
 
+export async function fetchNFTs(
+
+): Promise<void> {
+
+}
 
 export async function fetchAccountData(
   HoprStakeContractAddress: string,

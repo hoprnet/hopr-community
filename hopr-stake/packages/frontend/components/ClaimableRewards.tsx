@@ -25,7 +25,7 @@ export const ClaimableRewards = ({
         ))
     }
     loadAccountData()
-  }, [state.lastSync, HoprStakeContractAddress, state, dispatch])
+  }, [])
   return (
     <>
       <Text ml="6px" fontSize="sm" fontFamily="mono">

@@ -25,7 +25,7 @@ export const LastTimeSynced = ({
         ))
     }
     loadAccountData()
-  }, [dispatch, state.lastSync, account, library, HoprStakeContractAddress, block])
+  }, [])
   return (
     <>
       {state.lastSync

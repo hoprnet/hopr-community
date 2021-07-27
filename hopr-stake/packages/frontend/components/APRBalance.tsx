@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react'
+import { Text, Box } from '@chakra-ui/react'
 
 export const APRBalance = ({
   totalAPRBoost = 0,
@@ -6,18 +6,18 @@ export const APRBalance = ({
   totalAPRBoost?: number
 }): JSX.Element => {
   return (
-    <>
-      <Text d="inline" fontWeight="700" color="blue.600">
-        {`${18.25 + (totalAPRBoost / 317)}%`}
+    <Box d="inline">
+      <Text d="inline" fontWeight="700" color="blue.600" fontSize="xl">
+        {`${18.25 + totalAPRBoost / 317}%`}
       </Text>
-      <b>
+      <Text d="inline" fontWeight="700" fontSize="xl">
         {' '}
         (18.25% +{' '}
-        <Text d="inline" fontWeight="700" color="green.600">
-          {(totalAPRBoost / 317).toFixed(2)}%
-        </Text>
-        )
-      </b>
-    </>
+      </Text>
+      <Text d="inline" fontWeight="700" color="green.600" fontSize="xl">
+        {(totalAPRBoost / 317).toFixed(2)}%
+      </Text>
+      )
+    </Box>
   )
 }
