@@ -2,7 +2,7 @@ import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import React, { useEffect, useReducer, useState } from 'react'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
+import { DarkModeSwitch } from '../components/atoms/DarkModeSwitch'
 
 import Layout from '../components/layout/Layout'
 import { NFTQuery } from '../components/NFTQuery'
@@ -15,12 +15,17 @@ import {
   IContractAddress,
   IContractFromBlockNumbers,
 } from '../lib/addresses'
-import { bgColor, color, daysUntilProgramEnd } from '../lib/helpers'
-import { APRBalance } from '../components/APRBalance'
+import { bgColor, color } from '../lib/helpers'
+import { APRBalance } from '../components/atoms/APRBalance'
 import { reducer, initialState } from '../lib/reducers'
 import { ParagraphLinks } from '../components/ParagraphLinks'
 import { TokenBalance } from '../components/atoms/TokenBalance'
 import { CurrencyTag } from '../components/atoms/CurrencyTag'
+import {
+  EndProgramDateDays,
+  StartProgramDate,
+} from '../components/atoms/ProgramDate'
+import { BoldText } from '../components/atoms/BoldText'
 
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
@@ -86,8 +91,13 @@ function HomeIndex(): JSX.Element {
       </Text>
       <APRBalance totalAPRBoost={state.totalAPRBoost} />.
       <Text mt="8" fontSize="xl" d="inline">
-        Starting <b>July 27th 2021</b>, rewards can be claimed on each block.
-        All rewards will be returned as{' '}
+        Starting{' '}
+        <BoldText>
+          <StartProgramDate
+            HoprStakeContractAddress={contractAddresses.HoprStake}
+          />
+        </BoldText>
+        , rewards can be claimed on each block. All rewards will be returned as{' '}
         <Link
           px="1"
           href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.wxHOPR}/transactions`}
@@ -96,7 +106,11 @@ function HomeIndex(): JSX.Element {
           wxHOPR <ExternalLinkIcon />
         </Link>{' '}
         tokens. xHOPR staked today will be locked for{' '}
-        <b>{daysUntilProgramEnd} days</b>.
+        <BoldText>
+          <EndProgramDateDays
+            HoprStakeContractAddress={contractAddresses.HoprStake}
+          />
+        </BoldText>
       </Text>
       <Text mt="2" fontSize="xl">
         Increase your APR by redeeming NFTs to your account. HOPR NFTs can be

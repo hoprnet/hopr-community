@@ -14,7 +14,7 @@ import { ActionType, setStaking, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import { Dispatch } from 'react'
-import { daysUntilProgramEnd } from '../lib/helpers'
+import { EndProgramDateDays } from './atoms/ProgramDate'
 import { format } from 'timeago.js'
 
 export const StakeXHoprTokens = ({
@@ -170,7 +170,7 @@ export const StakeXHoprTokens = ({
               color="whiteAlpha.900"
               isDisabled={true}
             >
-              Claim Rewards ({daysUntilProgramEnd} days to go)
+              Claim Rewards (<EndProgramDateDays HoprStakeContractAddress={HoprStakeContractAddress} />  to go)
             </Button>
           </Box>
         )}
