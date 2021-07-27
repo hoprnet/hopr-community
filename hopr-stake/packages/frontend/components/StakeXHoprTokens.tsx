@@ -10,13 +10,16 @@ import {
 } from '@chakra-ui/react'
 import { CurrencyTag } from '../components/atoms/CurrencyTag'
 import { SyncButton } from './atoms/SyncButton'
-import { ActionType, setStaking, setSync, StateType } from '../lib/reducers'
+import { ActionType, fetchAccountData, setStaking, setSync, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useBlockNumber, useEthers } from '@usedapp/core'
 import { Dispatch } from 'react'
 import { EndProgramDateDays } from './atoms/ProgramDate'
 import { BalanceWithCurrency } from './molecules/BalanceWithCurrency'
 import { format } from 'timeago.js'
+import { useEffect } from 'react'
+import { nonEmptyAccount } from '../lib/helpers'
+import { utils } from 'ethers'
 
 export const StakeXHoprTokens = ({
   XHOPRContractAddress,
@@ -39,6 +42,19 @@ export const StakeXHoprTokens = ({
   const bonusBoost = state.totalAPRBoost / FACTOR_DENOMINATOR
   const totalBoost = bonusBoost + baseBoost
   const estimatedRewards = timeDiff * (+state.stakedHOPRTokens * totalBoost)
+
+  useEffect(() => {
+    const loadAccountData = async () => {
+      nonEmptyAccount(account) &&
+        (await fetchAccountData(
+          HoprStakeContractAddress,
+          account,
+          library,
+          dispatch
+        ))
+    }
+    loadAccountData()
+  }, [account, block])
 
   return (
     <>
@@ -87,7 +103,7 @@ export const StakeXHoprTokens = ({
                 </Text>
                 <BalanceWithCurrency
                   balanceElement={
-                    <Skeleton isLoaded={false} mr="5px">
+                    <Skeleton isLoaded={!state.isLoadingFetching} mr="5px">
                       <Tag colorScheme="gray" fontFamily="mono">
                         {item.value || '--'}
                       </Tag>
@@ -134,7 +150,7 @@ export const StakeXHoprTokens = ({
               <Button
                 width="10rem"
                 size="sm"
-                isLoading={state.isLoading}
+                isLoading={state.isLoadingStaking}
                 onClick={() => {
                   setStaking(
                     XHOPRContractAddress,
@@ -146,7 +162,7 @@ export const StakeXHoprTokens = ({
                 }}
                 {...colours}
               >
-                {state.isLoading ? 'Loading...' : 'Stake xHOPR tokens'}
+                Stake xHOPR tokens
               </Button>
             </InputRightElement>
           )}
@@ -159,11 +175,11 @@ export const StakeXHoprTokens = ({
         alignItems="center"
       >
         <Box>
-          <Box d="flex">
+          <Box d="flex" alignItems="center">
             <Text fontSize="sm" fontFamily="mono">
               Last time synced:{' '}
             </Text>
-            <Skeleton isLoaded={false} mr="5px" minW="100px">
+            <Skeleton isLoaded={!state.isLoadingFetching} mr="5px" minW="100px">
               {state.lastSync
                 ? state.lastSync == '0'
                   ? 'Never'
@@ -178,9 +194,9 @@ export const StakeXHoprTokens = ({
             </Text>
             <BalanceWithCurrency
               balanceElement={
-                <Skeleton isLoaded={false} mr="5px">
+                <Skeleton isLoaded={!state.isLoadingFetching} mr="5px">
                   <Tag colorScheme="gray" fontFamily="mono">
-                    {state.yetToClaimRewards || '--'}
+                    {utils.formatEther(state.yetToClaimRewards || "0").toString() || '--'}
                   </Tag>
                 </Skeleton>
               }

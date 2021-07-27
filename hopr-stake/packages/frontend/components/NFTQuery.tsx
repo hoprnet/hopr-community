@@ -90,7 +90,7 @@ const NFTLockButton = ({
         )
       }}
     >
-      {state.isLoading ? 'Loading...' : 'Lock NFT'}
+      {state.isLoadingRedeem ? 'Loading...' : 'Lock NFT'}
     </Button>
   )
 }
