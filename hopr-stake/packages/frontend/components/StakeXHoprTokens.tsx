@@ -6,6 +6,7 @@ import {
   Text,
   Box,
   Tag,
+  Skeleton,
 } from '@chakra-ui/react'
 import { CurrencyTag } from '../components/atoms/CurrencyTag'
 import { SyncButton } from './atoms/SyncButton'
@@ -61,7 +62,12 @@ export const StakeXHoprTokens = ({
         </Box>
       </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">
-        <Box d="flex" alignItems="center" justifyContent="space-between" width="50%">
+        <Box
+          d="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          width="50%"
+        >
           {[
             {
               value: state.stakedHOPRTokens,
@@ -81,9 +87,11 @@ export const StakeXHoprTokens = ({
                 </Text>
                 <BalanceWithCurrency
                   balanceElement={
-                    <Tag mr="5px" colorScheme="gray" fontFamily="mono">
-                      {item.value || '--'}
-                    </Tag>
+                    <Skeleton isLoaded={false} mr="5px">
+                      <Tag colorScheme="gray" fontFamily="mono">
+                        {item.value || '--'}
+                      </Tag>
+                    </Skeleton>
                   }
                   currencyElement={<CurrencyTag tag={item.currency} />}
                 />
@@ -151,22 +159,33 @@ export const StakeXHoprTokens = ({
         alignItems="center"
       >
         <Box>
-          <Text fontSize="sm" fontFamily="mono">
-            Last time synced:{' '}
-            {state.lastSync
-              ? state.lastSync == '0'
-                ? 'Never'
-                : new Date(+state.lastSync * 1000).toUTCString()
-              : '--'}
-            {+state.lastSync > 0 && `(${format(+state.lastSync * 1000)})`}
-          </Text>
+          <Box d="flex">
+            <Text fontSize="sm" fontFamily="mono">
+              Last time synced:{' '}
+            </Text>
+            <Skeleton isLoaded={false} mr="5px" minW="100px">
+              {state.lastSync
+                ? state.lastSync == '0'
+                  ? 'Never'
+                  : new Date(+state.lastSync * 1000).toUTCString()
+                : '--'}
+              {+state.lastSync > 0 && `(${format(+state.lastSync * 1000)})`}
+            </Skeleton>
+          </Box>
           <Box d="flex" alignItems="center">
             <Text fontWeight="600" fontSize="md" mr="5px">
               Claimable -
             </Text>
-            <Text ml="6px" fontSize="sm" fontFamily="mono">
-              {state.yetToClaimRewards || '--'} wxHOPR (Since last sync)
-            </Text>
+            <BalanceWithCurrency
+              balanceElement={
+                <Skeleton isLoaded={false} mr="5px">
+                  <Tag colorScheme="gray" fontFamily="mono">
+                    {state.yetToClaimRewards || '--'}
+                  </Tag>
+                </Skeleton>
+              }
+              currencyElement={<CurrencyTag tag={'wxHOPR'} />}
+            />
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
               + {estimatedRewards.toFixed(18)} (Estimated)
             </Text>
@@ -202,7 +221,6 @@ export const StakeXHoprTokens = ({
             >
               Claim Rewards
             </Button>
-            
           </Box>
         )}
       </Box>
