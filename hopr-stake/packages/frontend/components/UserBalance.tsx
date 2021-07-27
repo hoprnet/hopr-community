@@ -7,7 +7,6 @@ import {
   RPC_COLOURS,
 } from '../lib/connectors'
 import { round } from '../lib/helpers'
-import { XHoprBalance } from './XHoprBalance'
 import { CurrencyTag } from './atoms/CurrencyTag'
 import { TokenBalance } from './atoms/TokenBalance'
 import { EtherBalance } from './atoms/EtherBalance'
