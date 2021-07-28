@@ -18,6 +18,7 @@ import { ActionType, setRedeemNFT, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { bgColor, color, nonEmptyAccount } from '../lib/helpers'
 import { useRedeemedNFTs } from '../lib/hooks'
+import { CurrencyTag } from './atoms/CurrencyTag'
 
 type NFT = {
   tokenId: string
@@ -142,23 +143,28 @@ const NFTContainer = ({
                 >
                   {nft.typeOfBoostName}
                 </Tag>
-                {
-                  nft.factor === state.totalAPRBoost ?
-                  <Tag ml="2px" colorScheme="green">In Use</Tag> :
-                  <Tag ml="2px" colorScheme="red">Ignored</Tag>
-                }
+                {nft.factor === state.totalAPRBoost ? (
+                  <Tag ml="2px" colorScheme="green">
+                    In Use
+                  </Tag>
+                ) : (
+                  <Tag ml="2px" colorScheme="red">
+                    Ignored
+                  </Tag>
+                )}
               </Text>
-              <Box>
+              <Box >
                 <Text>
                   <b>Boost Factor</b> -{' '}
                   <code>{(nft.factor / 317).toFixed(2)}%</code>
                 </Text>
-                <Text>
-                  <b>APR</b> -{' '}
-                  <code>
-                    {(((nft.factor * 3600 * 24) / 1e12) * 365).toFixed(12)}%
-                  </code>
-                </Text>
+                <b>APR</b>
+                <Box d="flex" alignItems="baseline">
+                  <Text mr="2px">
+                     <code>{(nft.factor / 1e12).toFixed(12)}</code>
+                  </Text>
+                  <CurrencyTag tag="wxHOPR/sec" />
+                </Box>
               </Box>
               <Box isTruncated mt="5px">
                 Redeem Deadline
