@@ -15,6 +15,7 @@ import {
   MenuList,
   SimpleGrid,
   Text,
+  Tag,
 } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { useEthers, useNotifications } from '@usedapp/core'
@@ -26,9 +27,10 @@ import {
   getContractAddresses,
   IContractAddress,
 } from '../../lib/addresses'
-import Balance from '../atoms/UserBalance'
+import UserBalance from '../atoms/UserBalance'
 import ConnectWallet from '../atoms/ConnectWallet'
 import Head, { MetaProps } from './Head'
+import { chainIdToNetwork, RPC_COLOURS } from '../../lib/connectors'
 
 // Extends `window` to add `ethereum`.
 declare global {
@@ -69,6 +71,7 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
     emptyContractAddresses
   )
   const { notifications } = useNotifications()
+  const colours = RPC_COLOURS[chainId] || { scheme: 'gray' }
 
   let blockieImageSrc
   if (typeof window !== 'undefined') {
@@ -89,18 +92,33 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       <header>
         <Container maxWidth="container.xl">
           <SimpleGrid
-            columns={[1, 1, 1, 2]}
+            columns={[1, 1, 1, 3]}
             alignItems="center"
             justifyContent="space-between"
             py="8"
           >
             <Flex py={[4, null, null, 0]}>
-              <Link py="1" href="https://medium.com/hoprnet/hopr-staking-program-full-details-d0a4eb12d2c" isExternal>
+              <Link
+                py="1"
+                href="https://medium.com/hoprnet/hopr-staking-program-full-details-d0a4eb12d2c"
+                isExternal
+              >
                 Read about HOPR staking <ExternalLinkIcon />
               </Link>
-                <Link px="4" py="1" href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.HoprStake}/transactions`} isExternal>
+              <Link
+                px="4"
+                py="1"
+                href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.HoprStake}/transactions`}
+                isExternal
+              >
                 Contract Address <ExternalLinkIcon />
-                </Link>
+              </Link>
+            </Flex>
+            <Flex justifyContent="flex-end">
+              <UserBalance
+                wxHOPRContractAddress={contractAddresses.wxHOPR}
+                xHOPRContractAddress={contractAddresses.xHOPR}
+              />
             </Flex>
             {account ? (
               <Flex
@@ -108,9 +126,9 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
                 alignItems={'center'}
                 justifyContent={['flex-start', null, null, 'flex-end']}
               >
-                <Balance
-                  xHOPRContractAddress={contractAddresses.xHOPR}
-                />
+                <Tag px="10px" ml="10" textTransform="uppercase" {...colours}>
+                  {chainIdToNetwork(chainId) || 'Loading...'}
+                </Tag>
                 <Image ml="4" src={blockieImageSrc} alt="blockie" />
                 <Menu placement="bottom-end">
                   <MenuButton as={Button} ml="4">

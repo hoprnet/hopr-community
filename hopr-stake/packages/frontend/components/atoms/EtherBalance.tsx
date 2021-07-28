@@ -17,7 +17,7 @@ export const EtherBalance = ({
     : '0.00'
   isLoaded = true
 
-  const colours = RPC_COLOURS[chainId]
+  const colours = RPC_COLOURS[chainId] || { scheme: 'gray' }
 
   return (
     <>
