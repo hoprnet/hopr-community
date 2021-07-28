@@ -226,13 +226,12 @@ export const NFTQuery = ({
         const redemeedNfts = await Promise.all(redeemedNFTSPromises)
         setNFTS(nfts)
         setRedeeemedNFTS(redemeedNfts)
-        const totalAPRBoost = redeemedNFTs.reduce(
-          (acc, val) => acc + val.factor,
-          0
+        const maxFactorNFT = redeemedNFTs.reduce(
+          (prev, curr) => prev.factor > curr.factor ? prev : curr,
         )
         dispatch({
           type: 'SET_TOTAL_APR_BOOST',
-          totalAPRBoost,
+          totalAPRBoost: maxFactorNFT.factor,
         })
       }
     }

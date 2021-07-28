@@ -241,7 +241,7 @@ export const StakeXHoprTokens = ({
               currencyElement={<CurrencyTag tag={'wxHOPR'} />}
             />
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
-              + {estimatedRewards.toFixed(12)} (Sync to see actual amount)
+              + {estimatedRewards.toFixed(12)} (Sync for actual amount)
             </Text>
           </Box>
         </Box>
@@ -253,7 +253,7 @@ export const StakeXHoprTokens = ({
                 setSync(HoprStakeContractAddress, library, dispatch)
               }}
             >
-              Sync rewards
+              Sync
             </CallButton>
             <Button
               size="md"
