@@ -9,17 +9,30 @@ import {
   Skeleton,
 } from '@chakra-ui/react'
 import { CurrencyTag } from '../components/atoms/CurrencyTag'
-import { SyncButton } from './atoms/SyncButton'
-import { ActionType, fetchAccountData, setStaking, setSync, StateType } from '../lib/reducers'
+import { CallButton } from './atoms/CallButton'
+import {
+  ActionType,
+  fetchAccountData,
+  setClaim,
+  setStaking,
+  setSync,
+  StateType,
+} from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { useBlockNumber, useEthers } from '@usedapp/core'
-import { Dispatch } from 'react'
+import { Dispatch, useState } from 'react'
 import { EndProgramDateDays } from './atoms/ProgramDate'
 import { BalanceWithCurrency } from './molecules/BalanceWithCurrency'
 import { format } from 'timeago.js'
 import { useEffect } from 'react'
 import { nonEmptyAccount } from '../lib/helpers'
 import { utils } from 'ethers'
+
+enum LOADED_STATUS {
+  'INIT',
+  'ACCOUNT_DATA_FETCHED',
+  'LOADED',
+}
 
 export const StakeXHoprTokens = ({
   XHOPRContractAddress,
@@ -35,6 +48,10 @@ export const StakeXHoprTokens = ({
   const { chainId, library, account } = useEthers()
   const block = useBlockNumber()
   const colours = RPC_COLOURS[chainId]
+  const [loadStatus, setLoadStatus] = useState<LOADED_STATUS>(
+    LOADED_STATUS.INIT
+  )
+  const [loadCounter, setLoadCounter] = useState<number>(0)
 
   const timeDiff = (new Date().getTime() - +state.lastSync * 1000) / 1000 // to seconds
   const FACTOR_DENOMINATOR = 1e12
@@ -43,15 +60,22 @@ export const StakeXHoprTokens = ({
   const totalBoost = bonusBoost + baseBoost
   const estimatedRewards = timeDiff * (+state.stakedHOPRTokens * totalBoost)
 
+  const hasLoaded = () => loadStatus === LOADED_STATUS.LOADED
+
   useEffect(() => {
     const loadAccountData = async () => {
-      nonEmptyAccount(account) &&
-        (await fetchAccountData(
+      if (nonEmptyAccount(account)) {
+        await fetchAccountData(
           HoprStakeContractAddress,
           account,
           library,
           dispatch
-        ))
+        )
+        setLoadCounter(loadCounter + 1)
+        loadCounter >= 1
+          ? setLoadStatus(LOADED_STATUS.LOADED)
+          : setLoadStatus(LOADED_STATUS.ACCOUNT_DATA_FETCHED)
+      }
     }
     loadAccountData()
   }, [account, block])
@@ -103,7 +127,10 @@ export const StakeXHoprTokens = ({
                 </Text>
                 <BalanceWithCurrency
                   balanceElement={
-                    <Skeleton isLoaded={!state.isLoadingFetching} mr="5px">
+                    <Skeleton
+                      isLoaded={!state.isLoadingFetching && hasLoaded()}
+                      mr="5px"
+                    >
                       <Tag colorScheme="gray" fontFamily="mono">
                         {item.value || '--'}
                       </Tag>
@@ -120,10 +147,10 @@ export const StakeXHoprTokens = ({
             Rewards (wxHOPR/sec)
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono">
-            +{(baseBoost * +state.stakedHOPRTokens).toFixed(10)} (Base)
+            +{(baseBoost * +state.stakedHOPRTokens).toFixed(12)} (Base)
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono" color="green.600">
-            +{(bonusBoost * +state.stakedHOPRTokens).toFixed(10)} (Boost)
+            +{(bonusBoost * +state.stakedHOPRTokens).toFixed(12)} (Boost)
           </Text>
         </Box>
       </Box>
@@ -175,17 +202,23 @@ export const StakeXHoprTokens = ({
         alignItems="center"
       >
         <Box>
-          <Box d="flex" alignItems="center">
+          <Box d="flex" alignItems="center" mb="5px">
             <Text fontSize="sm" fontFamily="mono">
               Last time synced:{' '}
             </Text>
-            <Skeleton isLoaded={!state.isLoadingFetching} mr="5px" minW="100px">
-              {state.lastSync
-                ? state.lastSync == '0'
-                  ? 'Never'
-                  : new Date(+state.lastSync * 1000).toUTCString()
-                : '--'}
-              {+state.lastSync > 0 && `(${format(+state.lastSync * 1000)})`}
+            <Skeleton
+              isLoaded={!state.isLoadingFetching && hasLoaded()}
+              mr="5px"
+              minW="100px"
+            >
+              <Text ml="5px" fontSize="sm">
+                {state.lastSync
+                  ? state.lastSync == '0'
+                    ? 'Never'
+                    : new Date(+state.lastSync * 1000).toUTCString()
+                  : '--'}
+                {+state.lastSync > 0 && `(${format(+state.lastSync * 1000)})`}
+              </Text>
             </Skeleton>
           </Box>
           <Box d="flex" alignItems="center">
@@ -194,30 +227,37 @@ export const StakeXHoprTokens = ({
             </Text>
             <BalanceWithCurrency
               balanceElement={
-                <Skeleton isLoaded={!state.isLoadingFetching} mr="5px">
+                <Skeleton
+                  isLoaded={!state.isLoadingFetching && hasLoaded()}
+                  mr="5px"
+                >
                   <Tag colorScheme="gray" fontFamily="mono">
-                    {utils.formatEther(state.yetToClaimRewards || "0").toString() || '--'}
+                    {utils
+                      .formatEther(state.yetToClaimRewards || '0')
+                      .toString() || '--'}
                   </Tag>
                 </Skeleton>
               }
               currencyElement={<CurrencyTag tag={'wxHOPR'} />}
             />
             <Text ml="6px" fontSize="sm" fontFamily="mono" color="blue.600">
-              + {estimatedRewards.toFixed(18)} (Estimated)
+              + {estimatedRewards.toFixed(12)} (Sync to see actual amount)
             </Text>
           </Box>
         </Box>
         {account && (
           <Box textAlign="right">
-            <SyncButton
+            <CallButton
               isLoading={state.isLoadingSync}
-              syncHandler={() => {
-                setSync(HoprStakeContractAddress, state, library, dispatch)
+              handler={() => {
+                setSync(HoprStakeContractAddress, library, dispatch)
               }}
-            />
+            >
+              Sync rewards
+            </CallButton>
             <Button
               size="md"
-              ml="10px"
+              mx="10px"
               bg="blackAlpha.900"
               color="whiteAlpha.900"
               isDisabled={true}
@@ -228,15 +268,14 @@ export const StakeXHoprTokens = ({
               />{' '}
               to go)
             </Button>
-            <Button
-              size="md"
-              ml="10px"
-              bg="blackAlpha.900"
-              color="whiteAlpha.900"
-              isDisabled={true}
+            <CallButton
+              isLoading={state.isLoadingClaim}
+              handler={() => {
+                setClaim(HoprStakeContractAddress, library, dispatch)
+              }}
             >
-              Claim Rewards
-            </Button>
+              Claim rewards
+            </CallButton>
           </Box>
         )}
       </Box>

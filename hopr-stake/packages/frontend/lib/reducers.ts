@@ -22,6 +22,7 @@ export type StateType = {
   isLoadingStaking: boolean
   isLoadingSync: boolean
   isLoadingRedeem: boolean
+  isLoadingClaim: boolean
   totalAPRBoost: number
 }
 
@@ -38,6 +39,7 @@ export const initialState: StateType = {
   isLoadingStaking: false,
   isLoadingSync: false,
   isLoadingRedeem: false,
+  isLoadingClaim: false,
   totalAPRBoost: 0,
 }
 
@@ -64,6 +66,10 @@ export type ActionType =
   | {
     type: 'SET_LOADING_FETCHING'
     isLoadingFetching: StateType['isLoadingFetching']
+  }
+  | {
+    type: 'SET_LOADING_CLAIM'
+    isLoadingClaim: StateType['isLoadingClaim']
   }
   | {
     type: 'SET_LOADING_SYNC'
@@ -96,6 +102,11 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         isLoadingStaking: action.isLoadingStaking,
+      }
+    case 'SET_LOADING_CLAIM':
+      return {
+        ...state,
+        isLoadingClaim: action.isLoadingClaim
       }
     case 'SET_LOADING_FETCHING':
       return {
@@ -150,20 +161,22 @@ export async function fetchAccountData(
         cumulatedRewards,
         lastSyncTimestamp,
         claimedRewards,
-      } = accountStruct
+      } = accountStruct 
       const [
         stakedHOPRTokens,
+        alreadyClaimedRewards
       ] = [
         actualLockedTokenAmount,
+        claimedRewards
       ].map((dataPoint) =>
-        dataPoint ? round(Number(utils.formatEther(dataPoint)), 4) : '0.0000'
+        dataPoint ? round(Number(utils.formatEther(dataPoint)), 12) : '0.00000000'
       )
       dispatch({
         type: 'SET_ACCOUNT_DATA',
         stakedHOPRTokens,
-        yetToClaimRewards: cumulatedRewards.toString(),
+        yetToClaimRewards: (cumulatedRewards.sub(claimedRewards)).toString(),
         lastSync: lastSyncTimestamp.toString(),
-        alreadyClaimedRewards: claimedRewards.toString(),
+        alreadyClaimedRewards,
       })
       dispatch({
         type: 'SET_LOADING_FETCHING',
@@ -176,9 +189,40 @@ export async function fetchAccountData(
   }
 }
 
+export async function setClaim(
+  HoprStakeContractAddress: string,
+  provider: Web3Provider,
+  dispatch: React.Dispatch<ActionType>
+): Promise<void> {
+  if (provider && HoprStakeContractAddress != '') {
+    dispatch({
+      type: 'SET_LOADING_CLAIM',
+      isLoadingClaim: true,
+    })
+    const signer = provider.getSigner()
+    const address = await signer.getAddress()
+    const contract = new ethers.Contract(
+      HoprStakeContractAddress,
+      HoprStakeABI,
+      signer
+    ) as unknown as HoprStakeType
+    const transaction = await contract.claimRewards(address)
+    await transaction.wait()
+    fetchAccountData(
+      HoprStakeContractAddress,
+      address,
+      provider,
+      dispatch
+    )
+    dispatch({
+      type: 'SET_LOADING_CLAIM',
+      isLoadingClaim: false,
+    })
+  }
+}
+
 export async function setSync(
   HoprStakeContractAddress: string,
-  state: StateType,
   provider: Web3Provider,
   dispatch: React.Dispatch<ActionType>
 ): Promise<void> {
