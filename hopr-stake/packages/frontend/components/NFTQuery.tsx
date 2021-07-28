@@ -1,4 +1,4 @@
-import { useEthers, useTokenBalance } from '@usedapp/core'
+import { useBlockNumber, useEthers, useTokenBalance } from '@usedapp/core'
 import { Text, Box, Button, useColorMode, Image, Tag } from '@chakra-ui/react'
 import { useEffect, useState, Dispatch } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
@@ -9,6 +9,7 @@ import { Contract, constants, BigNumber } from 'ethers'
 import { ActionType, setRedeemNFT, StateType } from '../lib/reducers'
 import { RPC_COLOURS } from '../lib/connectors'
 import { bgColor, color, nonEmptyAccount } from '../lib/helpers'
+import { useRedeemedNFTs } from '../lib/hooks'
 
 type NFT = {
   tokenId: string
@@ -111,9 +112,19 @@ const NFTContainer = ({
   <>
     {nfts.map((nft) => {
       return (
-        <Box key={nft.tokenId} my="2" maxW="m">
-          <Image src={nft.image} width="250px" />
-          <Box p="6">
+        <Box
+          key={nft.tokenId}
+          my="2"
+          d="flex"
+          flexDirection="column"
+          alignContent="space-evenly"
+          border="1px solid #ccc"
+          p="5"
+          m="5"
+          borderRadius="5px"
+        >
+          <Image src={nft.image} width="250px" m="auto" />
+          <Box py="6" px="6">
             <Box d="flex" alignItems="baseline" flexDirection="column">
               <Text fontWeight="bold" as="h3" fontSize="large">
                 <code>{nft.typeName}</code>{' '}
@@ -131,7 +142,9 @@ const NFTContainer = ({
                 </Text>
                 <Text>
                   <b>APR</b> -{' '}
-                  <code>{((nft.factor * 3600 * 24) / 1e12) * 365}%</code>
+                  <code>
+                    {(((nft.factor * 3600 * 24) / 1e12) * 365).toFixed(12)}%
+                  </code>
                 </Text>
               </Box>
               <Box isTruncated mt="5px">
@@ -173,13 +186,18 @@ export const NFTQuery = ({
   const { library, account } = useEthers()
   const [nfts, setNFTS] = useState<NFT[]>([])
   const [redeemedNFTs, setRedeeemedNFTS] = useState<NFT[]>([])
-
+  const startingBlock = useBlockNumber()
+  const [blocks, setBlockCounter] = useState<number>(0)
   const { colorMode } = useColorMode()
   const NFTBalance =
     useTokenBalance(HoprBoostContractAddress, account) || constants.Zero
 
+  const redeemedNFTsBalance =
+    useRedeemedNFTs(HoprStakeContractAddress, account) || constants.Zero
+
   useEffect(() => {
     const loadNFTBalance = async () => {
+      startingBlock != startingBlock - 1 && setBlockCounter(blocks + 1)
       if (
         !(HoprStakeContractAddress && account) ||
         HoprStakeContractAddress.length == 0 ||
@@ -187,28 +205,25 @@ export const NFTQuery = ({
       ) {
         return
       }
-      const amountofNFTS = NFTBalance
-        ? [...Array(Number(NFTBalance.toString()))]
-        : []
-      const HoprStake = new Contract(
-        HoprStakeContractAddress,
-        HoprStakeABI,
-        library
-      ) as unknown as HoprStakeType
-      const redeemedNFTsAmountScalar = (
-        nonEmptyAccount(account)
-          ? await HoprStake.redeemedNftIndex(account)
-          : constants.Zero
-      ).toString()
-
-      if (amountofNFTS.length > 0 || +redeemedNFTsAmountScalar > 0) {
+      if (library && (+NFTBalance > 0 || +redeemedNFTsBalance > 0)) {
+        // We create empty arrays we can .map later based on the amount of
+        // nfts or redeemed nfts a user has.
+        const nftsMappedArray = [...Array(+NFTBalance)]
+        const redeemedNFTsMappedArray = [...Array(+redeemedNFTsBalance)]
+        // Only then we create the actual contracts we will be using.
         const HoprBoost = new Contract(
           HoprBoostContractAddress,
           HoprBoostABI,
           library
         ) as unknown as HoprBoostType
-        const redeemedNFTsAmount = [...Array(Number(redeemedNFTsAmountScalar))]
-        const redeemedNFTSPromises = redeemedNFTsAmount.map(
+        const HoprStake = new Contract(
+          HoprStakeContractAddress,
+          HoprStakeABI,
+          library
+        ) as unknown as HoprStakeType
+        // We go through both mapped arrays and create the to be resolved promises
+        // for both redeemed and not redeemed NFT tokens.
+        const redeemedNFTSPromises = redeemedNFTsMappedArray.map(
           async (_, index) => {
             const tokenId = nonEmptyAccount(account)
               ? await HoprStake.redeemedNft(account, index)
@@ -218,16 +233,20 @@ export const NFTQuery = ({
               : undefined
           }
         )
-        const nftsPromises = amountofNFTS.map(async (_, index) => {
+        const nftsPromises = nftsMappedArray.map(async (_, index) => {
           const tokenId = await HoprBoost.tokenOfOwnerByIndex(account, index)
           return await getNFTFromTokenId(HoprBoost, tokenId)
         })
-        const nfts = await Promise.all(nftsPromises)
-        const redemeedNfts = await Promise.all(redeemedNFTSPromises)
+        // We resolve both promises to make sure all NFTs are properly obtained
+        const nfts = (await Promise.all(nftsPromises)) || []
+        const redemeedNfts = (await Promise.all(redeemedNFTSPromises)) || []
+        // We update our current component state accordingly
         setNFTS(nfts)
         setRedeeemedNFTS(redemeedNfts)
+        // We propagate the total APR boost to the rest of the application.
         const maxFactorNFT = redeemedNFTs.reduce(
-          (prev, curr) => prev.factor > curr.factor ? prev : curr,
+          (prev, curr) => (prev.factor > curr.factor ? prev : curr),
+          { factor: 0 }
         )
         dispatch({
           type: 'SET_TOTAL_APR_BOOST',
@@ -236,7 +255,7 @@ export const NFTQuery = ({
       }
     }
     loadNFTBalance()
-  }, [])
+  }, [account, startingBlock])
   return (
     <>
       <Box
@@ -246,50 +265,81 @@ export const NFTQuery = ({
         bg={bgColor[colorMode]}
         color={color[colorMode]}
       >
-        <Box d="flex" alignItems="center">
-          <Text fontSize="xl" fontWeight="900">
-            HOPR NFTs
-          </Text>
-          <Text ml="10px" fontSize="sm" fontWeight="400">
-            Your NFTs will show up here. Earn them by participating in our
-            activities.
-          </Text>
+        <Box d="flex" justifyContent="space-between" mb="10px">
+          <Box d="flex" alignItems="center">
+            <Text fontSize="xl" fontWeight="900">
+              HOPR NFTs
+            </Text>
+            <Text ml="10px" fontSize="sm" fontWeight="400">
+              Please wait up to three blocks for your NFTs to show.
+            </Text>
+          </Box>
+          <Box d="flex" alignItems="center">
+            <Text fontWeight="600" fontSize="md" mr="5px">
+              Blocks
+            </Text>
+            <Text ml="6px" fontSize="sm" fontFamily="mono">
+              {startingBlock}
+            </Text>
+            {blocks > 0 && (
+              <Text ml="2px" fontSize="sm" fontFamily="mono" color="green.600">
+                +{blocks}
+              </Text>
+            )}
+          </Box>
         </Box>
-        <Box d="flex" alignItems="center">
-          <NFTContainer
-            nfts={nfts}
-            HoprBoostContractAddress={HoprBoostContractAddress}
-            HoprStakeContractAddress={HoprStakeContractAddress}
-            state={state}
-            dispatch={dispatch}
-          />
-        </Box>
-      </Box>
-      <Box
-        maxWidth="container.l"
-        p="8"
-        mt="8"
-        bg={bgColor[colorMode]}
-        color={color[colorMode]}
-      >
-        <Box d="flex" alignItems="center">
-          <Text fontSize="xl" fontWeight="900">
-            Locked HOPR NFTs
-          </Text>
-          <Text ml="10px" fontSize="sm" fontWeight="400">
-            Your locked NFTs will show up here. By activating them you’ll
-            benefit from its bonuses.
-          </Text>
-        </Box>
-        <Box d="flex" alignItems="center">
-          <NFTContainer
-            nfts={redeemedNFTs}
-            HoprBoostContractAddress={HoprBoostContractAddress}
-            HoprStakeContractAddress={HoprStakeContractAddress}
-            state={state}
-            dispatch={dispatch}
-          />
-        </Box>
+        {[
+          {
+            title: 'Available HOPR NFTs',
+            subtitle: `Your NFTs will show up here. Earn them by participating in activities. Lock them to boost your APR.`,
+            items: nfts,
+          },
+          {
+            title: 'Locked HOPR NFTs',
+            subtitle: `Your locked NFTs will show up here. The combined NFT boost (one per NFT type) will be added to your base APR`,
+            items: redeemedNFTs,
+          },
+        ].map((nftDataContainer) => {
+          return (
+            <Box key={nftDataContainer.title}>
+              <Box d="flex" alignItems="center">
+                <Text fontWeight="600" fontSize="md" mr="2px">
+                  {nftDataContainer.title}
+                </Text>
+                <Text ml="10px" fontSize="sm" fontWeight="400">
+                  {nftDataContainer.subtitle}
+                </Text>
+              </Box>
+              <Box d="flex" alignItems="center" mb="10px">
+                {nftDataContainer.items.length > 0 ? (
+                  <NFTContainer
+                    nfts={nftDataContainer.items}
+                    HoprBoostContractAddress={HoprBoostContractAddress}
+                    HoprStakeContractAddress={HoprStakeContractAddress}
+                    state={state}
+                    dispatch={dispatch}
+                  />
+                ) : (
+                  <Box
+                    minH="100px"
+                    d="flex"
+                    textAlign="center"
+                    alignItems="center"
+                    margin="auto"
+                    width="100%"
+                    borderRadius="5px"
+                    border="1px solid #ccc"
+                    justifyContent="center"
+                  >
+                    <Text fontSize="lg">
+                      Your available NFTs will show up here.
+                    </Text>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          )
+        })}
       </Box>
     </>
   )

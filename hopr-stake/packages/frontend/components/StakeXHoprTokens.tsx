@@ -46,8 +46,10 @@ export const StakeXHoprTokens = ({
   dispatch: Dispatch<ActionType>
 }): JSX.Element => {
   const { chainId, library, account } = useEthers()
-  const block = useBlockNumber()
+  const startingBlock = useBlockNumber()
+  const [blocks, setBlockCounter] = useState<number>(0)
   const colours = RPC_COLOURS[chainId]
+  
   const [loadStatus, setLoadStatus] = useState<LOADED_STATUS>(
     LOADED_STATUS.INIT
   )
@@ -64,6 +66,7 @@ export const StakeXHoprTokens = ({
 
   useEffect(() => {
     const loadAccountData = async () => {
+      startingBlock != startingBlock - 1 && setBlockCounter(blocks + 1)
       if (nonEmptyAccount(account)) {
         await fetchAccountData(
           HoprStakeContractAddress,
@@ -78,7 +81,7 @@ export const StakeXHoprTokens = ({
       }
     }
     loadAccountData()
-  }, [account, block])
+  }, [account, startingBlock])
 
   return (
     <>
@@ -97,8 +100,13 @@ export const StakeXHoprTokens = ({
             Blocks
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono">
-            {block}
-          </Text>
+              {startingBlock}
+            </Text>
+            {blocks > 0 && (
+              <Text ml="2px" fontSize="sm" fontFamily="mono" color="green.600">
+                +{blocks}
+              </Text>
+            )}
         </Box>
       </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">

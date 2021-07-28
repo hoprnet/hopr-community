@@ -17,6 +17,20 @@ export function useStartProgramDate(stakeContractAddress: string | Falsy): BigNu
     return startProgramDate
 }
 
+export function useRedeemedNFTs(stakeContractAddress: string | Falsy, address: string | Falsy): BigNumber | undefined {
+  const [startProgramDate] =
+      useContractCall(
+        address &&
+        stakeContractAddress && {
+        abi: new Interface(HoprStakeABI),
+        address: stakeContractAddress,
+        method: 'redeemedNftIndex',
+        args: [address],
+        }
+      ) ?? []
+    return startProgramDate
+}
+
 export function useEndProgramDate(stakeContractAddress: string | Falsy): BigNumber {
     const [endProgramDate] =
       useContractCall(
