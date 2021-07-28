@@ -142,6 +142,11 @@ const NFTContainer = ({
                 >
                   {nft.typeOfBoostName}
                 </Tag>
+                {
+                  nft.factor === state.totalAPRBoost ?
+                  <Tag ml="2px" colorScheme="green">In Use</Tag> :
+                  <Tag ml="2px" colorScheme="red">Ignored</Tag>
+                }
               </Text>
               <Box>
                 <Text>
@@ -279,7 +284,7 @@ export const NFTQuery = ({
               HOPR NFTs
             </Text>
             <Text ml="10px" fontSize="sm" fontWeight="400">
-              Please wait up to five blocks for your NFTs to show.
+              Please wait up to six block changes for your NFTs to show.
             </Text>
           </Box>
           <Box d="flex" alignItems="center">
@@ -291,7 +296,7 @@ export const NFTQuery = ({
             </Text>
             {blocks > 0 && (
               <Text ml="2px" fontSize="sm" fontFamily="mono" color="green.600">
-                +{blocks}
+                (+{blocks} block changes)
               </Text>
             )}
           </Box>

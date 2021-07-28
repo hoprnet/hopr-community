@@ -40,7 +40,7 @@ export const initialState: StateType = {
   isLoadingSync: false,
   isLoadingRedeem: false,
   isLoadingClaim: false,
-  totalAPRBoost: 0,
+  totalAPRBoost: -1,
 }
 
 type Accounts = {

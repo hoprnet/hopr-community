@@ -104,7 +104,7 @@ export const StakeXHoprTokens = ({
             </Text>
             {blocks > 0 && (
               <Text ml="2px" fontSize="sm" fontFamily="mono" color="green.600">
-                +{blocks}
+                (+{blocks} block changes)
               </Text>
             )}
         </Box>
