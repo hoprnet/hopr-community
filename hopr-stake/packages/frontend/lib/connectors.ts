@@ -6,10 +6,10 @@ const RPC_URLS: { [chainId: number]: string } = {
   100: 'https://rpc.xdaichain.com/',
 }
 
-export const RPC_COLOURS: { [chainId: number]: { bg: string, color: string} } = {
-  5: { bg:"lightblue", color:"#414141" },
-  100: { bg:"yellow.500", color:"#414141" },
-  1337: { bg:"blackAlpha.500", color:"#414141" }
+export const RPC_COLOURS: { [chainId: number]: { bg: string, color: string, scheme: string } } = {
+  5: { bg: "lightblue", color: "#414141", scheme: "blue" },
+  100: { bg: "yellow.500", color: "#414141", scheme: "yellow" },
+  1337: { bg: "blackAlpha.500", color: "#414141", scheme: "blackAlpha" }
 }
 
 export const walletconnect = new WalletConnectConnector({
@@ -41,8 +41,8 @@ export const chainToNativeToken = (chainId: number): string => {
       return "xDAI";
     case 31337:
       return "hETH";
-      case 1337:
-        return "lETH";
+    case 1337:
+      return "lETH";
     default:
       return "xDAI";
   }

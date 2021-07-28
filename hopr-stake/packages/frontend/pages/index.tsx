@@ -1,8 +1,8 @@
-import { Box, Heading, Text, Tag, Link, useColorMode } from '@chakra-ui/react'
+import { Box, Heading, Text, Link, useColorMode } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
-import { useBlockNumber, useEthers } from '@usedapp/core'
+import { useEthers } from '@usedapp/core'
 import React, { useEffect, useReducer, useState } from 'react'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
+import { DarkModeSwitch } from '../components/atoms/DarkModeSwitch'
 
 import Layout from '../components/layout/Layout'
 import { NFTQuery } from '../components/NFTQuery'
@@ -15,16 +15,21 @@ import {
   IContractAddress,
   IContractFromBlockNumbers,
 } from '../lib/addresses'
-import { XHoprBalance } from '../components/XHoprBalance'
-import { bgColor, color, daysUntilProgramEnd } from '../lib/helpers'
-import { APRBalance } from '../components/APRBalance'
+import { bgColor, color } from '../lib/helpers'
+import { APRBalance } from '../components/atoms/APRBalance'
 import { reducer, initialState } from '../lib/reducers'
-import { ParagraphLinks } from '../components/ParagraphLinks'
+import { ParagraphLinks } from '../components/atoms/ParagraphLinks'
+import { TokenBalance } from '../components/atoms/TokenBalance'
+import { CurrencyTag } from '../components/atoms/CurrencyTag'
+import {
+  EndProgramDateDays,
+  StartProgramDate,
+} from '../components/atoms/ProgramDate'
+import { BoldText } from '../components/atoms/BoldText'
 
 function HomeIndex(): JSX.Element {
   const { chainId } = useEthers()
   const { colorMode } = useColorMode()
-  const block = useBlockNumber()
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const [contractAddresses, setContractAddresses] = useState<IContractAddress>(
@@ -42,37 +47,37 @@ function HomeIndex(): JSX.Element {
       setFromBlockNumbers(fromBlockNumbers)
     }
     loadContracts()
-  }, [chainId, block])
+  }, [chainId])
 
   return (
     <Layout>
       <Box d="flex" mb="8" justifyContent="space-between" alignItems="center">
         <Heading as="h1">HOPR Staking</Heading>
         <Box d="flex" alignItems="center">
-          <Text mr="10px" fontWeight="600">
-            Available Rewards{'  '}
-          </Text>
-          <Tag mr="20px" colorScheme="green" fontFamily="mono">
-            <XHoprBalance
-              xHOPRContractAddress={contractAddresses.wxHOPR}
+          <Box d="flex" alignItems="baseline" mr="20px">
+            <Text fontWeight="600" mr="10px">
+              Available Rewards{'  '}
+            </Text>
+            <TokenBalance
+              tokenContract={contractAddresses.wxHOPR}
               givenAccount={contractAddresses.HoprStake}
             />{' '}
-            wxHOPR
-          </Tag>
-          <Text mr="10px" fontWeight="600">
-            Total Staked{'  '}
-          </Text>
-          <Tag ml="10px" colorScheme="blue" fontFamily="mono">
-            <XHoprBalance
-              xHOPRContractAddress={contractAddresses.xHOPR}
+            <Text fontSize="xs">wxHOPR</Text>
+          </Box>
+          <Box d="flex" alignItems="baseline">
+            <Text fontWeight="600" mr="10px">
+              Total Staked{'  '}
+            </Text>
+            <TokenBalance
+              tokenContract={contractAddresses.xHOPR}
               givenAccount={contractAddresses.HoprStake}
-            />{' '}
-            xHOPR
-          </Tag>
+              colorScheme="blue"
+            />
+            <CurrencyTag tag="xHOPR" />
+          </Box>
         </Box>
       </Box>
-
-      <Text mt="8" fontSize="xl">
+      <Text mt="8" fontSize="xl" d="inline">
         Stake{' '}
         <Link
           px="1"
@@ -82,9 +87,18 @@ function HomeIndex(): JSX.Element {
           xHOPR <ExternalLinkIcon />
         </Link>{' '}
         tokens to earn a base APR of{' '}
-        <APRBalance totalAPRBoost={state.totalAPRBoost} />. Starting{' '}
-        <b>July 27th 2021</b>, rewards can be claimed on each block. All rewards
-        will be returned as{' '}
+      </Text>
+      <APRBalance totalAPRBoost={state.totalAPRBoost} />.
+      <Text mt="8" fontSize="xl" d="inline">
+        Starting{' '}
+      </Text>
+      <BoldText>
+        <StartProgramDate
+          HoprStakeContractAddress={contractAddresses.HoprStake}
+        />
+      </BoldText>
+      <Text mt="8" fontSize="xl" d="inline">
+        , rewards can be claimed on each block. All rewards will be returned as{' '}
         <Link
           px="1"
           href={`https://blockscout.com/xdai/mainnet/address/${contractAddresses.wxHOPR}/transactions`}
@@ -93,8 +107,12 @@ function HomeIndex(): JSX.Element {
           wxHOPR <ExternalLinkIcon />
         </Link>{' '}
         tokens. xHOPR staked today will be locked for{' '}
-        <b>{daysUntilProgramEnd} days</b>.
       </Text>
+      <BoldText fullstop>
+        <EndProgramDateDays
+          HoprStakeContractAddress={contractAddresses.HoprStake}
+        />
+      </BoldText>
       <Text mt="2" fontSize="xl">
         Increase your APR by redeeming NFTs to your account. HOPR NFTs can be
         earned by participating in HOPR testnets and activities.
