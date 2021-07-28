@@ -314,6 +314,10 @@ export async function setStaking(
       dispatch
     )
     dispatch({
+      type: 'SET_STAKING_AMOUNT',
+      amountValue: '0',
+    })
+    dispatch({
       type: 'SET_LOADING_STAKING',
       isLoadingStaking: false,
     })

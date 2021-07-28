@@ -3,6 +3,7 @@ import {
   InputGroup,
   Input,
   InputRightElement,
+  InputLeftElement,
   Text,
   Box,
   Tag,
@@ -10,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { CurrencyTag } from '../components/atoms/CurrencyTag'
 import { CallButton } from './atoms/CallButton'
+import { MaxXHOPRButton } from './atoms/MaxXHOPRButton'
 import {
   ActionType,
   fetchAccountData,
@@ -49,7 +51,7 @@ export const StakeXHoprTokens = ({
   const startingBlock = useBlockNumber()
   const [blocks, setBlockCounter] = useState<number>(0)
   const colours = RPC_COLOURS[chainId]
-  
+
   const [loadStatus, setLoadStatus] = useState<LOADED_STATUS>(
     LOADED_STATUS.INIT
   )
@@ -100,13 +102,13 @@ export const StakeXHoprTokens = ({
             Blocks
           </Text>
           <Text ml="6px" fontSize="sm" fontFamily="mono">
-              {startingBlock}
+            {startingBlock}
+          </Text>
+          {blocks > 0 && (
+            <Text ml="2px" fontSize="sm" fontFamily="mono" color="green.600">
+              (+{blocks} block changes)
             </Text>
-            {blocks > 0 && (
-              <Text ml="2px" fontSize="sm" fontFamily="mono" color="green.600">
-                (+{blocks} block changes)
-              </Text>
-            )}
+          )}
         </Box>
       </Box>
       <Box d="flex" justifyContent="space-between" alignItems="center">
@@ -169,9 +171,22 @@ export const StakeXHoprTokens = ({
         mt="10px"
       >
         <InputGroup size="md">
+          <InputLeftElement width="3.5rem">
+            <MaxXHOPRButton
+              XHOPRContractAddress={XHOPRContractAddress}
+              updateBalanceHandler={(xHOPRBalance) =>
+                dispatch({
+                  type: 'SET_STAKING_AMOUNT',
+                  amountValue: xHOPRBalance,
+                })
+              }
+            />
+          </InputLeftElement>
           <Input
+            pl="4rem"
             pr="10.5rem"
             type={'number'}
+            value={state.amountValue}
             placeholder="Enter amount"
             onChange={(e) => {
               dispatch({
