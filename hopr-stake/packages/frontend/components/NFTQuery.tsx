@@ -1,5 +1,13 @@
 import { useBlockNumber, useEthers, useTokenBalance } from '@usedapp/core'
-import { Text, Box, Button, useColorMode, Image, Tag } from '@chakra-ui/react'
+import {
+  Text,
+  Box,
+  Button,
+  useColorMode,
+  Image,
+  Tag,
+  Skeleton,
+} from '@chakra-ui/react'
 import { useEffect, useState, Dispatch } from 'react'
 import HoprBoostABI from '@hoprnet/hopr-stake/lib/chain/abis/HoprBoost.json'
 import { HoprBoost as HoprBoostType } from '@hoprnet/hopr-stake/lib/types/HoprBoost'
@@ -271,7 +279,7 @@ export const NFTQuery = ({
               HOPR NFTs
             </Text>
             <Text ml="10px" fontSize="sm" fontWeight="400">
-              Please wait up to three blocks for your NFTs to show.
+              Please wait up to five blocks for your NFTs to show.
             </Text>
           </Box>
           <Box d="flex" alignItems="center">
@@ -310,33 +318,35 @@ export const NFTQuery = ({
                   {nftDataContainer.subtitle}
                 </Text>
               </Box>
-              <Box d="flex" alignItems="center" mb="10px">
-                {nftDataContainer.items.length > 0 ? (
-                  <NFTContainer
-                    nfts={nftDataContainer.items}
-                    HoprBoostContractAddress={HoprBoostContractAddress}
-                    HoprStakeContractAddress={HoprStakeContractAddress}
-                    state={state}
-                    dispatch={dispatch}
-                  />
-                ) : (
-                  <Box
-                    minH="100px"
-                    d="flex"
-                    textAlign="center"
-                    alignItems="center"
-                    margin="auto"
-                    width="100%"
-                    borderRadius="5px"
-                    border="1px solid #ccc"
-                    justifyContent="center"
-                  >
-                    <Text fontSize="lg">
-                      Your available NFTs will show up here.
-                    </Text>
-                  </Box>
-                )}
-              </Box>
+              <Skeleton isLoaded={blocks > 5}>
+                <Box d="flex" alignItems="center" mb="10px">
+                  {nftDataContainer.items.length > 0 ? (
+                    <NFTContainer
+                      nfts={nftDataContainer.items}
+                      HoprBoostContractAddress={HoprBoostContractAddress}
+                      HoprStakeContractAddress={HoprStakeContractAddress}
+                      state={state}
+                      dispatch={dispatch}
+                    />
+                  ) : (
+                    <Box
+                      minH="100px"
+                      d="flex"
+                      textAlign="center"
+                      alignItems="center"
+                      margin="auto"
+                      width="100%"
+                      borderRadius="5px"
+                      border="1px solid #ccc"
+                      justifyContent="center"
+                    >
+                      <Text fontSize="lg">
+                        Your available NFTs will show up here.
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
+              </Skeleton>
             </Box>
           )
         })}
