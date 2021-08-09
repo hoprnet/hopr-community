@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@craco/craco": "6.1.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
@@ -15,6 +16,7 @@
     "antd-dayjs-webpack-plugin": "1.0.6",
     "connected-react-router": "6.9.1",
     "craco-less": "1.17.1",
+    "graphql": "^15.5.1",
     "history": "4.10.1",
     "prop-types": "15.7.2",
     "react": "17.0.1",
