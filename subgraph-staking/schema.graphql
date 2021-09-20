@@ -1,0 +1,26 @@
+type Account @entity {
+  id: ID!
+  actualStake: BigInt!
+  virtualStake: BigInt!
+  lastSyncTimestamp: BigInt!
+  unclaimedRewards: BigInt!
+  boostRate: BigInt!
+  appliedBoosts: [Boost!]!
+  ignoredBoosts: [Boost!]!
+}
+
+type Boost @entity {
+  id: ID!
+  boostType: BigInt!
+  boostNumerator: BigInt!
+  redeemDeadline: BigInt!
+}
+
+type Program @entity {
+  id: ID!
+  currentRewardPool: BigInt!
+  totalActualStake: BigInt!
+  totalVirtualStake: BigInt!
+  totalUnclaimedRewards: BigInt!
+  lastSyncTimestamp: BigInt!
+}

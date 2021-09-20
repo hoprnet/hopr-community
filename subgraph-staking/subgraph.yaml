@@ -1,0 +1,59 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: HoprStake
+    network: xdai
+    source:
+      address: "0x912F4d6607160256787a2AD40dA098Ac2aFE57AC"
+      abi: HoprStake
+      startBlock: 17147181
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Claimed
+        - Redeemed
+        - Released
+        - RewardFueled
+        - Staked
+        - Sync
+      abis:
+        - name: HoprStake
+          file: ./abis/HoprStake.json
+      eventHandlers:
+        - event: Claimed(indexed address,indexed uint256)
+          handler: handleClaimed
+        - event: Redeemed(indexed address,indexed uint256,indexed bool)
+          handler: handleRedeemed
+        - event: Released(indexed address,indexed uint256,indexed uint256)
+          handler: handleReleased
+        - event: RewardFueled(indexed uint256)
+          handler: handleRewardFueled
+        - event: Staked(indexed address,indexed uint256,indexed uint256)
+          handler: handleStaked
+        - event: Sync(indexed address,indexed uint256)
+          handler: handleSync
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: HoprBoost
+    network: xdai
+    source:
+      address: "0x43d13D7B83607F14335cF2cB75E87dA369D056c7"
+      abi: HoprBoost
+      startBlock: 17147149
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: HoprBoost
+          file: ./abis/HoprBoost.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
