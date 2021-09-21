@@ -37,7 +37,7 @@ export function handleRedeemed(event: Redeemed): void {
   let tokenId = event.params.boostTokenId.toString();
   let boost = Boost.load(tokenId);
   if (boost == null) {
-    log.error('Cannot redeem an unexisting token', [])
+    log.error('Cannot redeem a non-existing token', [])
   }
   let ignoredBoosts = account.ignoredBoosts;
   let appliedBoosts = account.appliedBoosts;
@@ -45,11 +45,12 @@ export function handleRedeemed(event: Redeemed): void {
   if (event.params.factorRegistered) {
     // if registered, check if any token Id needs to be removed
     // let temp: Array<Boost> = appliedBoosts.map<Boost>((id: string): Boost => Boost.load(id) as Boost)
-    let registeredIndex = appliedBoosts
+    let registeredIndex = appliedBoosts.length == 0 ? -1 : appliedBoosts
       .map<BigInt>((id: string): BigInt => (Boost.load(id) as Boost).boostType)
       .indexOf(boost.boostType)
-    let registered = Boost.load(appliedBoosts[registeredIndex])
+    log.debug(`parsing tx ${event.transaction.hash.toHex()} to replace index ${registeredIndex}`,[])
     if (registeredIndex > -1) {
+      let registered = Boost.load(appliedBoosts[registeredIndex])
       ignoredBoosts.push(registered.id)
       appliedBoosts[registeredIndex] = tokenId
       account.boostRate = account.boostRate.minus(registered.boostNumerator).plus(boost.boostNumerator)

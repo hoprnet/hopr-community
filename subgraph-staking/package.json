@@ -4,11 +4,12 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ QYuQianchen/staking-program",
-    "create-local": "graph create --node http://localhost:8020/ QYuQianchen/staking-program",
-    "remove-local": "graph remove --node http://localhost:8020/ QYuQianchen/staking-program",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 QYuQianchen/staking-program",
-    "deploy-xdai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs QYuQianchen/staking-program --access-token $ACCESS_TOKEN"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ hoprnet/hopr-staking-program",
+    "create-local": "graph create --node http://localhost:8020/ hoprnet/hopr-staking-program",
+    "remove-local": "graph remove --node http://localhost:8020/ hoprnet/hopr-staking-program",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hoprnet/hopr-staking-program",
+    "deploy-xdai:test": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs QYuQianchen/staking-program --access-token $ACCESS_TOKEN",
+    "deploy-xdai:prod": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs hoprnet/hopr-staking-program --access-token $ACCESS_TOKEN"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
