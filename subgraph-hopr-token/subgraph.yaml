@@ -1,0 +1,24 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: HOPR
+    network: mainnet
+    source:
+      address: "0xf5581dfefd8fb0e4aec526be659cfab1f8c781da"
+      abi: HOPR
+      startBlock: 11887223
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: HOPR
+          file: ./abis/HOPR.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
