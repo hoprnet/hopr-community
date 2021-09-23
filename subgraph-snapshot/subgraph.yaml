@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: xHOPR and wxHOPR balance
-repository: https://github.com/hoprnet/hopr-analytics
+repository: https://github.com/hoprnet/hopr-community
 schema:
   file: ./schema.graphql
 dataSources:
