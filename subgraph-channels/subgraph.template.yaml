@@ -24,6 +24,6 @@ dataSources:
       eventHandlers:
         - event: Announcement(indexed address,bytes)
           handler: handleAnnouncement
-        - event: ChannelUpdate(indexed address,indexed address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
-          handler: handleChannelUpdate
+        - event: ChannelUpdated(indexed address,indexed address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
+          handler: handleChannelUpdated
       file: ./src/mapping.ts
