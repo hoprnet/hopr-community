@@ -58,9 +58,9 @@ type Channel @entity {
   commitmentHistory: [Bytes!]!
   statusHistory: [StatusSnapshot!]! @derivedFrom(field: "channel")
   "timestamp when it was opened last time"
-  lastOpenedAt: BigInt
+  lastOpenedAt: BigInt!
   "timestamp when it was closed last time"
-  lastClosedAt: BigInt
+  lastClosedAt: BigInt!
   tickets: [Ticket!]! @derivedFrom(field: "channel")
   "number of redeemed tickes"
   redeemedTicketCount: BigInt!

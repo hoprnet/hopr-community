@@ -8,7 +8,7 @@ export function handleAnnouncement(event: Announcement): void {
     let accountId = event.params.account.toHex();
     let account = getOrInitiateAccount(accountId)
     
-    if (account.multiaddr.length > 0 || account.multiaddr.indexOf(event.params.multiaddr) > -1) {
+    if (account.multiaddr.indexOf(event.params.multiaddr) > -1) {
         account.multiaddr.push(event.params.multiaddr)
     }
     account.hasAnnounced = true;
@@ -35,12 +35,13 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     if (channel == null) {
         // update channel count
         log.info('New channel', [])
-        channel = initiateChannel(channelId, sourceId, destinationId)
         source.fromChannelsCount = source.fromChannelsCount.plus(oneBigInt())
         destination.toChannelsCount = destination.toChannelsCount.plus(oneBigInt())
+        source.save();
+        destination.save();
+        channel = initiateChannel(channelId, sourceId, destinationId, event.params.newState.commitment)
     }
-    log.info(`[ info ] Channel ID: {}`, [channelId]);
-    
+    log.info(`[ info ] Channel commiment: {}`, [event.params.newState.commitment.toHexString()]);
     let oldChannelBalance = channel.balance
     let newChannelBalance = convertEthToDecimal(event.params.newState.balance);
     
@@ -50,7 +51,6 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     channel.channelEpoch = event.params.newState.channelEpoch;
     channel.ticketEpoch = event.params.newState.ticketEpoch;
     channel.ticketIndex = event.params.newState.ticketIndex;
-    // FIXME: Change i32 to enum
     let newStatus = convertStatusToEnum(event.params.newState);
     channel.status = newStatus;
     if (channel.commitmentHistory.indexOf(event.params.newState.commitment) < 0) {
@@ -75,8 +75,6 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     // update account balance
     source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
     channel.save();
-    source.save();
-    destination.save();
 }
 
 export function handleTicketRedeemed(event: TicketRedeemed): void {

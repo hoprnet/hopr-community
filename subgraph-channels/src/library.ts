@@ -72,7 +72,7 @@ export function getOrInitiateAccount(accountId: string): Account {
         account = new Account(accountId)
         account.hasAnnounced = false
         account.balance = zeroBD()
-        account.multiaddr.push(zeroBytes())
+        account.multiaddr = []
         account.fromChannelsCount = zeroBigInt()
         account.toChannelsCount = zeroBigInt()
     }
@@ -80,16 +80,17 @@ export function getOrInitiateAccount(accountId: string): Account {
     return account as Account;
 }
 
-export function initiateChannel(channelId: string, sourceId: string,destinationId: string): Channel {
+export function initiateChannel(channelId: string, sourceId: string, destinationId: string, commitment: Bytes): Channel {
     let channel = new Channel(channelId);
     channel.source = sourceId
     channel.destination = destinationId
-    // channel.balance = zeroBD()
-    // channel.commitment = zeroBytes()
-    // channel.channelEpoch = zeroBigInt()
-    // channel.ticketEpoch = zeroBigInt()
-    // channel.ticketIndex = zeroBigInt()
-    // channel.status = _convertI32ToEnum(0)
+    channel.balance = zeroBD()
+    channel.commitment = commitment
+    channel.channelEpoch = zeroBigInt()
+    channel.ticketEpoch = zeroBigInt()
+    channel.ticketIndex = zeroBigInt()
+    channel.status = convertI32ToEnum(0)
+    channel.commitmentHistory = []
     channel.lastOpenedAt = zeroBigInt()
     channel.lastClosedAt = zeroBigInt()
     channel.redeemedTicketCount = zeroBigInt()
