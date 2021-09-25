@@ -1,46 +1,64 @@
-import { log, crypto, Value } from '@graphprotocol/graph-ts'
-import { concat } from '@graphprotocol/graph-ts/helper-functions'
-import { Announcement, ChannelUpdate } from '../generated/HoprChannels/HoprChannels'
-import { Account, Channel } from '../generated/schema'
+import { Address, log } from '@graphprotocol/graph-ts'
+import { Announcement, ChannelUpdated, HoprChannels, TicketRedeemed } from '../generated/HoprChannels/HoprChannels'
+import { Account, Channel, Ticket } from '../generated/schema'
+import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD } from './library';
 
 export function handleAnnouncement(event: Announcement): void {
-    log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHexString()]);
-    let account = new Account(event.params.account.toHexString())
-    account.multiaddr = event.params.multiaddr;
-    account.channels = [];
+    log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHex()]);
+    let accountId = event.params.account.toHex();
+    let account = getOrInitiateAccount(accountId)
+    
+    if (account.multiaddr.length > 0 || account.multiaddr.indexOf(event.params.multiaddr) > -1) {
+        account.multiaddr.push(event.params.multiaddr)
+    }
     account.hasAnnounced = true;
     account.save()
-}
+}8
 
-export function handleChannelUpdate(event: ChannelUpdate): void {
-    log.info(`[ info ] Address of the account updating the channel: {}`, [event.params.source.toHexString()]);
-    let channelId = crypto.keccak256(concat(event.params.source, event.params.destination)).toHexString()
-    let channel = Channel.load(channelId);
-    log.info(`[ info ] Channel ID: {}`, [channelId]);
+export function handleChannelUpdated(event: ChannelUpdated): void {
+    log.info(`[ info ] Handle channel update: start {}`, [event.transaction.hash.toHex()]);
 
+    // channel source
+    let sourceId = event.params.source.toHex();
+    let source = getOrInitiateAccount(sourceId)
+    log.info(`[ info ] Handle channel update: source {}`, [event.transaction.hash.toHex()]);
+
+    // channel destination
+    let destinationId = event.params.destination.toHex();
+    let destination = getOrInitiateAccount(destinationId)
+    log.info(`[ info ] Handle channel update: destination {}`, [event.transaction.hash.toHex()]);
+
+    
+    let channelId = getChannelId(event.params.source, event.params.destination).toHex()
+    let channel = Channel.load(channelId)
+    log.info(`[ info ] Address of the account updating the channel: {}`, [channelId]);
     if (channel == null) {
-        channel = new Channel(channelId);
+        // update channel count
+        log.info('New channel', [])
+        channel = initiateChannel(channelId, sourceId, destinationId)
+        source.fromChannelsCount = source.fromChannelsCount.plus(oneBigInt())
+        destination.toChannelsCount = destination.toChannelsCount.plus(oneBigInt())
     }
-
+    log.info(`[ info ] Channel ID: {}`, [channelId]);
+    
+    let oldChannelBalance = channel.balance
+    let newChannelBalance = convertEthToDecimal(event.params.newState.balance);
+    
     log.info(`[ info ] Status: {}`, [event.params.newState.status as string]);
-    channel.source = event.params.source.toHexString();
-    channel.destination = event.params.destination.toHexString();
-    channel.balance = event.params.newState.balance;
+    channel.balance = newChannelBalance;
     channel.commitment = event.params.newState.commitment;
+    channel.channelEpoch = event.params.newState.channelEpoch;
     channel.ticketEpoch = event.params.newState.ticketEpoch;
     channel.ticketIndex = event.params.newState.ticketIndex;
-    if (event.params.newState.status as string == '') {
-        channel.status = 'WAITING_FOR_COMMITMENT'
-    } else {
-        channel.status = event.params.newState.status as string
+    // FIXME: Change i32 to enum
+    let newStatus = convertStatusToEnum(event.params.newState);
+    channel.status = newStatus;
+    if (channel.commitmentHistory.indexOf(event.params.newState.commitment) < 0) {
+        channel.commitmentHistory.push(event.params.newState.commitment)
     }
+    log.info(`[ info ] creating snapshot`, []);
 
-    let account = Account.load(event.params.source.toHexString())
-    let channels = account.channels;
-    channels.push(channelId);
-    account.channels = channels;
-    account.save()
-
+    createStatusSnapshot(event)
     /*
      * See https://github.com/hoprnet/hoprnet/blob/215d406a07f43078df9d517953d3789036668705/packages/utils/src/types/channelEntry.ts#L7-L12
      * Closed = 0,
@@ -49,9 +67,43 @@ export function handleChannelUpdate(event: ChannelUpdate): void {
      * PendingToClose = 3
      */
     if (event.params.newState.status == 2) {
-        channel.openedAt = event.block.timestamp;
+        channel.lastOpenedAt = event.block.timestamp;
     } else if (event.params.newState.status == 0) {
-        channel.closedAt = event.block.timestamp;
+        channel.lastClosedAt = event.block.timestamp;
     }
+
+    // update account balance
+    source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
     channel.save();
+    source.save();
+    destination.save();
+}
+
+export function handleTicketRedeemed(event: TicketRedeemed): void {
+    // get the channel epoch, which is not part of the event
+    let channelContract = HoprChannels.bind(event.address)
+    let channelId = getChannelId(event.params.source, event.params.destination);
+    let channelEpoch = channelContract.channels(channelId).value5
+    let ticketEpoch = event.params.ticketEpoch
+    let ticketIndex = event.params.ticketIndex
+    // create new ticket
+    let ticketId = channelId.toHex() + "-" + channelEpoch.toString() + "-" + ticketEpoch.toString() + "-" + ticketIndex.toString()
+    let ticket = new Ticket(ticketId)
+    ticket.channel = channelId.toHex()
+    ticket.nextCommitment = event.params.nextCommitment
+    ticket.ticketEpoch = ticketEpoch
+    ticket.ticketIndex = ticketIndex
+    ticket.proofOfRelaySecret = event.params.proofOfRelaySecret
+    ticket.amount = convertEthToDecimal(event.params.amount)
+    ticket.winProb = event.params.winProb
+    ticket.signature = event.params.signature
+    // update channel
+    let channel = Channel.load(channelId.toHex())
+    if (channel == null) {
+        log.error("Redeem a ticket for non-existing channel", [])
+    } else {
+        channel.redeemedTicketCount = channel.redeemedTicketCount.plus(oneBigInt())
+    }
+    channel.save()
+    ticket.save()
 }

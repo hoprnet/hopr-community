@@ -18,6 +18,8 @@ dataSources:
       entities:
         - Account
         - Channel
+        - StatusSnapshot
+        - Ticket
       abis:
         - name: HoprChannels
           file: ./abis/HoprChannels.json
@@ -26,4 +28,6 @@ dataSources:
           handler: handleAnnouncement
         - event: ChannelUpdated(indexed address,indexed address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
           handler: handleChannelUpdated
+        - event: TicketRedeemed(indexed address,indexed address,bytes32,uint256,uint256,bytes32,uint256,uint256,bytes)
+          handler: handleTicketRedeemed
       file: ./src/mapping.ts
