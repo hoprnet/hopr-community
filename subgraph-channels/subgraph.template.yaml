@@ -24,7 +24,7 @@ dataSources:
         - name: HoprChannels
           file: ./abis/HoprChannels.json
       eventHandlers:
-        - event: Announcement(indexed address,bytes)
+        - event: Announcement(indexed address,bytes,bytes)
           handler: handleAnnouncement
         - event: ChannelUpdated(indexed address,indexed address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
           handler: handleChannelUpdated

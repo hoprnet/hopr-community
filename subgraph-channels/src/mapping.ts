@@ -11,6 +11,7 @@ export function handleAnnouncement(event: Announcement): void {
     if (account.multiaddr.indexOf(event.params.multiaddr) > -1) {
         account.multiaddr.push(event.params.multiaddr)
     }
+    account.publicKey = event.params.publicKey;
     account.hasAnnounced = true;
     account.save()
 }8
