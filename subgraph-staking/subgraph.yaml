@@ -1,4 +1,6 @@
 specVersion: 0.0.2
+description: xdai staking program subgraph
+repository: https://github.com/hoprnet/hopr-community
 schema:
   file: ./schema.graphql
 dataSources:
