@@ -12,6 +12,7 @@ $ yarn run:network
 $ pbpaste | xargs -I {} echo "ETHEREUM_NETWORK=localhost\nETHEREUM_ENDPOINT={}" > .env
 $ yarn prepare-local
 $ yarn codegen
+$ yarn pre-build
 $ yarn build
 $ docker-compose up
 $ yarn create-local

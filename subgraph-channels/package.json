@@ -3,6 +3,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
+    "pre-build": "ts-node src/fetchAddress.ts",
     "build": "graph build",
     "prepare-local": "mustache config/local.json subgraph.template.yaml > subgraph.yaml",
     "prepare-xdai": "mustache config/xdai.json subgraph.template.yaml > subgraph.yaml",
@@ -19,5 +20,11 @@
     "@graphprotocol/graph-cli": "^0.20.0",
     "@graphprotocol/graph-ts": "^0.20.0",
     "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "@hoprnet/hopr-ethereum": "latest",
+    "@types/node": "^16.10.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   }
 }
