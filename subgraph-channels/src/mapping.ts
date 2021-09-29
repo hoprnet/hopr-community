@@ -7,10 +7,12 @@ export function handleAnnouncement(event: Announcement): void {
     log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHex()]);
     let accountId = event.params.account.toHex();
     let account = getOrInitiateAccount(accountId)
+    let multiaddr = account.multiaddr
     
-    if (account.multiaddr.indexOf(event.params.multiaddr) == -1) {
-        account.multiaddr.push(event.params.multiaddr)
+    if (multiaddr.indexOf(event.params.multiaddr) == -1) {
+        multiaddr.push(event.params.multiaddr)
     }
+    account.multiaddr = multiaddr
     account.publicKey = event.params.publicKey;
     account.hasAnnounced = true;
     account.save()
