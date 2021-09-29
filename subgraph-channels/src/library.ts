@@ -73,6 +73,7 @@ export function getOrInitiateAccount(accountId: string): Account {
         account.hasAnnounced = false
         account.balance = zeroBD()
         account.multiaddr = []
+        account.publicKey = null
         account.fromChannelsCount = zeroBigInt()
         account.toChannelsCount = zeroBigInt()
     }
