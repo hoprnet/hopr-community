@@ -8,7 +8,7 @@ export function handleAnnouncement(event: Announcement): void {
     let accountId = event.params.account.toHex();
     let account = getOrInitiateAccount(accountId)
     
-    if (account.multiaddr.length == 0 || account.multiaddr.indexOf(event.params.multiaddr) > -1) {
+    if (account.multiaddr.indexOf(event.params.multiaddr) == -1) {
         account.multiaddr.push(event.params.multiaddr)
     }
     account.publicKey = event.params.publicKey;
@@ -72,7 +72,9 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     }
 
     // update account balance
-    source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
+    if (newChannelBalance.notEqual(oldChannelBalance)) {
+        source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
+    }
     source.save();
     channel.save();
 }
