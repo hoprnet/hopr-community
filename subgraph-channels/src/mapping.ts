@@ -7,17 +7,19 @@ export function handleAnnouncement(event: Announcement): void {
     log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHex()]);
     let accountId = event.params.account.toHex();
     let account = getOrInitiateAccount(accountId)
+    let multiaddr = account.multiaddr
     
-    if (account.multiaddr.indexOf(event.params.multiaddr) > -1) {
-        account.multiaddr.push(event.params.multiaddr)
+    if (multiaddr.indexOf(event.params.multiaddr) == -1) {
+        multiaddr.push(event.params.multiaddr)
     }
+    account.multiaddr = multiaddr
+    account.publicKey = event.params.publicKey;
     account.hasAnnounced = true;
     account.save()
 }8
 
 export function handleChannelUpdated(event: ChannelUpdated): void {
     log.info(`[ info ] Handle channel update: start {}`, [event.transaction.hash.toHex()]);
-
     // channel source
     let sourceId = event.params.source.toHex();
     let source = getOrInitiateAccount(sourceId)
@@ -37,7 +39,6 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
         log.info('New channel', [])
         source.fromChannelsCount = source.fromChannelsCount.plus(oneBigInt())
         destination.toChannelsCount = destination.toChannelsCount.plus(oneBigInt())
-        source.save();
         destination.save();
         channel = initiateChannel(channelId, sourceId, destinationId, event.params.newState.commitment)
     }
@@ -73,7 +74,10 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     }
 
     // update account balance
-    source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
+    if (newChannelBalance.notEqual(oldChannelBalance)) {
+        source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
+    }
+    source.save();
     channel.save();
 }
 

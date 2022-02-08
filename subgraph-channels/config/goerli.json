@@ -1,5 +1,5 @@
 {
-    "network": "goerli",
-    "channelAddress": "0xa3722f4758c6f41e3c1dfd3a7dba6fd9baec9190",
-    "startBlock": "5225357"
-  }
+  "network": "goerli",
+  "channelAddress": "0x9a41CA5Cc7eaD4449c67b6e290BA34aAB6aFfC7e",
+  "startBlock": "5577677"
+}

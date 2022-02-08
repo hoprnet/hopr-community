@@ -1,6 +1,8 @@
 type Account @entity {
   "account's address"
   id: ID!
+  "account's public key"
+  publicKey: Bytes
   multiaddr: [Bytes!]!
   "channels where the Account is the source"
   fromChannels: [Channel!]! @derivedFrom(field: "source")
