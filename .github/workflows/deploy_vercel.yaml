@@ -44,7 +44,7 @@ jobs:
       - name: "Deploy to production"
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          echo "project id is ${{ steps.get-project-id.outputs.projectId }}" && npx vercel deploy \
+          npx vercel deploy \
             --cwd $(dirname ./${{ matrix.project }}) \
             --prod \
             --token ${{ secrets.VERCEL_TOKEN }} \
