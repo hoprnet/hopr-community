@@ -1,7 +1,7 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 import { Announcement, ChannelUpdated, HoprChannels, TicketRedeemed } from '../generated/HoprChannels/HoprChannels'
 import { Account, Channel, Ticket } from '../generated/schema'
-import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD } from './library';
+import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD, zeroBigInt } from './library';
 import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleAnnouncement(event: Announcement): void {
@@ -40,9 +40,9 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
         log.info('New channel', [])
         source.fromChannelsCount = source.fromChannelsCount.plus(oneBigInt())
         destination.toChannelsCount = destination.toChannelsCount.plus(oneBigInt())
-        destination.save();
         channel = initiateChannel(channelId, sourceId, destinationId, event.params.newState.commitment)
     }
+
     log.info(`[ info ] Channel commiment: {}`, [event.params.newState.commitment.toHexString()]);
     let oldChannelBalance = channel.balance
     let newChannelBalance = convertEthToDecimal(event.params.newState.balance);
@@ -53,7 +53,10 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     channel.channelEpoch = event.params.newState.channelEpoch;
     channel.ticketEpoch = event.params.newState.ticketEpoch;
     channel.ticketIndex = event.params.newState.ticketIndex;
+
+    let oldStatus = channel.status
     let newStatus = convertStatusToEnum(event.params.newState);
+
     channel.status = newStatus;
     if (channel.commitmentHistory.indexOf(event.params.newState.commitment) < 0) {
         channel.commitmentHistory.push(event.params.newState.commitment)
@@ -74,11 +77,28 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
         channel.lastClosedAt = event.block.timestamp;
     }
 
+    if (oldStatus != "OPEN" && channel.status == "OPEN") {
+        source.openChannelsCount = source.openChannelsCount.plus(oneBigInt())
+        destination.openChannelsCount = destination.openChannelsCount.plus(oneBigInt())
+        source.isActive = true
+        destination.isActive = true
+    } else if (oldStatus == "OPEN" && channel.status != "OPEN") {
+        source.openChannelsCount = source.openChannelsCount.minus(oneBigInt())
+        destination.openChannelsCount = destination.openChannelsCount.minus(oneBigInt())
+        if (source.openChannelsCount.equals(zeroBigInt())) {
+            source.isActive = false
+        }
+        if (destination.openChannelsCount.equals(zeroBigInt())) {
+            destination.isActive = false
+        }
+    }
+
     // update account balance
     if (newChannelBalance.notEqual(oldChannelBalance)) {
         source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
     }
     source.save();
+    destination.save();
     channel.save();
 }
 

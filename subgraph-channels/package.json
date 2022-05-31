@@ -17,11 +17,11 @@
     "deploy-goerli": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs hoprnet/hopr-channels-staging --access-token $ACCESS_TOKEN"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
-    "@graphprotocol/graph-ts": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.27.0",
     "mustache": "^4.2.0"
   },
   "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.30.1",
     "@hoprnet/hopr-ethereum": "latest",
     "@types/node": "^16.10.1",
     "ts-node": "^10.2.1",

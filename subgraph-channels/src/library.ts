@@ -76,6 +76,8 @@ export function getOrInitiateAccount(accountId: string): Account {
         account.publicKey = null
         account.fromChannelsCount = zeroBigInt()
         account.toChannelsCount = zeroBigInt()
+        account.isActive = false
+        account.openChannelsCount = zeroBigInt()
     }
 
     return account as Account;
