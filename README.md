@@ -7,10 +7,10 @@
   <!-- Title Placeholder -->
   <h3 align="center">HOPR Community</h3>
   <p align="center">
-    A repository of awesome HOPR projects.
+    A selection of awesome HOPR projects and dApps.
   </p>
 </p>
 
-| Project           | Preview                               |
+| Project           | Try it out                            |
 | ----------------- | ------------------------------------- |
 | hopr-status-board | https://hopr-status-board.vercel.app/ |

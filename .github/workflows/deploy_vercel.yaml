@@ -6,15 +6,19 @@ on:
     paths:
       - "./projects/*"
 jobs:
+  # Creates a matrix of projects that need to be deployed
+  #   - Project must contain a 'deploy.json' file
+  #   - Project folder must contain changes
   create-matrix:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v2
-      - name: Create matrix by looking at projects
+      - name: Create matrix by looking at projects which contain deploy.json
         id: set-matrix
-        run: echo "::set-output name=matrix::$(ls projects/**/deploy.json | jq -Rsc 'split("\n")[:-1]')"
+        run: echo "::set-output name=matrix::$(./scripts/create-matrix.sh | jq -Rsc 'split("\n")[:-1]')"
+  # Using the matrix created above, we try to deploy the projects
   deploy:
     needs: create-matrix
     runs-on: ubuntu-latest
@@ -23,32 +27,35 @@ jobs:
         project: ${{ fromJson(needs.create-matrix.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v2
-      - name: "Install Node.js"
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - name: "Install Yarn"
-        run: |
-          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-          apt update
-          apt install --no-install-recommends yarn
-      - name: "Install Vercel"
-        run: yarn
-      - name: "Cancel if deploy.json is not found"
-        if: hashFiles('./${{ matrix.project }}') == ''
-        run: exit 0
       - name: Get projectId
         id: get-project-id
         run: echo "::set-output name=projectId::$(cat './${{ matrix.project }}' | jq '.projectId')"
-      - name: "Deploy to production"
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |
-          npx vercel deploy \
-            --cwd $(dirname ./${{ matrix.project }}) \
-            --prod \
-            --token ${{ secrets.VERCEL_TOKEN }} \
-            --scope hoprnet \
-            --env VERCEL_PROJECT_ID=${{ steps.get-project-id.outputs.projectId }} \
-            --env VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} \
-            --confirm
+      # Fail if 'projectId' in 'deploy.json' is invalid
+      - name: Validate projectId
+        if: startsWith(steps.get-project-id.outputs.projectId, '"prj_') != true
+        run: echo "Invalid projectId" && exit 1;
+      - name: passed
+        run: echo "passed"
+      # - name: Install Node.js
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 16
+      # - name: Install Yarn
+      #   run: |
+      #     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      #     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      #     apt update
+      #     apt install --no-install-recommends yarn
+      # - name: Install other dependancies
+      #   run: yarn
+      # - name: "Deploy to production"
+      #   if: ${{ github.ref == 'refs/heads/main' }}
+      #   run: |
+      #     npx vercel deploy \
+      #       --cwd $(dirname ./${{ matrix.project }}) \
+      #       --prod \
+      #       --token ${{ secrets.VERCEL_TOKEN }} \
+      #       --scope hoprnet \
+      #       --env VERCEL_PROJECT_ID=${{ steps.get-project-id.outputs.projectId }} \
+      #       --env VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} \
+      #       --confirm
