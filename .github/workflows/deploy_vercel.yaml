@@ -1,8 +1,8 @@
 name: Deploy on Vercel
 on:
   push:
-    branches:
-      - "main"
+    # branches:
+    #   - "main"
     paths:
       - "./projects/*"
 jobs:
