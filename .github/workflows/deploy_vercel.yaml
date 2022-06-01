@@ -43,7 +43,7 @@ jobs:
           apt install --no-install-recommends yarn
       - name: Install other dependancies
         run: yarn
-      - name: "Deploy to production"
+      - name: Deploy to production
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           npx vercel deploy \
@@ -54,8 +54,8 @@ jobs:
             --env VERCEL_PROJECT_ID=${{ steps.get-project-id.outputs.projectId }} \
             --env VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} \
             --confirm
-      - name: "Deploy to development"
-        if: ${{ github.ref !== 'refs/heads/main' }}
+      - name: Deploy to development
+        if: ${{ github.ref != 'refs/heads/main' }}
         run: |
           npx vercel deploy \
             --cwd $(dirname ${{ matrix.project }}) \
