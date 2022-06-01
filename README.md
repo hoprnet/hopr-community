@@ -7,7 +7,7 @@
   <!-- Title Placeholder -->
   <h3 align="center">HOPR Community</h3>
   <p align="center">
-    A selection of awesome HOPR projects and dApps.
+    A selection of awesome HOPR projects.
   </p>
 </p>
 
