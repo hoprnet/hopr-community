@@ -1,11 +1,5 @@
 name: Deploy on Vercel
-on:
-  push
-  # push:
-  #   # branches:
-  #   #   - "main"
-  #   paths:
-  #     - "./projects/*"
+on: push
 jobs:
   # Creates a matrix of projects that need to be deployed
   #   - Project must contain a 'deploy.json' file
@@ -37,28 +31,36 @@ jobs:
       - name: Validate projectId
         if: startsWith(steps.get-project-id.outputs.projectId, '"prj_') != true
         run: echo "Invalid projectId" && exit 1;
-      - name: passed
-        run: echo "passed"
-      # - name: Install Node.js
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: 16
-      # - name: Install Yarn
-      #   run: |
-      #     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-      #     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-      #     apt update
-      #     apt install --no-install-recommends yarn
-      # - name: Install other dependancies
-      #   run: yarn
-      # - name: "Deploy to production"
-      #   if: ${{ github.ref == 'refs/heads/main' }}
-      #   run: |
-      #     npx vercel deploy \
-      #       --cwd $(dirname ./${{ matrix.project }}) \
-      #       --prod \
-      #       --token ${{ secrets.VERCEL_TOKEN }} \
-      #       --scope hoprnet \
-      #       --env VERCEL_PROJECT_ID=${{ steps.get-project-id.outputs.projectId }} \
-      #       --env VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} \
-      #       --confirm
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Install Yarn
+        run: |
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+          apt update
+          apt install --no-install-recommends yarn
+      - name: Install other dependancies
+        run: yarn
+      - name: "Deploy to production"
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          npx vercel deploy \
+            --cwd $(dirname ${{ matrix.project }}) \
+            --prod \
+            --token ${{ secrets.VERCEL_TOKEN }} \
+            --scope hoprnet \
+            --env VERCEL_PROJECT_ID=${{ steps.get-project-id.outputs.projectId }} \
+            --env VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} \
+            --confirm
+      - name: "Deploy to development"
+        if: ${{ github.ref !== 'refs/heads/main' }}
+        run: |
+          npx vercel deploy \
+            --cwd $(dirname ${{ matrix.project }}) \
+            --token ${{ secrets.VERCEL_TOKEN }} \
+            --scope hoprnet \
+            --env VERCEL_PROJECT_ID=${{ steps.get-project-id.outputs.projectId }} \
+            --env VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }} \
+            --confirm
