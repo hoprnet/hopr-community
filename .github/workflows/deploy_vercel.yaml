@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Get projectId
         id: get-project-id
-        run: echo "::set-output name=projectId::$(cat './${{ matrix.project }}' | jq '.projectId')"
+        run: echo "::set-output name=projectId::$(cat '${{ matrix.project }}' | jq '.projectId')"
       # Fail if 'projectId' in 'deploy.json' is invalid
       - name: Validate projectId
         if: startsWith(steps.get-project-id.outputs.projectId, '"prj_') != true
