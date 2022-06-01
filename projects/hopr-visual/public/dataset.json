@@ -1,0 +1,67 @@
+{
+  "nodes": [
+    {
+      "key": "microsoft excel",
+      "label": "Microsoft Excel",
+      "tag": "Tool",
+      "URL": "https://en.wikipedia.org/wiki/Microsoft%20Excel",
+      "cluster": "1",
+      "x": 0,
+      "y": 0,
+      "score": 0.0018317394731443256
+    },
+    {
+      "key": "gephi",
+      "label": "Gephi",
+      "tag": "Tool",
+      "URL": "https://en.wikipedia.org/wiki/Gephi",
+      "cluster": "0",
+      "x": 0,
+      "y": 1,
+      "score": 0.0010242079745792347
+    },
+    {
+      "key": "microsoft power bi",
+      "label": "Microsoft Power BI",
+      "tag": "Tool",
+      "URL": "https://en.wikipedia.org/wiki/Microsoft%20Power%20BI",
+      "cluster": "1",
+      "x": 0,
+      "y": 2,
+      "score": 0.0000049571249591405295
+    },
+    {
+      "key": "qlik",
+      "label": "Qlik",
+      "tag": "Tool",
+      "URL": "https://en.wikipedia.org/wiki/Qlik",
+      "cluster": "1",
+      "x": 2,
+      "y": 3,
+      "score": 0
+    }
+  ],
+  "edges": [
+    ["microsoft excel", "gephi"],
+    ["microsoft excel", "microsoft power bi"],
+    ["microsoft excel", "qlik"],
+    ["microsoft power bi", "qlik"]
+  ],
+  "clusters": [
+    { "key": "0", "color": "#6c3e81", "clusterLabel": "Graph theory" },
+    { "key": "1", "color": "#666666", "clusterLabel": "Spreadsheets" }
+  ],
+  "tags": [
+    { "key": "Chart type", "image": "charttype.svg" },
+    { "key": "Company", "image": "company.svg" },
+    { "key": "Concept", "image": "concept.svg" },
+    { "key": "Field", "image": "field.svg" },
+    { "key": "List", "image": "list.svg" },
+    { "key": "Method", "image": "method.svg" },
+    { "key": "Organization", "image": "organization.svg" },
+    { "key": "Person", "image": "person.svg" },
+    { "key": "Technology", "image": "technology.svg" },
+    { "key": "Tool", "image": "tool.svg" },
+    { "key": "unknown", "image": "unknown.svg" }
+  ]
+}

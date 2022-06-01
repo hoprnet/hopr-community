@@ -27,6 +27,9 @@ jobs:
       - name: Get projectId
         id: get-project-id
         run: echo "::set-output name=projectId::$(cat '${{ matrix.project }}' | jq '.projectId')"
+      - name: Get nodeVersion or use default
+        id: get-node-version
+        run: echo "::set-output name=nodeVersion::$(cat '${{ matrix.project }}' | jq '.nodeVersion // 16')"
       # Fail if 'projectId' in 'deploy.json' is invalid
       - name: Validate projectId
         if: startsWith(steps.get-project-id.outputs.projectId, '"prj_') != true
@@ -34,7 +37,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: ${{ steps.get-project-id.outputs.nodeVersion }}
       - name: Install Yarn
         run: |
           curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -

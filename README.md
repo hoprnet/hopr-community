@@ -11,6 +11,8 @@
   </p>
 </p>
 
+## List of hosted projects
+
 | Project           | Try it out                            |
 | ----------------- | ------------------------------------- |
 | hopr-status-board | https://hopr-status-board.vercel.app/ |
