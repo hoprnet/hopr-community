@@ -7,3 +7,4 @@
 5. Run command `vercel --scope hoprnet`
 6. Once its hosted, copy `projectId` from within `.vercel` folder into a new `deploy.json` file
 7. Add `nodeVersion` in `deploy.json` file
+8. Add link of the demo URL into the [README](./README.md)
