@@ -1,5 +1,7 @@
 # Subgraph for HoprChannels
 
+## Hosted Subgraph
+[https://thegraph.com/hosted-service/subgraph/eliaxie/hopr-channels](https://thegraph.com/hosted-service/subgraph/eliaxie/hopr-channels)
 
 ## How to run
 
