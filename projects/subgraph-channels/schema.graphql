@@ -16,6 +16,10 @@ type Account @entity {
   hasAnnounced: Boolean!
   "sum of the channel balances where the account is the source"
   balance: BigDecimal!
+  "has at least 1 open channel"
+  isActive: Boolean!
+  "number of active channels"
+  openChannelsCount: BigInt!
 }
 
 enum ChannelStatus {

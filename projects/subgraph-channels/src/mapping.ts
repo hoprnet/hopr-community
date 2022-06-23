@@ -1,14 +1,15 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 import { Announcement, ChannelUpdated, HoprChannels, TicketRedeemed } from '../generated/HoprChannels/HoprChannels'
 import { Account, Channel, Ticket } from '../generated/schema'
-import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD } from './library';
+import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD, zeroBigInt } from './library';
+import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleAnnouncement(event: Announcement): void {
     log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHex()]);
     let accountId = event.params.account.toHex();
     let account = getOrInitiateAccount(accountId)
     let multiaddr = account.multiaddr
-    
+
     if (multiaddr.indexOf(event.params.multiaddr) == -1) {
         multiaddr.push(event.params.multiaddr)
     }
@@ -16,7 +17,7 @@ export function handleAnnouncement(event: Announcement): void {
     account.publicKey = event.params.publicKey;
     account.hasAnnounced = true;
     account.save()
-}8
+}
 
 export function handleChannelUpdated(event: ChannelUpdated): void {
     log.info(`[ info ] Handle channel update: start {}`, [event.transaction.hash.toHex()]);
@@ -30,7 +31,7 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
     let destination = getOrInitiateAccount(destinationId)
     log.info(`[ info ] Handle channel update: destination {}`, [event.transaction.hash.toHex()]);
 
-    
+
     let channelId = getChannelId(event.params.source, event.params.destination).toHex()
     let channel = Channel.load(channelId)
     log.info(`[ info ] Address of the account updating the channel: {}`, [channelId]);
@@ -39,20 +40,23 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
         log.info('New channel', [])
         source.fromChannelsCount = source.fromChannelsCount.plus(oneBigInt())
         destination.toChannelsCount = destination.toChannelsCount.plus(oneBigInt())
-        destination.save();
         channel = initiateChannel(channelId, sourceId, destinationId, event.params.newState.commitment)
     }
+
     log.info(`[ info ] Channel commiment: {}`, [event.params.newState.commitment.toHexString()]);
     let oldChannelBalance = channel.balance
     let newChannelBalance = convertEthToDecimal(event.params.newState.balance);
-    
-    log.info(`[ info ] Status: {}`, [event.params.newState.status as string]);
+
+    log.info(`[ info ] Status: {}`, [BigInt.fromI32(event.params.newState.status).toString()]);
     channel.balance = newChannelBalance;
     channel.commitment = event.params.newState.commitment;
     channel.channelEpoch = event.params.newState.channelEpoch;
     channel.ticketEpoch = event.params.newState.ticketEpoch;
     channel.ticketIndex = event.params.newState.ticketIndex;
+
+    let oldStatus = channel.status
     let newStatus = convertStatusToEnum(event.params.newState);
+
     channel.status = newStatus;
     if (channel.commitmentHistory.indexOf(event.params.newState.commitment) < 0) {
         channel.commitmentHistory.push(event.params.newState.commitment)
@@ -73,11 +77,28 @@ export function handleChannelUpdated(event: ChannelUpdated): void {
         channel.lastClosedAt = event.block.timestamp;
     }
 
+    if (oldStatus != "OPEN" && channel.status == "OPEN") {
+        source.openChannelsCount = source.openChannelsCount.plus(oneBigInt())
+        destination.openChannelsCount = destination.openChannelsCount.plus(oneBigInt())
+        source.isActive = true
+        destination.isActive = true
+    } else if (oldStatus == "OPEN" && channel.status != "OPEN") {
+        source.openChannelsCount = source.openChannelsCount.minus(oneBigInt())
+        destination.openChannelsCount = destination.openChannelsCount.minus(oneBigInt())
+        if (source.openChannelsCount.equals(zeroBigInt())) {
+            source.isActive = false
+        }
+        if (destination.openChannelsCount.equals(zeroBigInt())) {
+            destination.isActive = false
+        }
+    }
+
     // update account balance
     if (newChannelBalance.notEqual(oldChannelBalance)) {
         source.balance = source.balance.plus(newChannelBalance).minus(oldChannelBalance);
     }
     source.save();
+    destination.save();
     channel.save();
 }
 
@@ -103,6 +124,7 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     let channel = Channel.load(channelId.toHex())
     if (channel == null) {
         log.error("Redeem a ticket for non-existing channel", [])
+        return;
     } else {
         channel.redeemedTicketCount = channel.redeemedTicketCount.plus(oneBigInt())
     }
