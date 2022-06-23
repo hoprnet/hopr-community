@@ -1,17 +1,17 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSigma } from "react-sigma-v2";
 
 import { FiltersState } from "../types";
 
-function prettyPercentage(val: number): string {
-  return (val * 100).toFixed(1) + "%";
-}
+// function prettyPercentage(val: number): string {
+//   return (val * 100).toFixed(1) + "%";
+// }
 
 const GraphTitle: FC<{ filters: FiltersState, refresh: boolean }> = ({ filters, refresh }) => {
   const sigma = useSigma();
   const graph = sigma.getGraph();
 
-  const [visibleItems, setVisibleItems] = useState<{ nodes: number; edges: number }>({ nodes: 0, edges: 0 });
+  const [, setVisibleItems] = useState<{ nodes: number; edges: number }>({ nodes: 0, edges: 0 });
   useEffect(() => {
     // To ensure the graphology instance has up to data "hidden" values for
     // nodes, we wait for next frame before reindexing. This won't matter in the

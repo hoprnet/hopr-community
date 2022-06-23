@@ -1,10 +1,6 @@
-import React, { KeyboardEvent, ChangeEvent, FC, useEffect, useState } from "react";
-import { useSigma } from "react-sigma-v2";
-import { Attributes } from "graphology-types";
-import { BsSearch } from "react-icons/bs";
-
-import { RemoteStatus, FiltersState, VisualMode } from "../types";
-import internal from "stream";
+import React, { KeyboardEvent, ChangeEvent, FC, useEffect } from "react";
+// import { useSigma } from "react-sigma-v2";
+import { RemoteStatus } from "../types";
 import { MdPassword } from "react-icons/md";
 import { GrNodes } from "react-icons/gr";
 
@@ -15,7 +11,7 @@ import { GrNodes } from "react-icons/gr";
  * 2. We need custom markup
  */
 const EndpointField: FC<{ endpoint: string, remoteStatus: RemoteStatus, nodeToken: string, error: string, setNodeToken: React.Dispatch<React.SetStateAction<string>>, setRemoteEndpoint: React.Dispatch<React.SetStateAction<string>>, setRemoteStatus: React.Dispatch<React.SetStateAction<RemoteStatus>> }> = ({ endpoint, remoteStatus, nodeToken, error, setNodeToken, setRemoteEndpoint, setRemoteStatus }) => {
-  const sigma = useSigma();
+  // const sigma = useSigma();
 
   // Refresh values when filters are updated (but wait a frame first):
   useEffect(() => {

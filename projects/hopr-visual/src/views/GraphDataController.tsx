@@ -1,9 +1,9 @@
 import { useSigma } from "react-sigma-v2";
 import { FC, useEffect } from "react";
 import { keyBy, omit } from "lodash";
-import { circular, random } from 'graphology-layout';
+import { random } from 'graphology-layout';
 
-import { Cluster, Dataset, FiltersState, VisualMode } from "../types";
+import { Dataset, FiltersState, VisualMode } from "../types";
 import forceAtlas2 from "graphology-layout-forceatlas2";
 
 const GraphDataController: FC<{ dataset: Dataset; filters: FiltersState, refresh: boolean, mode: VisualMode }> = ({ dataset, filters, children, refresh, mode }) => {
@@ -28,15 +28,15 @@ const GraphDataController: FC<{ dataset: Dataset; filters: FiltersState, refresh
         "clusterLabel": "Nodes"
       }
     ]
-    let tagsA = [
-      {
-        "key": "nodes",
-        "image": "technology.svg"
-      }
-    ]
+    // let tagsA = [
+    //   {
+    //     "key": "nodes",
+    //     "image": "technology.svg"
+    //   }
+    // ]
 
     const clusters = keyBy(clustersA, "key");
-    const tags = keyBy(tagsA, "key");
+    // const tags = keyBy(tagsA, "key");
 
     graph.clear()
 
@@ -59,7 +59,6 @@ const GraphDataController: FC<{ dataset: Dataset; filters: FiltersState, refresh
     const maxDegree = Math.max(...scores);
     const MIN_NODE_SIZE = 3;
     const MAX_NODE_SIZE = 10;
-    let i = 0
     graph.forEachNode((node) => {
       graph.setNodeAttribute(
         node,

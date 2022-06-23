@@ -1,4 +1,4 @@
-import { Bytes, ethers } from "ethers";
+import { Bytes } from "ethers";
 
 export enum RemoteStatus {
   errored = "errored", invalid = "invalid", valid = "valid", selected = "selected", connected = "connected", exploring = "expoloring", complete = "complete"

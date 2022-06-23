@@ -91,7 +91,7 @@ export async function exploreLocalCluster(localNodeEndpoint: string, nodeToken: 
 
 
     responseData = await makePeerRequest(localNodeEndpoint, nodeToken)
-    if (responseData.status != Status.OK && responseData.nodes != undefined) {
+    if (responseData.status !== Status.OK && responseData.nodes !== undefined) {
         setRemoteError(responseData.error)
         setRemoteStatus(RemoteStatus.errored)
         return
@@ -107,17 +107,17 @@ export async function exploreLocalCluster(localNodeEndpoint: string, nodeToken: 
     try {
         while (toBeVisitedList.length > 0) {
             let node: HoprNodeHeader | undefined = toBeVisitedList.shift();
-            if (node == undefined || visitedMap.has(node.peerId)) {
+            if (node === undefined || visitedMap.has(node.peerId)) {
                 continue
             }
             let endpoint = parseEndpoint(node, localNodeEndpoint)
             node.endpoint = endpoint
             let req = await makePeerRequest(endpoint, nodeToken)
-            if (req.error != null) continue
+            if (req.error !== null) continue
             visitedMap.set(node.peerId, node)
             for (let i = 0; i < req.nodes.length; i++) {
                 const element = req.nodes[i];
-                if (element == undefined || visitedMap.has(element.peerId)) {
+                if (element === undefined || visitedMap.has(element.peerId)) {
                     continue
                 }
                 toBeVisitedList = toBeVisitedList.concat(element)
@@ -138,19 +138,19 @@ export async function exploreLocalCluster(localNodeEndpoint: string, nodeToken: 
     //build nodes and edges (Accounts and Channels) for each node of the network
     for await (const entry of visitedMap.entries()) {
         let hoprNode = visitedMap.get(entry[0])
-        if (hoprNode == undefined) {
+        if (hoprNode === undefined) {
             setRemoteError("[exploreLocalCluster] Hoprnode cannot be null at this point")
             setRemoteStatus(RemoteStatus.errored)
             return
         }
         let nodeRequest: AccountRequest = await makeAccount(hoprNode, nodeToken)
-        if (nodeRequest.status != Status.OK) {
+        if (nodeRequest.status !== Status.OK) {
             setRemoteError(nodeRequest.error)
             setRemoteStatus(RemoteStatus.errored)
             return
         }
         let channelsRequest: ChannelRequest = await makeEdges(hoprNode, nodeToken, nodeRequest.account)
-        if (channelsRequest.status != Status.OK) {
+        if (channelsRequest.status !== Status.OK) {
             setRemoteError(nodeRequest.error)
             setRemoteStatus(RemoteStatus.errored)
             return
