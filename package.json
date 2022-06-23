@@ -1,0 +1,9 @@
+{
+  "name": "hopr-community",
+  "version": "0.0.1",
+  "description": "Contains various projects build by the community.",
+  "private": true,
+  "devDependencies": {
+    "vercel": "^24.2.0"
+  }
+}
