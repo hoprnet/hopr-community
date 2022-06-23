@@ -61,13 +61,11 @@ export const getChannels = (baseUrl: string, headers: Headers) =>
 export const getInfo = (baseUrl: string, headers: Headers) =>
   nonJsonApi(baseUrl, headers, '/api/v2/node/info', Promise.resolve({}));
 
-export const getUptime = async (baseUrl: string) => {
+export const getUptime = async (baseUrl: string, headers: Headers) => {
   const start = performance.now();
   const version = await (
-    await fetch(`${baseUrl}/healthcheck/v1/version`).catch((err) => ({
-      text: () => Promise.resolve(0),
-    }))
-  ).text();
+    await nonJsonApi(baseUrl, headers, '/api/v2/node/version', Promise.resolve(0))
+  );  
   const end = performance.now();
   return version ? end - start : 0;
 };

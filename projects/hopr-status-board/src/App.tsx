@@ -32,6 +32,7 @@ import {
   getVersion,
   getUptime,
 } from './api';
+import WebSocketHandler from './WebSocketHandler';
 
 const truncate = (str: string, chars = 10) =>
   str.substr(0, chars) + '...' + str.substr(str.length - chars, chars);
@@ -55,7 +56,6 @@ type Address = Balance;
 type Node = {
   index: number;
   httpEndpoint: string;
-  wsEndpoint: string;
   address: Address;
   balance: Balance;
   version: string;
@@ -63,6 +63,7 @@ type Node = {
   info?: any;
   channels?: any;
   tickets?: any;
+  securityToken?: string;
 };
 
 type Nodes = { [key: string]: Node[] };
@@ -161,10 +162,9 @@ const Hosts = ({
               </Td>
               <Td>
                 <Stack direction="row" spacing={4}>
-                  <EndpointButton endpoint={node.wsEndpoint} label="WS" />
                   <EndpointButton
                     endpoint={node.httpEndpoint}
-                    label="HTTP"
+                    label="API Endpoint"
                     variant="outline"
                   />
                 </Stack>
@@ -188,18 +188,22 @@ const Hosts = ({
               </Td>
             </Tr>
             <Tr>
-              <Th colSpan={2}>General</Th>
+              <Th>General</Th>
+              <Th>Messages</Th>
               <Th>Info</Th>
               <Th>Channels</Th>
               <Th>Tickets</Th>
             </Tr>
             <Tr>
-              <Td colSpan={2}>
+              <Td>
                 <Code>Balance</Code>:{parseEther(node.balance.hopr)} HOPR,{' '}
                 {parseEther(node.balance.native)} ETH
                 <br />
                 <Code>Version</Code>:{node.version}
               </Td>
+              <td>
+                <WebSocketHandler wsEndpoint={`${node.httpEndpoint}/api/v2/messages/websocket`} securityToken={node.securityToken || ''} />
+              </td>
               <Td>
                 <ReactJson src={node.info} collapsed />
               </Td>
@@ -217,10 +221,13 @@ const Hosts = ({
 );
 
 function App() {
-  const [host, setHost] = useState('');
+
+  const params = new URLSearchParams(window.location.search)
+
+  const [host, setHost] = useState(params.get('nodeHost') || '');
   const [hosts, setHosts] = useState<{ [key: string]: Host }>({});
   const [nodes, setNodes] = useState<Nodes>({});
-  const [customToken, setCustomToken] = useState<string>('');
+  const [customToken, setCustomToken] = useState<string>(params.get('securityToken') || '');
 
   const getHeaders = (securityToken: string, isPost = false) => {
     const headers = new Headers();
@@ -235,9 +242,7 @@ function App() {
   const loadHosts = async (
     NODES: number,
     DEFAULT_SECURITY_TOKEN: string,
-    BASE_HTTP: (index: number) => string,
-    BASE_WS: (index: number) => string,
-    BASE_HC: (index: number) => string
+    BASE_HTTP: (index: number) => string
   ) => {
     return await Promise.all(
       [...Array(NODES)].map(async (_, index) => {
@@ -253,7 +258,7 @@ function App() {
           headers
         );
         const version = await getVersion(BASE_HTTP(index + 1), headers);
-        const uptimer = () => getUptime(BASE_HC(index + 1));
+        const uptimer = () => getUptime(BASE_HTTP(index + 1), headers);
         const info = await getInfo(BASE_HTTP(index + 1), headers);
         const channels = await getChannels(BASE_HTTP(index + 1), headers);
         const tickets = await getTickets(BASE_HTTP(index + 1), headers);
@@ -267,7 +272,7 @@ function App() {
           tickets,
           balance: { hopr: hoprBalance, native: nativeBalance },
           httpEndpoint: BASE_HTTP(index + 1),
-          wsEndpoint: BASE_WS(index + 1),
+          securityToken: DEFAULT_SECURITY_TOKEN,
         };
       })
     );
@@ -277,15 +282,11 @@ function App() {
     const NODES = 5;
     const DEFAULT_SECURITY_TOKEN = '^^LOCAL-testing-123^^';
     const BASE_HTTP = (index: number) => `https://1330${index}-${url.hostname}`;
-    const BASE_WS = (index: number) => `wss://1950${index}-${url.hostname}`;
-    const BASE_HC = (index: number) => `https://1808${index}-${url.hostname}`;
 
     return loadHosts(
       NODES,
       DEFAULT_SECURITY_TOKEN,
-      BASE_HTTP,
-      BASE_WS,
-      BASE_HC
+      BASE_HTTP
     );
   };
 
@@ -293,15 +294,11 @@ function App() {
     const NODES = 5;
     const DEFAULT_SECURITY_TOKEN = '^^LOCAL-testing-123^^';
     const BASE_HTTP = (index: number) => `http://${url.hostname}:1330${index}`;
-    const BASE_WS = (index: number) => `ws://${url.hostname}:1950${index}`;
-    const BASE_HC = (index: number) => `http://${url.hostname}:1808${index}`;
 
     return loadHosts(
       NODES,
       DEFAULT_SECURITY_TOKEN,
-      BASE_HTTP,
-      BASE_WS,
-      BASE_HC
+      BASE_HTTP
     );
   }
 
@@ -309,15 +306,11 @@ function App() {
     const NODES = 1;
     const DEFAULT_SECURITY_TOKEN = customToken;
     const BASE_HTTP = (index: number) => `http://${url.hostname}:3001`;
-    const BASE_WS = (index: number) => `ws://${url.hostname}:3000`;
-    const BASE_HC = (index: number) => `http://${url.hostname}:8080`;
 
     return loadHosts(
       NODES,
       DEFAULT_SECURITY_TOKEN,
-      BASE_HTTP,
-      BASE_WS,
-      BASE_HC
+      BASE_HTTP
     );
   };
 
@@ -422,7 +415,6 @@ function App() {
             version: '1.87.x',
             uptimer: () => Promise.resolve(Math.random() * 10),
             httpEndpoint: 'http://localhost:3001',
-            wsEndpoint: 'ws//localhost:3000',
             address: {
               hopr: '16Uiu2HAmE9b3TSHeF25uJS1Ecf2Js3TutnaSnipdV9otEpxbRN8Q',
               native: '0xEA9eDAE5CfC794B75C45c8fa89b605508A03742a',
