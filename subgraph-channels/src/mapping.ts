@@ -17,7 +17,7 @@ export function handleAnnouncement(event: Announcement): void {
     account.publicKey = event.params.publicKey;
     account.hasAnnounced = true;
     account.save()
-} 8
+}
 
 export function handleChannelUpdated(event: ChannelUpdated): void {
     log.info(`[ info ] Handle channel update: start {}`, [event.transaction.hash.toHex()]);
