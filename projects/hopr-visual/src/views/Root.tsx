@@ -19,6 +19,7 @@ import { GrClose } from "react-icons/gr";
 import { BiRadioCircleMarked, BiBookContent, BiNetworkChart } from "react-icons/bi";
 import { BsArrowsFullscreen, BsFullscreenExit, BsZoomIn, BsZoomOut } from "react-icons/bs";
 import EndpointField from "./EndpointField";
+import { isSSR, getUrlParams, Settings } from "../utils/api"
 
 const APIURL = 'https://api.thegraph.com/subgraphs/name/eliaxie/hopr-channels'
 const client = new ApolloClient({
@@ -28,11 +29,12 @@ const client = new ApolloClient({
 
 
 const Root: FC = () => {
+  const urlParams = !isSSR ? getUrlParams(window.location) : {} as Settings
   const [showContents, setShowContents] = useState(true);
   const [dataReady, setDataReady] = useState(false);
   const [dataset, setDataset] = useState<Dataset>({} as Dataset);
-  const [localNodeEndpoint, setLocalNodeEndpoint] = useState("");
-  const [nodeToken, setNodeToken] = useState("");
+  const [localNodeEndpoint, setLocalNodeEndpoint] = useState(urlParams.apiEndpoint || "");
+  const [nodeToken, setNodeToken] = useState(urlParams.apiToken || "");
   const [remoteError, setRemoteError] = useState("");
   const [remoteStatus, setRemoteStatus] = useState(RemoteStatus.invalid);
   const [refresh, setRefresh] = useState(false); //refresh sigma at every state change
@@ -41,12 +43,11 @@ const Root: FC = () => {
     tags: {},
   });
   const [mode, setMode] = useState(() => {
-    const queryParams = new URLSearchParams(window.location.search)
-    const paramMode = queryParams.get("mode")
-    if (paramMode !== undefined && paramMode === "api") {
+    if (urlParams.mode === "api") {
       return VisualMode.Localnode
+    } else {
+      return VisualMode.Subgraph
     }
-    return VisualMode.Subgraph
   })
 
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);

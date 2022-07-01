@@ -224,10 +224,10 @@ function App() {
 
   const params = new URLSearchParams(window.location.search)
 
-  const [host, setHost] = useState(params.get('nodeHost') || '');
+  const [host, setHost] = useState(params.get('apiEndpoint') || '');
   const [hosts, setHosts] = useState<{ [key: string]: Host }>({});
   const [nodes, setNodes] = useState<Nodes>({});
-  const [customToken, setCustomToken] = useState<string>(params.get('securityToken') || '');
+  const [customToken, setCustomToken] = useState<string>(params.get('apiToken') || '');
 
   const getHeaders = (securityToken: string, isPost = false) => {
     const headers = new Headers();
