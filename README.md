@@ -17,5 +17,6 @@
 | ----------------- | ------------------------------------- |
 | hopr-status-board | https://hopr-status-board.vercel.app/ |
 | hopr-visual       | https://hopr-visual.vercel.app/       |
+| hopr-chess        | https://hopr-chess.vercel.app/        |
 
 To add a new project, see [GUIDE](./ADMIN_GUIDE.md).
