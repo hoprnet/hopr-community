@@ -11,7 +11,7 @@
   </p>
 </p>
 
-## List of hosted projects
+## List of community projects
 
 | Project           | Try it out                            |
 | ----------------- | ------------------------------------- |
