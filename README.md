@@ -13,18 +13,18 @@
 
 ## List of community projects
 
-| Project           | Try it out                            |
-| ----------------- | ------------------------------------- |
-| hopr-status-board | https://hopr-status-board.vercel.app/ |
-| hopr-visual       | https://hopr-visual.vercel.app/       |
-| hopr-chess        | https://hopr-chess.vercel.app/        |
+| Project             | Try it out                              |
+| ------------------- | --------------------------------------- |
+| hopr-status-board   | https://hopr-status-board.vercel.app/   |
+| hopr-visual         | https://hopr-visual.vercel.app/         |
+| hopr-chess          | https://hopr-chess.vercel.app/          |
+| hopr-boomerang-chat | https://hopr-boomerang-chat.vercel.app/ |
 
 To add a new project, see [GUIDE](./ADMIN_GUIDE.md).
 
 ## List of in-house projects
 
-| Project           | Repository                            |
-| ----------------- | ------------------------------------- |
+| Project    | Repository                                                               |
+| ---------- | ------------------------------------------------------------------------ |
 | hopr-admin | https://github.com/hoprnet/hoprnet/tree/master/packages/hoprd/hopr-admin |
-| myne-chat       | https://github.com/hoprnet/myne-chat       |
-| hopr-boomerang-chat | https://github.com/hoprnet/hopr-boomerang-chat |
+| myne-chat  | https://github.com/hoprnet/myne-chat                                     |
