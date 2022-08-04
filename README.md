@@ -19,3 +19,11 @@
 | hopr-visual       | https://hopr-visual.vercel.app/       |
 
 To add a new project, see [GUIDE](./ADMIN_GUIDE.md).
+
+## List of in-house projects
+
+| Project           | Repository                            |
+| ----------------- | ------------------------------------- |
+| hopr-admin | https://github.com/hoprnet/hoprnet/tree/master/packages/hoprd/hopr-admin |
+| myne-chat       | https://github.com/hoprnet/myne-chat       |
+| hopr-boomerang-chat | https://github.com/hoprnet/hopr-boomerang-chat |
