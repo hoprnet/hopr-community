@@ -1,7 +1,5 @@
 # HOPR Chess
 
-### [Demo](https://glowing-chebakia-d83186.netlify.app)
-
 ## Description
 
 HOPR-chess is an in-browser chess board powered by HOPR.
