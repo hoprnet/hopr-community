@@ -171,10 +171,11 @@ async function makePeerRequest(localNodeEndpoint: string, nodeToken: string): Pr
         status: Status.OK
     }
 
+    const url = new URL('/api/v2/node/peers', localNodeEndpoint)
+
     var config = {
         method: 'get',
-        url: `https://${localNodeEndpoint}/api/v2/node/peers`,
-        //url: `https://jsonplaceholder.typicode.com/posts`,
+        url: url.href,
         headers: {
             'accept': 'application/json',
             'x-auth-token': nodeToken
@@ -228,9 +229,11 @@ async function makeAccount(node: HoprNodeHeader, nodeToken: string): Promise<Acc
         status: Status.OK
     }
 
+    const url = new URL('/api/v2/account/addresses', node.endpoint)
+
     var config = {
         method: 'get',
-        url: `https://${node.endpoint}/api/v2/account/addresses`,
+        url: url.href,
         headers: {
             'accept': 'application/json',
             'x-auth-token': nodeToken
@@ -273,9 +276,11 @@ async function makeEdges(hoprNode: HoprNodeHeader, nodeToken: string, account: A
         status: Status.OK
     }
 
+    const url = new URL('/api/v2/channels', hoprNode.endpoint)
+
     var config = {
         method: 'get',
-        url: `https://${hoprNode.endpoint}/api/v2/channels`,
+        url: url.href,
         headers: {
             'accept': 'application/json',
             'x-auth-token': nodeToken

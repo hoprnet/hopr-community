@@ -19,7 +19,7 @@ You can use `?mode=api` to load directly into `local cluster` mode
 
 ## Usage
 Opening the page will show the composition of the Hopr Network, from there you can use the search bar to focus on one particular node or hover a node to show the address and the balances of its channels. By clicking on it, you will open Blockscout on its address.\
-Clicking on the last button on the left, you'll go in local cluster mode, there you'll be able to input a node address (in the format IP:PORT or localhost:PORT or PORT-hoprnet-[..].gitpod.io) and the cluster's token. By then pressing Enter the graph will be drawn on the screen.
+Clicking on the last button on the left, you'll go in local cluster mode, there you'll be able to input a node address (in the format http://IP:PORT or http://localhost:PORT or https://PORT-hoprnet-[..].gitpod.io) and the cluster's token. By then pressing Enter the graph will be drawn on the screen.
 ### Video Demo: 
 
 https://user-images.githubusercontent.com/27226791/174053168-44cca4bb-5d1f-4d8c-8ac3-411973fe25d9.mp4
