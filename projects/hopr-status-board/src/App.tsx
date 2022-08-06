@@ -1,5 +1,5 @@
-import { CopyIcon, CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
-import { Frame, Line } from 'scintilla';
+import { CopyIcon, CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import { Frame, Line } from "scintilla";
 import {
   Button,
   Code,
@@ -18,9 +18,9 @@ import {
   Stack,
   useClipboard,
   Flex,
-} from '@chakra-ui/react';
-import ReactJson from 'react-json-view';
-import React, { useState, useEffect, Fragment } from 'react';
+} from "@chakra-ui/react";
+import ReactJson from "react-json-view";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   getChannels,
   getHoprAddress,
@@ -31,11 +31,11 @@ import {
   getTickets,
   getVersion,
   getUptime,
-} from './api';
-import WebSocketHandler from './WebSocketHandler';
+} from "./api";
+import WebSocketHandler from "./WebSocketHandler";
 
 const truncate = (str: string, chars = 10) =>
-  str.substr(0, chars) + '...' + str.substr(str.length - chars, chars);
+  str.substr(0, chars) + "..." + str.substr(str.length - chars, chars);
 
 const parseEther = (value: string) =>
   Number((BigInt(value) / 10n ** 14n).toString()) / 10000;
@@ -75,7 +75,7 @@ type ResponseAddress = {
 
 const EndpointButton = ({
   endpoint,
-  variant = 'solid',
+  variant = "solid",
   label,
 }: {
   endpoint: string;
@@ -95,11 +95,7 @@ const EndpointButton = ({
   );
 };
 
-const RedLine = ({
-  uptimer,
-}: {
-  uptimer?: () => Promise<number>;
-}) => {
+const RedLine = ({ uptimer }: { uptimer?: () => Promise<number> }) => {
   const [demoUptime, setDemoUptime] = useState<number[]>([0]);
   useEffect(() => {
     const timeout = setTimeout(async () => {
@@ -115,14 +111,14 @@ const RedLine = ({
     };
   }, [demoUptime]);
   return (
-    <div style={{ width: '200px' }}>
+    <div style={{ width: "200px" }}>
       <Frame>
         <Line
           data={demoUptime}
           stroke={{
             color: { solid: [255, 0, 0, 1] },
             width: 2,
-            style: 'solid',
+            style: "solid",
           }}
         />
       </Frame>
@@ -152,7 +148,7 @@ const Hosts = ({
             <Tr>
               <Td>
                 <Flex alignItems="center">
-                  {node.address ? <CheckCircleIcon /> : <WarningIcon />}{' '}
+                  {node.address ? <CheckCircleIcon /> : <WarningIcon />}{" "}
                   <Text mx="2">Host</Text>
                   {node.index + 1}
                   <Tag mx="2" colorScheme="yellow">
@@ -173,14 +169,14 @@ const Hosts = ({
                 <Code>
                   {node.address
                     ? truncate(node.address.hopr)
-                    : 'No HOPR address'}
+                    : "No HOPR address"}
                 </Code>
               </Td>
               <Td>
                 <Code>
                   {node.address
                     ? truncate(node.address.native)
-                    : 'No ETH address'}
+                    : "No ETH address"}
                 </Code>
               </Td>
               <Td>
@@ -196,13 +192,16 @@ const Hosts = ({
             </Tr>
             <Tr>
               <Td>
-                <Code>Balance</Code>:{parseEther(node.balance.hopr)} HOPR,{' '}
+                <Code>Balance</Code>:{parseEther(node.balance.hopr)} HOPR,{" "}
                 {parseEther(node.balance.native)} ETH
                 <br />
                 <Code>Version</Code>:{node.version}
               </Td>
               <td>
-                <WebSocketHandler wsEndpoint={`${node.httpEndpoint}/api/v2/messages/websocket`} securityToken={node.securityToken || ''} />
+                <WebSocketHandler
+                  wsEndpoint={`${node.httpEndpoint}/api/v2/messages/websocket`}
+                  securityToken={node.securityToken || ""}
+                />
               </td>
               <Td>
                 <ReactJson src={node.info} collapsed />
@@ -221,21 +220,22 @@ const Hosts = ({
 );
 
 function App() {
+  const params = new URLSearchParams(window.location.search);
 
-  const params = new URLSearchParams(window.location.search)
-
-  const [host, setHost] = useState(params.get('apiEndpoint') || '');
+  const [host, setHost] = useState(params.get("apiEndpoint") || "");
   const [hosts, setHosts] = useState<{ [key: string]: Host }>({});
   const [nodes, setNodes] = useState<Nodes>({});
-  const [customToken, setCustomToken] = useState<string>(params.get('apiToken') || '');
+  const [customToken, setCustomToken] = useState<string>(
+    params.get("apiToken") || ""
+  );
 
   const getHeaders = (securityToken: string, isPost = false) => {
     const headers = new Headers();
     if (isPost) {
-      headers.set('Content-Type', 'application/json');
-      headers.set('Accept-Content', 'application/json');
+      headers.set("Content-Type", "application/json");
+      headers.set("Accept-Content", "application/json");
     }
-    headers.set('Authorization', 'Basic ' + btoa(securityToken));
+    headers.set("Authorization", "Basic " + btoa(securityToken));
     return headers;
   };
 
@@ -280,49 +280,37 @@ function App() {
 
   const loadGitpodHosts = async (url: URL) => {
     const NODES = 5;
-    const DEFAULT_SECURITY_TOKEN = '^^LOCAL-testing-123^^';
+    const DEFAULT_SECURITY_TOKEN = "^^LOCAL-testing-123^^";
     const BASE_HTTP = (index: number) => `https://1330${index}-${url.hostname}`;
 
-    return loadHosts(
-      NODES,
-      DEFAULT_SECURITY_TOKEN,
-      BASE_HTTP
-    );
+    return loadHosts(NODES, DEFAULT_SECURITY_TOKEN, BASE_HTTP);
   };
 
   const loadLocalHosts = async (url: URL) => {
     const NODES = 5;
-    const DEFAULT_SECURITY_TOKEN = '^^LOCAL-testing-123^^';
+    const DEFAULT_SECURITY_TOKEN = "^^LOCAL-testing-123^^";
     const BASE_HTTP = (index: number) => `http://${url.hostname}:1330${index}`;
 
-    return loadHosts(
-      NODES,
-      DEFAULT_SECURITY_TOKEN,
-      BASE_HTTP
-    );
-  }
+    return loadHosts(NODES, DEFAULT_SECURITY_TOKEN, BASE_HTTP);
+  };
 
   const loadCustomHosts = async (url: URL, customToken: string) => {
     const NODES = 1;
     const DEFAULT_SECURITY_TOKEN = customToken;
     const BASE_HTTP = (index: number) => `http://${url.hostname}:3001`;
 
-    return loadHosts(
-      NODES,
-      DEFAULT_SECURITY_TOKEN,
-      BASE_HTTP
-    );
+    return loadHosts(NODES, DEFAULT_SECURITY_TOKEN, BASE_HTTP);
   };
 
   useEffect(() => {
     const loadNodesFromHosts = async () => {
       Object.keys(hosts).map(async (host) => {
         switch (hosts[host].domain) {
-          case 'gitpod.io':
+          case "gitpod.io":
             const gitpodNodes = await loadGitpodHosts(hosts[host].url);
             setNodes((prevNodes) => ({ [host]: gitpodNodes, ...prevNodes }));
             break;
-          case 'localhost':
+          case "localhost":
             const localNodes = await loadLocalHosts(hosts[host].url);
             setNodes((prevNodes) => ({ [host]: localNodes, ...prevNodes }));
             break;
@@ -337,10 +325,10 @@ function App() {
   }, [hosts]);
 
   const enterNode = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       try {
         const url = new URL(host);
-        const domain = url.hostname.split('.').slice(-2).join('.');
+        const domain = url.hostname.split(".").slice(-2).join(".");
         setHosts((prevHosts) => ({
           [host]: { url, domain, token: customToken },
           ...prevHosts,
@@ -351,78 +339,78 @@ function App() {
 
   const exampleTable = (
     <Hosts
-      host={'localhost'}
+      host={"localhost"}
       nodes={{
         localhost: [
           {
             index: 0,
             balance: {
-              hopr: '1234000000000000000',
-              native: '2345000000000000000',
+              hopr: "1234000000000000000",
+              native: "2345000000000000000",
             },
             channels: {
               incoming: [
                 {
-                  type: 'incoming',
+                  type: "incoming",
                   channelId:
-                    '0x04e50b7ddce9770f58cebe51f33b472c92d1c40384759f5a0b1025220bf15ec5',
+                    "0x04e50b7ddce9770f58cebe51f33b472c92d1c40384759f5a0b1025220bf15ec5",
                   peerId:
-                    '16Uiu2HAmVfV4GKQhdECMqYmUMGLy84RjTJQxTWDcmUX5847roBar',
-                  status: 'Open',
-                  balance: '10000000000000000000',
+                    "16Uiu2HAmVfV4GKQhdECMqYmUMGLy84RjTJQxTWDcmUX5847roBar",
+                  status: "Open",
+                  balance: "10000000000000000000",
                 },
               ],
               outgoing: [
                 {
-                  type: 'incoming',
+                  type: "incoming",
                   channelId:
-                    '0x04e50b7ddce9770f58cebe51f33b472c92d1c40384759f5a0b1025220bf15ec5',
+                    "0x04e50b7ddce9770f58cebe51f33b472c92d1c40384759f5a0b1025220bf15ec5",
                   peerId:
-                    '16Uiu2HAmVfV4GKQhdECMqYmUMGLy84RjTJQxTWDcmUX5847roBar',
-                  status: 'Open',
-                  balance: '10000000000000000000',
+                    "16Uiu2HAmVfV4GKQhdECMqYmUMGLy84RjTJQxTWDcmUX5847roBar",
+                  status: "Open",
+                  balance: "10000000000000000000",
                 },
               ],
             },
             info: {
-              environment: 'hardhat-localhost',
+              environment: "hardhat-localhost",
               announcedAddress: [
-                '/ip4/128.0.215.32/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit',
-                '/p2p/16Uiu2HAmLpqczAGfgmJchVgVk233rmB2T3DSn2gPG6JMa5brEHZ1/p2p-circuit/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit',
-                '/ip4/127.0.0.1/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit',
-                '/ip4/192.168.178.56/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit',
+                "/ip4/128.0.215.32/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit",
+                "/p2p/16Uiu2HAmLpqczAGfgmJchVgVk233rmB2T3DSn2gPG6JMa5brEHZ1/p2p-circuit/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit",
+                "/ip4/127.0.0.1/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit",
+                "/ip4/192.168.178.56/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit",
               ],
               listeningAddress: [
-                '/ip4/0.0.0.0/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit',
+                "/ip4/0.0.0.0/tcp/9080/p2p/16Uiu2HAm91QFjPepnwjuZWzK5pb5ZS8z8qxQRfKZJNXjkgGNUAit",
               ],
-              network: 'hardhat',
-              hoprToken: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
-              hoprChannels: '0x2a54194c8fe0e3CdeAa39c49B95495aA3b44Db63',
+              network: "hardhat",
+              hoprToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+              hoprChannels: "0x2a54194c8fe0e3CdeAa39c49B95495aA3b44Db63",
               channelClosurePeriod: 1,
             },
             tickets: {
               pending: 0,
               unredeemed: 0,
-              unredeemedValue: 'string',
+              unredeemedValue: "string",
               redeemed: 0,
-              redeemedValue: 'string',
+              redeemedValue: "string",
               losingTickets: 0,
               winProportion: 0,
               neglected: 0,
               rejected: 0,
-              rejectedValue: 'string',
+              rejectedValue: "string",
             },
-            version: '1.87.x',
+            version: "1.87.x",
             uptimer: () => Promise.resolve(Math.random() * 10),
-            httpEndpoint: 'http://localhost:3001',
+            httpEndpoint: "http://localhost:3001",
             address: {
-              hopr: '16Uiu2HAmE9b3TSHeF25uJS1Ecf2Js3TutnaSnipdV9otEpxbRN8Q',
-              native: '0xEA9eDAE5CfC794B75C45c8fa89b605508A03742a',
+              hopr: "16Uiu2HAmE9b3TSHeF25uJS1Ecf2Js3TutnaSnipdV9otEpxbRN8Q",
+              native: "0xEA9eDAE5CfC794B75C45c8fa89b605508A03742a",
             },
           },
         ],
       }}
-      domain={'localhost'}
+      domain={"localhost"}
     />
   );
 
@@ -430,15 +418,15 @@ function App() {
     <>
       <Table variant="simple">
         <TableCaption>
-          list of available hopr nodes{' '}
+          list of available hopr nodes{" "}
           <Button size="sm" onClick={() => setHosts({})}>
             clear
           </Button>
         </TableCaption>
         <Tbody>
-          <Tr>
+          {/* <Tr>
             <Td>{exampleTable}</Td>
-          </Tr>
+          </Tr> */}
           <Tr>
             <Td>
               {Object.keys(hosts).map((host) => (
