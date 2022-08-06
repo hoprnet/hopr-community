@@ -179,7 +179,7 @@ const Root: FC = () => {
     }
 
     loadData()
-  }, [mode, remoteStatus === RemoteStatus.errored, remoteStatus === RemoteStatus.selected, remoteStatus === RemoteStatus.invalid, localNodeEndpoint, nodeToken])
+  }, [mode, remoteStatus === RemoteStatus.valid, remoteStatus === RemoteStatus.errored, remoteStatus === RemoteStatus.selected, remoteStatus === RemoteStatus.invalid, localNodeEndpoint, nodeToken])
 
   return (
     <div id="app-root" className={showContents ? "show-contents" : ""}>

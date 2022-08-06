@@ -89,7 +89,6 @@ export async function exploreLocalCluster(localNodeEndpoint: string, nodeToken: 
     let visitedMap: Map<string, HoprNodeHeader> = new Map()
     let toBeVisitedList: HoprNodeHeader[] = []
 
-
     responseData = await makePeerRequest(localNodeEndpoint, nodeToken)
     if (responseData.status !== Status.OK && responseData.nodes !== undefined) {
         setRemoteError(responseData.error)
@@ -113,7 +112,7 @@ export async function exploreLocalCluster(localNodeEndpoint: string, nodeToken: 
             let endpoint = parseEndpoint(node, localNodeEndpoint)
             node.endpoint = endpoint
             let req = await makePeerRequest(endpoint, nodeToken)
-            if (req.error !== null) continue
+            if (req.error) continue
             visitedMap.set(node.peerId, node)
             for (let i = 0; i < req.nodes.length; i++) {
                 const element = req.nodes[i];
@@ -125,6 +124,7 @@ export async function exploreLocalCluster(localNodeEndpoint: string, nodeToken: 
 
         }
     } catch (error) {
+        console.error(error)
         setRemoteError(responseData.error)
         setRemoteStatus(RemoteStatus.errored)
         return
@@ -256,6 +256,7 @@ async function makeAccount(node: HoprNodeHeader, nodeToken: string): Promise<Acc
 }
 
 function parseEndpoint(node: HoprNodeHeader, localEndpoing: string): string {
+    const isHTTPS = localEndpoing.startsWith('https')
     if (localEndpoing.includes("gitpod")) {
         let splitted = node.multiAddr.split("/")
         let gitpodUrl = localEndpoing.substring(5)
@@ -265,7 +266,7 @@ function parseEndpoint(node: HoprNodeHeader, localEndpoing: string): string {
         let splitted = node.multiAddr.split("/")
         let ip = splitted[2]
         let port = parseInt(splitted[4]) % 10 + 13300 //changes port 190xx to 133xx
-        return `${ip}:${port}`
+        return `${isHTTPS ? "https://" : "http://"}${ip}:${port}`
     }
 }
 

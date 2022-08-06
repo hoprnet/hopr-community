@@ -72,7 +72,7 @@ const EndpointField: FC<{ endpoint: string, remoteStatus: RemoteStatus, nodeToke
         classes = classes.concat("endpointSuccess")
         break
       case RemoteStatus.errored:
-        message = error.toString()
+        message = error ? error.toString() : "Unknown error"
         classes = classes.concat("endpointError")
         break
       case RemoteStatus.exploring:

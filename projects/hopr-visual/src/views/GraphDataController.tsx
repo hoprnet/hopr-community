@@ -44,7 +44,7 @@ const GraphDataController: FC<{ dataset: Dataset; filters: FiltersState, refresh
       graph.addNode(node.id, {
         ...node,
         label: node.id,
-        URL: mode === VisualMode.Subgraph ? "https://blockscout.com/xdai/mainnet/address/" + node.id : "https://docs.hoprnet.org/developers/intro",
+        URL: "https://blockscout.com/xdai/mainnet/address/" + node.id,
         score: node.balance,
         cluster: "1",
         tag: "nodes",
