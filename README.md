@@ -13,12 +13,12 @@
 
 ## List of community projects
 
-| Project             | Try it out                              |
-| ------------------- | --------------------------------------- |
-| hopr-status-board   | https://hopr-status-board.vercel.app/   |
-| hopr-visual         | https://hopr-visual.vercel.app/         |
-| hopr-chess          | https://hopr-chess.vercel.app/          |
-| hopr-boomerang-chat | https://hopr-boomerang-chat.vercel.app/ |
+| Project             | Try it out                              | Author                                    |
+| ------------------- | --------------------------------------- | ----------------------------------------- |
+| hopr-status-board   | https://hopr-status-board.vercel.app/   | [0xMrH](https://github.com/0xMrH)         |
+| hopr-visual         | https://hopr-visual.vercel.app/         | [Eliaxie](https://github.com/Eliaxie)     |
+| hopr-chess          | https://hopr-chess.vercel.app/          | [vividwood](https://github.com/vividwood) |
+| hopr-boomerang-chat | https://hopr-boomerang-chat.vercel.app/ | [0xjjpa](https://github.com/0xjjpa)       |
 
 To add a new project, see [GUIDE](./ADMIN_GUIDE.md).
 
