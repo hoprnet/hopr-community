@@ -289,7 +289,7 @@ function App() {
   const loadLocalHosts = async (url: URL, customToken: string) => {
     let nodes = 1;
     let base_http = (index: number) => url.href.substr(0, url.href.length - 1);
-    if (url.port == 13301) {
+    if (url.port == "13301") {
       // local cluster setup
       nodes = 5
       base_http = (index: number) => `http://${url.hostname}:1330${index}`;
