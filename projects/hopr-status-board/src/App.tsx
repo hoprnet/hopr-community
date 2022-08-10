@@ -286,18 +286,25 @@ function App() {
     return loadHosts(NODES, DEFAULT_SECURITY_TOKEN, BASE_HTTP);
   };
 
-  const loadLocalHosts = async (url: URL) => {
-    const NODES = 5;
+  const loadLocalHosts = async (url: URL, customToken: string) => {
+    let nodes = 1;
+    let base_http = (index: number) => url.href.substr(0, url.href.length - 1);
+    if (url.port == 13301) {
+      // local cluster setup
+      nodes = 5
+      base_http = (index: number) => `http://${url.hostname}:1330${index}`;
+    }
     const DEFAULT_SECURITY_TOKEN = "^^LOCAL-testing-123^^";
-    const BASE_HTTP = (index: number) => `http://${url.hostname}:1330${index}`;
-
-    return loadHosts(NODES, DEFAULT_SECURITY_TOKEN, BASE_HTTP);
+    if (!customToken) {
+      customToken = DEFAULT_SECURITY_TOKEN
+    }
+    return loadHosts(nodes, customToken, base_http);
   };
 
   const loadCustomHosts = async (url: URL, customToken: string) => {
     const NODES = 1;
     const DEFAULT_SECURITY_TOKEN = customToken;
-    const BASE_HTTP = (index: number) => `http://${url.hostname}:3001`;
+    const BASE_HTTP = (index: number) => url.href.substr(0, url.href.length - 1);
 
     return loadHosts(NODES, DEFAULT_SECURITY_TOKEN, BASE_HTTP);
   };
@@ -311,7 +318,7 @@ function App() {
             setNodes((prevNodes) => ({ [host]: gitpodNodes, ...prevNodes }));
             break;
           case "localhost":
-            const localNodes = await loadLocalHosts(hosts[host].url);
+            const localNodes = await loadLocalHosts(hosts[host].url, customToken);
             setNodes((prevNodes) => ({ [host]: localNodes, ...prevNodes }));
             break;
           default:
