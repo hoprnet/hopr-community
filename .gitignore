@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 node_modules
 .vercel
-=======
 .DS_Store
 **/package-lock.json
->>>>>>> main
+/.direnv/

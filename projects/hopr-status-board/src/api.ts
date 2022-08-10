@@ -65,7 +65,7 @@ export const getUptime = async (baseUrl: string, headers: Headers) => {
   const start = performance.now();
   const version = await (
     await nonJsonApi(baseUrl, headers, '/api/v2/node/version', Promise.resolve(0))
-  );  
+  );
   const end = performance.now();
   return version ? end - start : 0;
 };
