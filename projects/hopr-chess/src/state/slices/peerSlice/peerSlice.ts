@@ -9,7 +9,6 @@ import { Action } from 'redux'
 import { handshake, answer, heartbeat, moveAction } from './peerAPI'
 import { getParam } from 'lib/url';
 
-
 export enum Status {
   Idle = 'idle',
   Waiting = 'waiting',
@@ -128,16 +127,15 @@ export const connectGame = (): ThunkAction<void, RootState, unknown, Action<stri
   dispatch(peerSlice.actions.setNumber(Math.floor(Math.random() * 1e15)))
   dispatch(peerSlice.actions.inviteOpponent())
   dispatch(sendHandshake())
-} 
-
+}
 
 export const receiveHandshake = (message: string): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-  
+
   if (state.peer.opponent.address && state.peer.num && state.peer.status === Status.Waiting) {
     const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
     await request(state.peer.opponent.address, JSON.stringify(handshake(state.peer.num)))
-    
+
     dispatch(peerSlice.actions.sendHandshake())
   } else if (state.peer.opponent.address && state.peer.num && state.peer.status === Status.Handshake) {
     dispatch(sendAnswer())
@@ -147,7 +145,7 @@ export const receiveHandshake = (message: string): ThunkAction<void, RootState, 
 
 export const sendAnswer = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-  
+
   if (state.peer.opponent.address && state.peer.num && state.peer.status === Status.Handshake) {
     const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
     await request(state.peer.opponent.address, JSON.stringify(answer(state.peer.num)))
@@ -189,9 +187,9 @@ export const { setNumber, inviteOpponent, setSecurityToken, setOpponent } = peer
 export const selectNumber = (state: RootState) => state.peer.num;
 export const selectHashedNumber = (state: RootState) => state.peer.num == null ? '' : sha256(state.peer.num.toString())
 export const selectStatus = (state: RootState) => state.peer.status
-export const selectSecurityToken = (state: RootState) => state.peer.securityToken
+export const selectSecurityToken = (state: RootState) => state.peer.securityToken ? (getParam(state.router.location, 'apiToken') || '') : ''
 export const selectEndpoint = (state: RootState) => state.router.location ? (getParam(state.router.location, 'apiEndpoint') || '') : ''
-export const selectOpponent = (state: RootState) => state.peer.opponent.address || '' 
+export const selectOpponent = (state: RootState) => state.peer.opponent.address || ''
 export const selectLocation = (state: RootState) => state.router.location
 
 export default peerSlice.reducer;
