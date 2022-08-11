@@ -331,18 +331,23 @@ function App() {
     loadNodesFromHosts();
   }, [hosts]);
 
-  const enterNode = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const keyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      try {
-        const url = new URL(host);
-        const domain = url.hostname.split(".").slice(-2).join(".");
-        setHosts((prevHosts) => ({
-          [host]: { url, domain, token: customToken },
-          ...prevHosts,
-        }));
-      } catch (err) {}
+      enterNode();
     }
   };
+
+  const enterNode = () => {
+    try {
+      const url = new URL(host);
+      const domain = url.hostname.split(".").slice(-2).join(".");
+      setHosts((prevHosts) => ({
+        [host]: { url, domain, token: customToken },
+        ...prevHosts,
+      }));
+    } catch (err) {}
+  };
+
 
   const exampleTable = (
     <Hosts
@@ -449,18 +454,34 @@ function App() {
         </Tbody>
       </Table>
       <Box>
-        <InputGroup>
+        <InputGroup
+          style={{
+            "gap": "8px",
+            "padding": "0 16px",
+          }}
+        >
           <Input
             placeholder="node host e.g. https://hoprnet-hoprnet-j4zbg3yajqp.ws-eu31.gitpod.io/ or localhost"
             value={host}
             onChange={(e) => setHost(e.target.value)}
-            onKeyPress={enterNode}
+            onKeyPress={keyPress}
           />
           <Input
             placeholder="^^LOCAL-testing-123^^"
             value={customToken}
             onChange={(e) => setCustomToken(e.target.value)}
+            onKeyPress={keyPress}
           />
+          <Button
+              size="sm"
+              style={{
+                "height": "40px",
+                "width": "100px",
+              }}
+              onClick={()=>{enterNode()}}
+          >
+            Open
+          </Button>
         </InputGroup>
       </Box>
     </>
