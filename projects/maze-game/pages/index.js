@@ -61,8 +61,8 @@ export default function Home() {
   useEffect(()=>{
     if(!router.isReady) return;
     console.log('router ready:', router)
-    // hopr.current.apiToken = router.query.apiToken;
-    // hopr.current.apiEndpoint = router.query.apiEndpoint;
+    hopr.current.apiToken = router.query.apiToken;
+    hopr.current.apiEndpoint = router.query.apiEndpoint;
     set_apiEndpoint(router.query.apiEndpoint);
     set_apiToken(router.query.apiToken);
 
@@ -85,7 +85,7 @@ export default function Home() {
 
     for (let i = 0; i < players.length; i++) {
       if(players[i].peerId !== peerId) {
-        sendMessage(hopr.current.apiEndpoint, hopr.current.apiToken, players[i].peerId, JSON.stringify(message));
+        sendMessage(apiEndpoint, apiToken, players[i].peerId, JSON.stringify(message));
       }
     }
   }
@@ -141,11 +141,13 @@ export default function Home() {
   function setApiEndpoint(input){
     set_apiEndpoint(input);
     set_peerId(null);
+    hopr.current.apiEndpoint = router.query.apiEndpoint;
     router.push(`/?apiEndpoint=${input}${apiToken?.length > 0 ? `&apiToken=${apiToken}` : ''}`)
   }
 
   function setApiToken(input){
     set_apiToken(input);
+    hopr.current.apiToken = router.query.apiToken;
     set_peerId(null);
     router.push(`/?${apiEndpoint?.length > 0 ? `apiEndpoint=${apiEndpoint}&` : ''}apiToken=${input}`)
   }
