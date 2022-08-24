@@ -1,0 +1,33 @@
+.container {
+  width: 350px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .message {
+    min-width: 160px;
+    min-height: 50px;
+    background-color: var(--sl-grey);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    border-top-right-radius: 0;
+    margin-right: 10px;
+
+    .wrapper {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        width: 30%;
+      }
+    }
+  }
+}

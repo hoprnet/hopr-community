@@ -1,0 +1,120 @@
+.container {
+  .header {
+    width: 350px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(90deg, var(--purple) 0%, var(--blue) 100%);
+
+    .menu {
+      width: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .left {
+        margin-left: 20px;
+        font-weight: 600 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          cursor: pointer;
+        }
+
+        span {
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+
+  .content {
+    width: 350px;
+    height: 410px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--grey);
+    flex-direction: column;
+
+    span:nth-child(2) {
+      width: 200px;
+      font-size: 12px;
+      margin-top: 20px;
+      color: var(--sl-grey);
+    }
+
+    .toReceive {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+      height: 20px;
+
+      span {
+        width: 70px;
+        height: 20px;
+        margin-top: 0;
+        color: var(--sl-grey);
+        margin-top: 5px;
+      }
+
+      img {
+        width: 20px;
+      }
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 180px;
+      margin-top: 25px;
+      background-color: transparent;
+      border: 1px solid var(--sl-grey);
+      border-radius: 20px;
+      padding: 13px;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      color: var(--sl-grey);
+
+      &:hover {
+        border: 1px solid var(--white);
+        color: var(--white);
+      }
+    }
+  }
+
+  .footer {
+    width: 350px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    flex-direction: column;
+    font-size: 12px;
+    background-color: var(--grey);
+
+    img {
+      width: 80px;
+      height: 18.75px;
+      margin-top: 5px;
+    }
+
+    .resizer {
+      width: 160px;
+      height: 5px;
+      background: linear-gradient(90deg, var(--purple) 0%, var(--blue) 100%);
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+  }
+}
