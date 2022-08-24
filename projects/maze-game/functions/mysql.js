@@ -82,11 +82,11 @@ export async function getLobbies (payload) {
   let query1 = await queryDB(escape`
     SELECT *, UNIX_TIMESTAMP(startsAt)-UNIX_TIMESTAMP(NOW()) AS startsAtSec
     FROM maze_lobbies
-    WHERE maze_lobbies.timestamp >= (NOW() - INTERVAL 12 HOUR) AND enviorement = ${environment}
+    WHERE maze_lobbies.timestamp >= (NOW() - INTERVAL 20 MINUTE) AND enviorement = ${environment}
   `);
   let query2 = await queryDB(escape`
     SELECT lobbyId, COUNT(lobbyId) AS count FROM maze_players 
-    WHERE timestamp >= (NOW() - INTERVAL 12 HOUR)
+    WHERE timestamp >= (NOW() - INTERVAL 20 MINUTE)
     GROUP BY lobbyId;
   `);
   let combined = query1.map ( lobby=>{

@@ -25,7 +25,11 @@ const HoprButton = styled(Button)`
 `
 
 
-function App(props) {
+function WinOverlay(props) {
+  const winnerTime = Math.min(...props.wonAt.map(item => item.wonAt));
+  const winner = props.wonAt.filter(item => item.wonAt === winnerTime)[0]
+  console.log('winner', winner)
+
   return (
     <div 
       className="win-overlay"
@@ -36,22 +40,31 @@ function App(props) {
         <ReactLogo2
           className="win-overlay--logo"
         />
-        <div
-          className="win-overlay--title"
-        > 
-          Player { props.win } won!
-        </div>
-        <HoprButton 
+          {
+            winner.peerId === props.peerId ?
+            <div
+              className="win-overlay--title"
+            > 
+              You won!
+            </div>
+            :
+              <div
+                className="win-overlay--title"
+              > 
+                Player {winner.peerId} won!
+              </div>
+          }
+        {/* <HoprButton 
           variant="outlined"
           onClick={props.onPlayAgain}
           disabled
         >
           Play again
-        </HoprButton>
+        </HoprButton> */}
       </div>
 
     </div>
   );
 }
 
-export default App;
+export default WinOverlay;

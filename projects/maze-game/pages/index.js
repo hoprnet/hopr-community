@@ -13,18 +13,23 @@ import { getPeerId, sendMessage } from '../functions/hopr-sdk'
 export default function Home() {  
   const router = useRouter();
   
-  const [win, setWin] = useState(null);
+  const [win, set_win] = useState(null);
   const [lobby, set_lobby] = useState(true);
   const [lobbyId, set_lobbyId] = useState(null);
   const childFunc = React.useRef(null);
   const hopr = React.useRef({apiToken: null, apiEndpoint: null, peerId: null, environment: null});
 
+  const [apiEndpoint, set_apiEndpoint] = useState(null);
+  const [apiToken, set_apiToken] = useState(null);
   const [peerId, set_peerId] = useState(null);
+
   const [environment, set_environment] = useState(null);
   const [players, set_players] = useState([]);
   const [map, set_map] = useState(false);
 
   const [gotHoprAPI, set_gotHoprAPI] = useState(false);
+  const [startedAt, set_startedAt] = useState();
+  const [wonAt, set_wonAt] = useState([]);
 
   const [remotePos1, set_remotePos1] = useState([0,1]);
   const [remotePos2, set_remotePos2] = useState([0,1]);
@@ -38,15 +43,29 @@ export default function Home() {
   //   set_gotHoprAPI(true);
   // }, []);
 
-  useEffect(()=>{
-    console.log('players', players)
-  }, [players]);
+  //DEV WIN
+  // useEffect(()=>{
+  //   set_lobby(false)
+  //   set_peerId('16Uiu2HAkwrugLw54kVtDB4x9AULNv7kVqVkP5PAYVQwbNT4fJmpQ')
+  //   set_win('16Uiu2HAkwrugLw54kVtDB4x9AULNv7kVqVkP5PAYVQwbNT4fJmpQ')
+  //   set_wonAt([
+  //     {wonAt: 1234, peerId: '16Uiu2HAkwrugLw54kVtDB4x9AULNv7kVqVkP5PAYVQwbNT4fJmpQ'}
+  //   ])
+  // }, []);
+
+
+  // useEffect(()=>{
+  //   console.log('players', players)
+  // }, [players]);
 
   useEffect(()=>{
     if(!router.isReady) return;
     console.log('router ready:', router)
-    hopr.current.apiToken = router.query.apiToken;
-    hopr.current.apiEndpoint = router.query.apiEndpoint;
+    // hopr.current.apiToken = router.query.apiToken;
+    // hopr.current.apiEndpoint = router.query.apiEndpoint;
+    set_apiEndpoint(router.query.apiEndpoint);
+    set_apiToken(router.query.apiToken);
+
     set_gotHoprAPI(true);
   }, [router.isReady]);
 
@@ -88,6 +107,47 @@ export default function Home() {
   function startGame(){
     console.log('Index: startGame')
     set_lobby(false);
+    set_startedAt(Date.now())
+  }
+
+  function winGame(input){
+    set_win(input);
+    const wonAt = Date.now() - startedAt;
+    let message = {
+      from: hopr.current.peerId,
+      wonAt
+    }
+    for (let i = 0; i < players.length; i++) {
+      if(players[i].peerId !== peerId) {
+        sendMessage(hopr.current.apiEndpoint, hopr.current.apiToken, players[i].peerId, JSON.stringify(message));
+      }
+    }
+    let wonAtTmp = JSON.parse(JSON.stringify(wonAt));
+    wonAtTmp.push({wonAt, peerId: hopr.current.peerId})
+    set_wonAt(wonAtTmp);
+  }
+
+  function gotWsMessage(input){
+    let message = JSON.parse(input);
+    if(message.postion){
+      set_remotePos1(message.postion);
+    } else if (message.wonAt) {
+      let wonAtTmp = JSON.parse(JSON.stringify(wonAt));
+      wonAtTmp.push({wonAt: message.wonAt, peerId: message.from})
+      set_wonAt(wonAtTmp);
+    }
+  }
+
+  function setApiEndpoint(input){
+    set_apiEndpoint(input);
+    set_peerId(null);
+    router.push(`/?apiEndpoint=${input}${apiToken?.length > 0 ? `&apiToken=${apiToken}` : ''}`)
+  }
+
+  function setApiToken(input){
+    set_apiToken(input);
+    set_peerId(null);
+    router.push(`/?${apiEndpoint?.length > 0 ? `apiEndpoint=${apiEndpoint}&` : ''}apiToken=${input}`)
   }
 
   
@@ -99,7 +159,7 @@ export default function Home() {
       {
         map &&
         <Board
-          onWin={setWin}
+          onWin={winGame}
           map={map}
           newPlayerPosition={playerNewPosition}
           childFunc={childFunc}
@@ -109,8 +169,10 @@ export default function Home() {
       {
         lobby &&
           <LobbyOverlay
-            apiEndpoint={hopr.current.apiEndpoint}
-            apiToken={hopr.current.apiToken}
+            apiEndpoint={apiEndpoint}
+            apiToken={apiToken}
+            setApiEndpoint={setApiEndpoint}
+            setApiToken={setApiToken}
             lobbyId={lobbyId}
             set_lobbyId={set_lobbyId}
             peerId={peerId}
@@ -125,25 +187,20 @@ export default function Home() {
       {
         win &&
           <WinOverlay
-            win={win}
-            onPlayAgain={resetGame}
+            wonAt={wonAt}
+            peerId={peerId}
+        //    onPlayAgain={resetGame}
           />
       }
       {
-        hopr.current.apiEndpoint && hopr.current.apiToken &&
+        peerId && apiEndpoint && apiToken &&
         <WebSockerHandler
-          apiEndpoint={hopr.current.apiEndpoint}
-          apiToken={hopr.current.apiToken}
-          onMessage={(input)=>{
-            console.log('WS: onMessage', input);
-            set_remotePos1(JSON.parse(input).postion);
-          }}
+          apiEndpoint={apiEndpoint}
+          apiToken={apiToken}
+          onMessage={gotWsMessage}
         />
       }
-      {/* <p onClick={()=>{fakeRemote([0,1])}}>Press 0,1</p>
-      <p onClick={()=>{fakeRemote([1,1])}}>Press 1,1</p> */}
 
-      {/* <img src={ReactLogo} className="App-logo " alt="logo" /> */}
     </div>
   );
 }

@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import DoneIcon from '@mui/icons-material/Done';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import { getPeerId } from '../../functions/hopr-sdk';
-
+import { isValidHttpUrl } from '../../functions/shared'
 
 
 
@@ -19,13 +19,19 @@ const SLobbyOverlay = styled.div`
   top: 0;
   left: 0;
   width: calc( 100vw );
-  height: calc( 100vh );
+  min-height: calc( 100vh );
   padding: 64px;
+  height: 100%;
+  @media only screen and (max-width: 500px) {
+    padding: 0px;
+    height: 100%;
+  }
 `
 
 const LobbyContainer = styled.div`
   width: 100%;
   height: 100%;
+  overflow-y: auto;
   background: rgba(250 250 250 / 95%);
   padding: 16px;
   display: flex;
@@ -147,8 +153,15 @@ function LobbyOverlay(props) {
   function testNetwork(){
     console.log('Test')
     if(props.apiEndpoint && props.apiToken){
-      const host = new URL(props.apiEndpoint).host;
-      props.set_environment(host.split('.')[0].match(/_\w+/)[0].replace('_','') || 'any' );
+      let host, environment = 'any';
+      try {
+        host = new URL(props.apiEndpoint).host;
+        environment = host.split('.')[0].match(/_\w+/)[0].replace('_','') || 'any';
+      } catch (e) {
+        if(props.apiEndpoint.includes('localhost') || props.apiEndpoint.includes('127.0.0.1')) environment = 'localhost';
+      }
+      props.set_environment(environment);
+      console.log('Lobby environment:', environment);
       const fetchData = async () => {
         const id = await getPeerId(props.apiEndpoint, props.apiToken);
         if(id) {
@@ -299,24 +312,25 @@ function LobbyOverlay(props) {
           id="filled-size-small"
           variant="filled"
           size="small"
-          disabled
           value={props.apiEndpoint ? props.apiEndpoint : ''}
+          onChange={(event)=>{props.setApiEndpoint(event.target.value)}}
         />
         <HoprTextField
           label="apiToken"
           id="filled-size-small"
           variant="filled"
           size="small"
-          disabled
           value={props.apiToken? props.apiToken : ''}
+          onChange={(event)=>{props.setApiToken(event.target.value)}}
         />
         <Row>
           <Button 
             variant="outlined"
             onClick={testNetwork}
-          >Test</Button>
+            disabled={!!props.peerId}
+          >Connect</Button>
           {
-            networkWorking ? 
+            !!props.peerId ? 
               <DoneIcon/>
               :
               <DoNotDisturbIcon/>

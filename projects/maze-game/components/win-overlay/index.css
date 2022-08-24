@@ -2,8 +2,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: calc( 100vw - 128px );
-  height: calc( 100vh - 128px );
+  width: calc( 100vw );
+  height: calc( 100vh );
   padding: 64px;
 }
 
@@ -25,7 +25,10 @@
 
 .win-overlay--title {
   color: white;
-  font-size: 80px;
+  text-align: center;
+  padding: 8px;
+  font-size: 44px;
   margin-top: 64px;
   font-family: Source Code Pro,monospace;
+  word-wrap: anywhere;
 }
