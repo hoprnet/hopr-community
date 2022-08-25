@@ -50,10 +50,6 @@ function Board(props) {
       console.log('Win!', playerPosition);
       setWin(1);
       props.onWin(1);
-    } else if(maze && playerPosition2[0] === maze.length - 1 && playerPosition2[1] === maze[0].length - 2){
-      console.log('Win!', playerPosition);
-      setWin(2);
-      props.onWin(2);
     }
   }, [playerPosition, playerPosition2]);
 

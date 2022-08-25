@@ -122,9 +122,7 @@ export default function Home() {
         sendMessage(hopr.current.apiEndpoint, hopr.current.apiToken, players[i].peerId, JSON.stringify(message));
       }
     }
-    let wonAtTmp = JSON.parse(JSON.stringify(wonAt));
-    wonAtTmp.push({wonAt, peerId: hopr.current.peerId})
-    set_wonAt(wonAtTmp);
+    set_wonAt(oldArray => [...oldArray, {wonAt, peerId: hopr.current.peerId}]);
   }
 
   function gotWsMessage(input){
@@ -132,9 +130,8 @@ export default function Home() {
     if(message.postion){
       set_remotePos1(message.postion);
     } else if (message.wonAt) {
-      let wonAtTmp = JSON.parse(JSON.stringify(wonAt));
-      wonAtTmp.push({wonAt: message.wonAt, peerId: message.from})
-      set_wonAt(wonAtTmp);
+      console.log('message.wonAt')
+      set_wonAt(oldArray => [...oldArray, {wonAt: message.wonAt, peerId: message.from}]);
     }
   }
 
@@ -187,7 +184,7 @@ export default function Home() {
           />
       }
       {
-        win &&
+        wonAt.length > 0 &&
           <WinOverlay
             wonAt={wonAt}
             peerId={peerId}
