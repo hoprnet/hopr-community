@@ -39,8 +39,8 @@ https://user-images.githubusercontent.com/78161484/186307184-0d5a4334-4c02-4dd1-
 
 ## Future Features
 
-  - [ ] Release on Chrome Web Extension Store (and other browsers).
-  - [ ] Make message history persistent (Cookies).
+  - [X] Release on Chrome Web Extension Store (and other browsers).
+  - [ ] Make message history persistent.
   - [ ] Extend token transfer to DAI tokens.
   - [ ] Create a Login window, abstracting HOPR node configuration and launching on demand nodes to non-tech-savvy users.
   - [ ] Currenty, aliases are stored locally. HOPR api support setting, reading and deleting peer alias and will be implemented soon.
