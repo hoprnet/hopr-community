@@ -1,0 +1,51 @@
+.container {
+  width: 350px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  span {
+    color: var(--sl-grey);
+    font-size: 13px;
+  }
+
+  .data {
+    width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .id {
+      width: 200px;
+      align-items: flex-start;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      justify-content: space-between;
+      flex-direction: row;
+      border: solid 1px var(--sl-grey);
+      padding: 5px;
+      padding-left: 12px;
+      padding-right: 12px;
+      border-radius: 20px;
+    }
+
+    .pointer {
+      img {
+        cursor: pointer;
+        width: 13px;
+        transition: all 0.3s ease-in-out;
+      }
+    }
+  }
+
+  .divisor {
+    width: 270px;
+    height: 0.5px;
+    background-color: var(--sl-grey);
+    position: absolute;
+    margin-top: 55px;
+  }
+}
