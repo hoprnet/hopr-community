@@ -3,7 +3,29 @@
 ## Hosted Subgraph
 [https://thegraph.com/hosted-service/subgraph/eliaxie/hopr-channels](https://thegraph.com/hosted-service/subgraph/eliaxie/hopr-channels)
 
-## How to run
+
+## Installation
+```
+yarn
+yarn upgrade @hoprnet/hopr-ethereum
+```
+Populate the contract address providing environment string and network name
+```
+yarn pre-build <environment> <network>
+```
+e.g. `yarn pre-build paleochora xdai`
+
+Then follow by compiling the subgraph deployment code
+```
+yarn codegen
+yarn build --network <network>
+```
+Next, get the access token from https://thegraph.com/hosted-service/dashboard and deploy, e.g. to the production network
+```
+ACCESS_TOKEN=<access_token> yarn deploy-xdai
+```
+
+## How to run (deprecated)
 
 Here's the _tl;dr_ version:
 

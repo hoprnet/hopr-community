@@ -1,35 +1,64 @@
-import {networks, PublicNetworks, ContractNames, getContractData, ContractData} from "@hoprnet/hopr-ethereum"
+import {PublicNetworks, ContractNames, getContractData, ContractData} from "@hoprnet/hopr-ethereum"
 import fs from 'fs'
 
-type Config = {
-    network: string
-    channelAddress: string
-    startBlock: string
+// As in https://thegraph.com/docs/en/deploying/deploying-a-subgraph-to-hosted/#using-graph-cli
+type DataSourceConfig = {
+    address: string
+    startBlock: number
 }
 
-const supportedNetworks = ['goerli', 'matic', 'xdai'];
-
-const conversion = (contract: ContractData, deployedNetwork: PublicNetworks): Config | null => {
-    if (deployedNetwork === 'polygon') {
-        return {network: 'matic', channelAddress: contract.address, startBlock: (contract as any).blockNumber.toString() ?? 0};
+type NetworkConfig = {
+    [network: string]: {
+        [dataSource: string]: DataSourceConfig
     }
+}
+
+// remove matic
+const supportedNetworks = ['goerli', 'xdai'];
+
+const conversion = (contract: ContractData, deployedNetwork: PublicNetworks): NetworkConfig | null => {
+    // FIXME: legacy pology does not exist anymore
+    // if (deployedNetwork === 'polygon') {
+    //     return {network: 'matic', channelAddress: contract.address, startBlock: (contract as any).blockNumber.toString() ?? 0};
+    // }
     if (supportedNetworks.includes(deployedNetwork)) {
-        return {network:deployedNetwork, channelAddress: contract.address, startBlock: (contract as any).blockNumber.toString() ?? 0};
+        return {
+            [deployedNetwork]: {
+                "HoprChannels": {
+                    "address": contract.address,
+                    "startBlock": (contract as any).blockNumber ?? 0
+                }
+            }
+        }
     }
     return null;
 }
 
-const main = () => {
-    const deployedNetworks = Object.keys(networks) as PublicNetworks[];
-    console.log(deployedNetworks)
+/**
+ * @param environmentId string name of environment
+ * @param networkName string name of network
+ */
+const main = (environmentId: string, networkName: string) => {
+    if (environmentId && networkName) {
+        console.log(`Fetching contract data from environment ${environmentId}`)
+        const deployedNetwork = networkName as PublicNetworks
+        // Object.keys(Networks) as PublicNetworks[];
+        console.log(deployedNetwork)
 
-    deployedNetworks.forEach((deployedNetwork: PublicNetworks) => {
-        const contract = getContractData(deployedNetwork, 'HoprChannels' as ContractNames)
+    
+        const contract = getContractData(deployedNetwork, environmentId, 'HoprChannels' as ContractNames)
+        console.log(`contract ${contract.address} of deployedNetwork ${deployedNetwork}`)
         const config = conversion(contract, deployedNetwork);
         if (config) {
-            fs.writeFileSync(`${__dirname}/../config/${config.network}.json`, JSON.stringify(config, null, 2));
+            fs.writeFileSync(`${__dirname}/../networks.json`, JSON.stringify(config, null, 2));
         }
-    })
+    } else {
+        console.log("Missing <environmentId>. Quit.");
+        process.exit(1);
+    }
 }
 
-main()
+/**
+ * 
+ */
+main(process.argv[2], process.argv[3])

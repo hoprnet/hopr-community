@@ -21,7 +21,7 @@ import { BsArrowsFullscreen, BsFullscreenExit, BsZoomIn, BsZoomOut } from "react
 import EndpointField from "./EndpointField";
 import { isSSR, getUrlParams, Settings } from "../utils/api"
 
-const APIURL = 'https://api.thegraph.com/subgraphs/name/eliaxie/hopr-channels'
+const APIURL = 'https://api.thegraph.com/subgraphs/name/hoprnet/hopr-channels'
 const client = new ApolloClient({
   uri: APIURL,
   cache: new InMemoryCache(),

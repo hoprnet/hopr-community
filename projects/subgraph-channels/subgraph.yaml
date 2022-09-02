@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: HOPR Channels
 repository: https://github.com/hoprnet/hopr-community
 schema:
@@ -6,14 +6,14 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: HoprChannels
-    network: {{network}}
+    network: xdai
     source:
       abi: HoprChannels
-      address: "{{channelAddress}}"
-      startBlock: {{startBlock}}
+      address: "0xCe7209FD81ED129C2ea8369715c168419e4148Ef"
+      startBlock: 23643396
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Account
@@ -26,8 +26,10 @@ dataSources:
       eventHandlers:
         - event: Announcement(indexed address,bytes,bytes)
           handler: handleAnnouncement
-        - event: ChannelUpdated(indexed address,indexed address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
+        - event: ChannelUpdated(indexed address,indexed
+            address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
           handler: handleChannelUpdated
-        - event: TicketRedeemed(indexed address,indexed address,bytes32,uint256,uint256,bytes32,uint256,uint256,bytes)
+        - event: TicketRedeemed(indexed address,indexed
+            address,bytes32,uint256,uint256,bytes32,uint256,uint256,bytes)
           handler: handleTicketRedeemed
       file: ./src/mapping.ts
