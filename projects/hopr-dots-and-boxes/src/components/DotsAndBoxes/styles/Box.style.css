@@ -1,0 +1,23 @@
+.box {
+	font-size: 24px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.box3 {
+	height: 60px;
+	width: 60px;
+}
+
+.box4 {
+	height: 45px;
+	width: 45px;
+	font-size: 24px;
+}
+
+.box5 {
+	height: 40px;
+	width: 40px;
+	font-size: 24px;
+}
