@@ -252,10 +252,10 @@
   dependencies:
     assemblyscript "0.19.10"
 
-"@hoprnet/hopr-ethereum@^1.90.0-next.8":
-  version "1.90.0-next.8"
-  resolved "https://registry.yarnpkg.com/@hoprnet/hopr-ethereum/-/hopr-ethereum-1.90.0-next.8.tgz#eab45baf85843ac417b2bf49ebeb383bed485bd0"
-  integrity sha512-O88eYidaNKF9I1HVvvt9yYwOlvMJozbLdv21FntJX+sN9gFmHbzh9eh63LAHaIcM9gkRO4poK9+NJ05yKdrY/w==
+"@hoprnet/hopr-ethereum@^1.90.14":
+  version "1.90.14"
+  resolved "https://registry.yarnpkg.com/@hoprnet/hopr-ethereum/-/hopr-ethereum-1.90.14.tgz#482a0de2239baf92ce803cb9bc5760714e1a9c26"
+  integrity sha512-NOoaTdwYsvtuYEckwFG+8NS5azJHix21XEcMi71ow+SCGqrI4ONp+7de3tZe28zyV5pM/9SQUIhaiqS457FFbA==
   dependencies:
     "@openzeppelin/contracts" "4.4.2"
     "@openzeppelin/contracts-v3-0-1" "npm:@openzeppelin/contracts@3.4.2"
@@ -1484,9 +1484,9 @@ glob@^7.1.3:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-"gluegun@git+https://github.com/edgeandnode/gluegun.git#v4.3.1-pin-colors-dep":
+"gluegun@https://github.com/edgeandnode/gluegun#v4.3.1-pin-colors-dep":
   version "4.3.1"
-  resolved "git+https://github.com/edgeandnode/gluegun.git#b34b9003d7bf556836da41b57ef36eb21570620a"
+  resolved "https://github.com/edgeandnode/gluegun#b34b9003d7bf556836da41b57ef36eb21570620a"
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"

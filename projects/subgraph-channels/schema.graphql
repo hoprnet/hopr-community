@@ -71,3 +71,12 @@ type Channel @entity {
   "number of redeemed tickes"
   redeemedTicketCount: BigInt!
 }
+
+type NetworkRegistry @entity {
+  "Account that registered nodes"
+  id: Bytes!
+  "List of HOPR nodes (or peers) registered by the account"
+  registeredPeers: [Bytes!]!
+  "If the account is eligible"
+  eligibility: Boolean!
+}
