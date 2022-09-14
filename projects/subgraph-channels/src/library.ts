@@ -1,7 +1,7 @@
 import { BigInt, BigDecimal, Address, crypto, Bytes } from '@graphprotocol/graph-ts'
 import { concat } from '@graphprotocol/graph-ts/helper-functions'
 import { ChannelUpdated, ChannelUpdatedNewStateStruct, ChannelUpdated__Params, TicketRedeemed__Params } from '../generated/HoprChannels/HoprChannels'
-import { Account, Channel, StatusSnapshot } from '../generated/schema'
+import { Account, Channel, StatusSnapshot, NetworkRegistry } from '../generated/schema'
 
 /************************************
  ********** General Helpers *********
@@ -108,4 +108,16 @@ export function createStatusSnapshot(event: ChannelUpdated): void {
     statusSnapshot.status = convertStatusToEnum(event.params.newState)
     statusSnapshot.timestamp = event.block.timestamp
     statusSnapshot.save()
+}
+
+export function getOrInitiateRegistration(accountId: Bytes, peerId?: string): NetworkRegistry {
+  let registry = NetworkRegistry.load(accountId)
+
+  if (registry == null) {
+    registry = new NetworkRegistry(accountId)
+    registry.registeredPeers = peerId ? [peerId] : []
+    registry.eligibility = false
+  }
+
+  return registry as NetworkRegistry;
 }

@@ -1,7 +1,8 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 import { Announcement, ChannelUpdated, HoprChannels, TicketRedeemed } from '../generated/HoprChannels/HoprChannels'
+import { Deregistered, DeregisteredByOwner, EligibilityUpdated, Registered, RegisteredByOwner } from '../generated/HoprNetworkRegistry/HoprNetworkRegistry'
 import { Account, Channel, Ticket } from '../generated/schema'
-import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD, zeroBigInt } from './library';
+import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, getOrInitiateRegistration, initiateChannel, oneBigInt, zeroBD, zeroBigInt } from './library';
 import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleAnnouncement(event: Announcement): void {
@@ -130,4 +131,35 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     }
     channel.save()
     ticket.save()
+}
+
+export function handleRegistered(event: Registered | RegisteredByOwner): void {
+    let account = getOrInitiateRegistration(event.params.account, event.params.hoprPeerId)
+    let registeredPeers = account.registeredPeers
+
+    if (registeredPeers.indexOf(event.params.hoprPeerId) == -1) {
+        registeredPeers.push(event.params.hoprPeerId)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleDeregistered(event: Deregistered | DeregisteredByOwner): void {
+    let account = getOrInitiateRegistration(event.params.account, event.params.hoprPeerId)
+    let registeredPeers = account.registeredPeers
+    let elementIndex = registeredPeers.indexOf(event.params.hoprPeerId)
+
+    if ( elementIndex == -1) {
+        log.error(` [ error] Cannot find registration: {}`, [event.params.account.toHex(), event.params.hoprPeerId])
+    } else {
+        registeredPeers.splice(elementIndex, 1)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleEligibilityUpdated(event: EligibilityUpdated): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    account.eligibility = event.params.eligibility
+    account.save()
 }
