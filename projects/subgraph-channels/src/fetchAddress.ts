@@ -16,7 +16,7 @@ type NetworkConfig = {
 // remove matic
 const supportedNetworks = ['goerli', 'xdai'];
 
-const conversion = (contract: ContractData, deployedNetwork: PublicNetworks): NetworkConfig | null => {
+const conversion = (channelContract: ReturnType<typeof getContractData>, nrContract: ReturnType<typeof getContractData>,  deployedNetwork: PublicNetworks): NetworkConfig | null => {
     // FIXME: legacy pology does not exist anymore
     // if (deployedNetwork === 'polygon') {
     //     return {network: 'matic', channelAddress: contract.address, startBlock: (contract as any).blockNumber.toString() ?? 0};
@@ -25,8 +25,12 @@ const conversion = (contract: ContractData, deployedNetwork: PublicNetworks): Ne
         return {
             [deployedNetwork]: {
                 "HoprChannels": {
-                    "address": contract.address,
-                    "startBlock": (contract as any).blockNumber ?? 0
+                    "address": channelContract.address,
+                    "startBlock": channelContract.blockNumber ?? channelContract.receipt.blockNumber
+                },
+                "HoprNetworkRegistry": {
+                    "address": nrContract.address,
+                    "startBlock": nrContract.blockNumber ?? nrContract.receipt.blockNumber
                 }
             }
         }
@@ -45,10 +49,12 @@ const main = (environmentId: string, networkName: string) => {
         // Object.keys(Networks) as PublicNetworks[];
         console.log(deployedNetwork)
 
-    
-        const contract = getContractData(deployedNetwork, environmentId, 'HoprChannels' as ContractNames)
-        console.log(`contract ${contract.address} of deployedNetwork ${deployedNetwork}`)
-        const config = conversion(contract, deployedNetwork);
+        // HoprChannels
+        const hoprChannelcontract = getContractData(deployedNetwork, environmentId, 'HoprChannels' as ContractNames)
+        console.log(`Channel contract ${hoprChannelcontract.address} of deployedNetwork ${deployedNetwork}`)
+        const hoprNetworkRegistrycontract = getContractData(deployedNetwork, environmentId, 'HoprNetworkRegistry' as ContractNames)
+        console.log(`Network Registry contract ${hoprNetworkRegistrycontract.address} of deployedNetwork ${deployedNetwork}`)
+        const config = conversion(hoprChannelcontract, hoprNetworkRegistrycontract, deployedNetwork);
         if (config) {
             fs.writeFileSync(`${__dirname}/../networks.json`, JSON.stringify(config, null, 2));
         }

@@ -1,7 +1,7 @@
 import { BigInt, BigDecimal, Address, crypto, Bytes } from '@graphprotocol/graph-ts'
 import { concat } from '@graphprotocol/graph-ts/helper-functions'
-import { ChannelUpdated, ChannelUpdatedNewStateStruct, ChannelUpdated__Params, TicketRedeemed__Params } from '../generated/HoprChannels/HoprChannels'
-import { Account, Channel, StatusSnapshot } from '../generated/schema'
+import { ChannelUpdated, ChannelUpdatedNewStateStruct } from '../generated/HoprChannels/HoprChannels'
+import { Account, Channel, StatusSnapshot, NetworkRegistry } from '../generated/schema'
 
 /************************************
  ********** General Helpers *********
@@ -20,7 +20,7 @@ export function bigDecimalExp18(): BigDecimal {
 }
 
 export function zeroBytes(): Bytes {
-  return changetype<Bytes>(Bytes.fromHexString('0x0000000000000000000000000000000000000000000000000000000000000000'))
+  return Bytes.fromHexString('0x0000000000000000000000000000000000000000000000000000000000000000')
 }
 
 export function zeroBD(): BigDecimal {
@@ -43,7 +43,7 @@ export function convertEthToDecimal(eth: BigInt): BigDecimal {
  ********* Specific Helpers *********
  ************************************/
  export function getChannelId(source: Address, destination: Address): Bytes {
-    return changetype<Bytes>(crypto.keccak256(concat(source, destination)))
+    return Bytes.fromByteArray(crypto.keccak256(concat(source, destination)))
 }
 
 export function convertStatusToEnum(update: ChannelUpdatedNewStateStruct): string {
@@ -65,7 +65,7 @@ export function convertI32ToEnum(status: i32): string {
     }
 }
 
-export function getOrInitiateAccount(accountId: string): Account {
+export function getOrInitiateAccount(accountId: Bytes): Account {
     let account = Account.load(accountId)
 
     if (account == null) {
@@ -83,7 +83,7 @@ export function getOrInitiateAccount(accountId: string): Account {
     return account as Account;
 }
 
-export function initiateChannel(channelId: string, sourceId: string, destinationId: string, commitment: Bytes): Channel {
+export function initiateChannel(channelId: Bytes, sourceId: Bytes, destinationId: Bytes, commitment: Bytes): Channel {
     let channel = new Channel(channelId);
     channel.source = sourceId
     channel.destination = destinationId
@@ -104,8 +104,20 @@ export function initiateChannel(channelId: string, sourceId: string, destination
 export function createStatusSnapshot(event: ChannelUpdated): void {
     let statusSnapshotId = event.transaction.hash.toHex() + "-" + event.logIndex.toString()
     let statusSnapshot = new StatusSnapshot(statusSnapshotId)
-    statusSnapshot.channel = getChannelId(event.params.source, event.params.destination).toHex()
+    statusSnapshot.channel = getChannelId(event.params.source, event.params.destination)
     statusSnapshot.status = convertStatusToEnum(event.params.newState)
     statusSnapshot.timestamp = event.block.timestamp
     statusSnapshot.save()
+}
+
+export function getOrInitiateRegistration(accountId: Bytes): NetworkRegistry {
+  let registry = NetworkRegistry.load(accountId)
+
+  if (registry == null) {
+    registry = new NetworkRegistry(accountId)
+    registry.eligibility = false
+    registry.registeredPeers = []
+  }
+
+  return registry as NetworkRegistry;
 }

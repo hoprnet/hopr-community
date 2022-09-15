@@ -9,11 +9,11 @@ dataSources:
     network: xdai
     source:
       abi: HoprChannels
-      address: "0xCe7209FD81ED129C2ea8369715c168419e4148Ef"
-      startBlock: 23643396
+      address: "0xFaBeE463f31E39eC8952bBfB4490C41103bf573e"
+      startBlock: 24097267
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Account
@@ -32,4 +32,32 @@ dataSources:
         - event: TicketRedeemed(indexed address,indexed
             address,bytes32,uint256,uint256,bytes32,uint256,uint256,bytes)
           handler: handleTicketRedeemed
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: HoprNetworkRegistry
+    network: xdai
+    source:
+      abi: HoprNetworkRegistry
+      address: "0x819E6a81e1e3f96CF1ac9200477C2d09c676959D"
+      startBlock: 24097272
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - NetworkRegistry
+      abis:
+        - name: HoprNetworkRegistry
+          file: ./abis/HoprNetworkRegistry.json
+      eventHandlers:
+        - event: Registered(indexed address,string)
+          handler: handleRegistered
+        - event: Deregistered(indexed address,string)
+          handler: handleDeregistered
+        - event: RegisteredByOwner(indexed address,string)
+          handler: handleOwnerRegistered
+        - event: DeregisteredByOwner(indexed address,string)
+          handler: handleDeregistered
+        - event: EligibilityUpdated(indexed address,indexed bool)
+          handler: handleEligibilityUpdated
       file: ./src/mapping.ts

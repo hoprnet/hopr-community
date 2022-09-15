@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.30.1",
-    "@hoprnet/hopr-ethereum": "latest",
+    "@hoprnet/hopr-ethereum": "^1.90.14",
     "@types/node": "^16.10.1",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
