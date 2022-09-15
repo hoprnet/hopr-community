@@ -133,8 +133,8 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     ticket.save()
 }
 
-export function handleRegistered(event: Registered | RegisteredByOwner): void {
-    let account = getOrInitiateRegistration(event.params.account, event.params.hoprPeerId)
+export function handleRegistered(event: Registered): void {
+    let account = getOrInitiateRegistration(event.params.account)
     let registeredPeers = account.registeredPeers
 
     if (registeredPeers.indexOf(event.params.hoprPeerId) == -1) {
@@ -144,8 +144,33 @@ export function handleRegistered(event: Registered | RegisteredByOwner): void {
     account.save()
 }
 
-export function handleDeregistered(event: Deregistered | DeregisteredByOwner): void {
-    let account = getOrInitiateRegistration(event.params.account, event.params.hoprPeerId)
+export function handleOwnerRegistered(event: RegisteredByOwner): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    let registeredPeers = account.registeredPeers
+
+    if (registeredPeers.indexOf(event.params.hoprPeerId) == -1) {
+        registeredPeers.push(event.params.hoprPeerId)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleDeregistered(event: Deregistered): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    let registeredPeers = account.registeredPeers
+    let elementIndex = registeredPeers.indexOf(event.params.hoprPeerId)
+
+    if ( elementIndex == -1) {
+        log.error(` [ error] Cannot find registration: {}`, [event.params.account.toHex(), event.params.hoprPeerId])
+    } else {
+        registeredPeers.splice(elementIndex, 1)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleOwnerDeregistered(event: DeregisteredByOwner): void {
+    let account = getOrInitiateRegistration(event.params.account)
     let registeredPeers = account.registeredPeers
     let elementIndex = registeredPeers.indexOf(event.params.hoprPeerId)
 

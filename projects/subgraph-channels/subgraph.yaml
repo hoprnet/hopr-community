@@ -45,10 +45,7 @@ dataSources:
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - Account
-        - Channel
-        - StatusSnapshot
-        - Ticket
+        - NetworkRegistry
       abis:
         - name: HoprNetworkRegistry
           file: ./abis/HoprNetworkRegistry.json
@@ -58,7 +55,7 @@ dataSources:
         - event: Deregistered(indexed address,string)
           handler: handleDeregistered
         - event: RegisteredByOwner(indexed address,string)
-          handler: handleRegistered
+          handler: handleOwnerRegistered
         - event: DeregisteredByOwner(indexed address,string)
           handler: handleDeregistered
         - event: EligibilityUpdated(indexed address,indexed bool)

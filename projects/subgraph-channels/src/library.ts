@@ -110,13 +110,13 @@ export function createStatusSnapshot(event: ChannelUpdated): void {
     statusSnapshot.save()
 }
 
-export function getOrInitiateRegistration(accountId: Bytes, peerId?: string): NetworkRegistry {
+export function getOrInitiateRegistration(accountId: Bytes): NetworkRegistry {
   let registry = NetworkRegistry.load(accountId)
 
   if (registry == null) {
     registry = new NetworkRegistry(accountId)
-    registry.registeredPeers = peerId ? [peerId] : []
     registry.eligibility = false
+    registry.registeredPeers = []
   }
 
   return registry as NetworkRegistry;
