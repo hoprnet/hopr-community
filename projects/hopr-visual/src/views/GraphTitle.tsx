@@ -26,7 +26,7 @@ const GraphTitle: FC<{ filters: FiltersState, refresh: boolean }> = ({ filters, 
 
   return (
     <div className="graph-title">
-      <h1>Paleochora Internal Testnet Network</h1>
+      <h1>Monte-Rosa Environment</h1>
       <h2>
         <i>
           {graph.order} node{graph.order > 1 ? "s" : ""}, {graph.size} edge
