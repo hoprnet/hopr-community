@@ -7,8 +7,7 @@ import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleAnnouncement(event: Announcement): void {
     log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHex()]);
-    let accountId = event.params.account.toHex();
-    let account = getOrInitiateAccount(accountId)
+    let account = getOrInitiateAccount(event.params.account)
     let multiaddr = account.multiaddr
 
     if (multiaddr.indexOf(event.params.multiaddr) == -1) {
@@ -23,19 +22,19 @@ export function handleAnnouncement(event: Announcement): void {
 export function handleChannelUpdated(event: ChannelUpdated): void {
     log.info(`[ info ] Handle channel update: start {}`, [event.transaction.hash.toHex()]);
     // channel source
-    let sourceId = event.params.source.toHex();
+    let sourceId = event.params.source;
     let source = getOrInitiateAccount(sourceId)
     log.info(`[ info ] Handle channel update: source {}`, [event.transaction.hash.toHex()]);
 
     // channel destination
-    let destinationId = event.params.destination.toHex();
+    let destinationId = event.params.destination;
     let destination = getOrInitiateAccount(destinationId)
     log.info(`[ info ] Handle channel update: destination {}`, [event.transaction.hash.toHex()]);
 
 
-    let channelId = getChannelId(event.params.source, event.params.destination).toHex()
+    let channelId = getChannelId(event.params.source, event.params.destination)
     let channel = Channel.load(channelId)
-    log.info(`[ info ] Address of the account updating the channel: {}`, [channelId]);
+    log.info(`[ info ] Address of the account updating the channel: {}`, [channelId.toHex()]);
     if (channel == null) {
         // update channel count
         log.info('New channel', [])
@@ -113,7 +112,7 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     // create new ticket
     let ticketId = channelId.toHex() + "-" + channelEpoch.toString() + "-" + ticketEpoch.toString() + "-" + ticketIndex.toString()
     let ticket = new Ticket(ticketId)
-    ticket.channel = channelId.toHex()
+    ticket.channel = channelId
     ticket.nextCommitment = event.params.nextCommitment
     ticket.ticketEpoch = ticketEpoch
     ticket.ticketIndex = ticketIndex
@@ -122,9 +121,9 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     ticket.winProb = event.params.winProb
     ticket.signature = event.params.signature
     // update channel
-    let channel = Channel.load(channelId.toHex())
+    let channel = Channel.load(channelId)
     if (channel == null) {
-        log.error("Redeem a ticket for non-existing channel", [])
+        log.error("Redeem a ticket for non-existing channel {}", [channelId.toHex()])
         return;
     } else {
         channel.redeemedTicketCount = channel.redeemedTicketCount.plus(oneBigInt())
