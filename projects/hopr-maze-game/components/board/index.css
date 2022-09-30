@@ -1,0 +1,98 @@
+.boardContainer {
+  /* width: 1280px;
+  height: 720px; */
+  width: 100%;
+  height: 92vh;
+  position: relative;
+  text-align: center;
+}
+
+.boardContainer:focus {
+  outline: none;
+}
+
+
+.maze-svg {
+  max-width: 100%;
+  max-height: 100%;
+  background: linear-gradient(#000050,#0000b4)
+}
+
+.main-stop {
+  stop-color: red;
+}
+.alt-stop {
+  stop-color: green;
+}
+
+#hopr-blue-gradient {
+  --color-stop: #000050;
+  --color-bot: #0000b4;
+}
+
+.background {
+  fill: url(#hopr-blue-gradient);
+}
+
+.ractange{
+  fill:rgba(0,0,0,0);
+  stroke-width:1;
+  /* stroke:rgb(255, 255, 255); */
+}
+
+.ractange.wall{
+  fill:rgba(255, 255, 255, 0.678);
+}
+
+.hopr-logo-maze-player-container[animation="true"] {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.hopr-logo-maze-player-container[win="true"] {
+  animation: App-logo-spin infinite 1s linear;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hopr-logo-maze-player-container.player-2 circle.hopr-icon_svg__hopr-circle {
+  fill: rgb(255 119 217)!important;
+}
+
+.hopr-logo-maze-player-container.player-1[overlap="true"] {
+  transform: scale(0.5) translate3d(43px, 31px, 0);
+}
+
+.hopr-logo-maze-player-container.player-2[overlap="true"] {
+  transform: scale(0.5) translate3d(35px, 0px, 0);
+}
+
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, -1px, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-1px, 1px, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(1px, 0, 0);
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

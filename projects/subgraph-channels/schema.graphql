@@ -1,6 +1,6 @@
 type Account @entity {
   "account's address"
-  id: ID!
+  id: Bytes!
   "account's public key"
   publicKey: Bytes
   multiaddr: [Bytes!]!
@@ -31,7 +31,7 @@ enum ChannelStatus {
 
 type StatusSnapshot @entity {
   "tx hash - tx index"
-  id: ID!
+  id: String!
   channel: Channel!
   status: ChannelStatus!
   timestamp: BigInt!
@@ -39,7 +39,7 @@ type StatusSnapshot @entity {
 
 type Ticket @entity {
   "channel epoch - ticket epoch - ticket index"
-  id: ID!
+  id: String!
   channel: Channel!
   nextCommitment: Bytes!
   ticketEpoch: BigInt!
@@ -52,7 +52,7 @@ type Ticket @entity {
 
 type Channel @entity {
   "the channel id, this should be computed like: https://github.com/hoprnet/hoprnet/blob/26abb110bc5d18b84786066676b379bbc00a331c/packages/utils/src/types/channelEntry.ts#L14"
-  id: ID!
+  id: Bytes!
   source: Account!
   destination: Account!
   balance: BigDecimal!
@@ -70,4 +70,13 @@ type Channel @entity {
   tickets: [Ticket!]! @derivedFrom(field: "channel")
   "number of redeemed tickes"
   redeemedTicketCount: BigInt!
+}
+
+type NetworkRegistry @entity {
+  "Account that registered nodes"
+  id: Bytes!
+  "List of HOPR nodes (or peers) registered by the account"
+  registeredPeers: [String!]!
+  "If the account is eligible"
+  eligibility: Boolean!
 }

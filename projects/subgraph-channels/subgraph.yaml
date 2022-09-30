@@ -1,0 +1,63 @@
+specVersion: 0.0.4
+description: HOPR Channels
+repository: https://github.com/hoprnet/hopr-community
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: HoprChannels
+    network: xdai
+    source:
+      abi: HoprChannels
+      address: "0xFaBeE463f31E39eC8952bBfB4490C41103bf573e"
+      startBlock: 24097267
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Channel
+        - StatusSnapshot
+        - Ticket
+      abis:
+        - name: HoprChannels
+          file: ./abis/HoprChannels.json
+      eventHandlers:
+        - event: Announcement(indexed address,bytes,bytes)
+          handler: handleAnnouncement
+        - event: ChannelUpdated(indexed address,indexed
+            address,(uint256,bytes32,uint256,uint256,uint8,uint256,uint32))
+          handler: handleChannelUpdated
+        - event: TicketRedeemed(indexed address,indexed
+            address,bytes32,uint256,uint256,bytes32,uint256,uint256,bytes)
+          handler: handleTicketRedeemed
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: HoprNetworkRegistry
+    network: xdai
+    source:
+      abi: HoprNetworkRegistry
+      address: "0x819E6a81e1e3f96CF1ac9200477C2d09c676959D"
+      startBlock: 24097272
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - NetworkRegistry
+      abis:
+        - name: HoprNetworkRegistry
+          file: ./abis/HoprNetworkRegistry.json
+      eventHandlers:
+        - event: Registered(indexed address,string)
+          handler: handleRegistered
+        - event: Deregistered(indexed address,string)
+          handler: handleDeregistered
+        - event: RegisteredByOwner(indexed address,string)
+          handler: handleOwnerRegistered
+        - event: DeregisteredByOwner(indexed address,string)
+          handler: handleDeregistered
+        - event: EligibilityUpdated(indexed address,indexed bool)
+          handler: handleEligibilityUpdated
+      file: ./src/mapping.ts

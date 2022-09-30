@@ -1,13 +1,13 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 import { Announcement, ChannelUpdated, HoprChannels, TicketRedeemed } from '../generated/HoprChannels/HoprChannels'
+import { Deregistered, DeregisteredByOwner, EligibilityUpdated, Registered, RegisteredByOwner } from '../generated/HoprNetworkRegistry/HoprNetworkRegistry'
 import { Account, Channel, Ticket } from '../generated/schema'
-import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, initiateChannel, oneBigInt, zeroBD, zeroBigInt } from './library';
+import { convertEthToDecimal, convertStatusToEnum, createStatusSnapshot, getChannelId, getOrInitiateAccount, getOrInitiateRegistration, initiateChannel, oneBigInt, zeroBD, zeroBigInt } from './library';
 import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleAnnouncement(event: Announcement): void {
     log.info(`[ info ] Address of the account announcing itself: {}`, [event.params.account.toHex()]);
-    let accountId = event.params.account.toHex();
-    let account = getOrInitiateAccount(accountId)
+    let account = getOrInitiateAccount(event.params.account)
     let multiaddr = account.multiaddr
 
     if (multiaddr.indexOf(event.params.multiaddr) == -1) {
@@ -22,19 +22,19 @@ export function handleAnnouncement(event: Announcement): void {
 export function handleChannelUpdated(event: ChannelUpdated): void {
     log.info(`[ info ] Handle channel update: start {}`, [event.transaction.hash.toHex()]);
     // channel source
-    let sourceId = event.params.source.toHex();
+    let sourceId = event.params.source;
     let source = getOrInitiateAccount(sourceId)
     log.info(`[ info ] Handle channel update: source {}`, [event.transaction.hash.toHex()]);
 
     // channel destination
-    let destinationId = event.params.destination.toHex();
+    let destinationId = event.params.destination;
     let destination = getOrInitiateAccount(destinationId)
     log.info(`[ info ] Handle channel update: destination {}`, [event.transaction.hash.toHex()]);
 
 
-    let channelId = getChannelId(event.params.source, event.params.destination).toHex()
+    let channelId = getChannelId(event.params.source, event.params.destination)
     let channel = Channel.load(channelId)
-    log.info(`[ info ] Address of the account updating the channel: {}`, [channelId]);
+    log.info(`[ info ] Address of the account updating the channel: {}`, [channelId.toHex()]);
     if (channel == null) {
         // update channel count
         log.info('New channel', [])
@@ -112,7 +112,7 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     // create new ticket
     let ticketId = channelId.toHex() + "-" + channelEpoch.toString() + "-" + ticketEpoch.toString() + "-" + ticketIndex.toString()
     let ticket = new Ticket(ticketId)
-    ticket.channel = channelId.toHex()
+    ticket.channel = channelId
     ticket.nextCommitment = event.params.nextCommitment
     ticket.ticketEpoch = ticketEpoch
     ticket.ticketIndex = ticketIndex
@@ -121,13 +121,69 @@ export function handleTicketRedeemed(event: TicketRedeemed): void {
     ticket.winProb = event.params.winProb
     ticket.signature = event.params.signature
     // update channel
-    let channel = Channel.load(channelId.toHex())
+    let channel = Channel.load(channelId)
     if (channel == null) {
-        log.error("Redeem a ticket for non-existing channel", [])
+        log.error("Redeem a ticket for non-existing channel {}", [channelId.toHex()])
         return;
     } else {
         channel.redeemedTicketCount = channel.redeemedTicketCount.plus(oneBigInt())
     }
     channel.save()
     ticket.save()
+}
+
+export function handleRegistered(event: Registered): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    let registeredPeers = account.registeredPeers
+
+    if (registeredPeers.indexOf(event.params.hoprPeerId) == -1) {
+        registeredPeers.push(event.params.hoprPeerId)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleOwnerRegistered(event: RegisteredByOwner): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    let registeredPeers = account.registeredPeers
+
+    if (registeredPeers.indexOf(event.params.hoprPeerId) == -1) {
+        registeredPeers.push(event.params.hoprPeerId)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleDeregistered(event: Deregistered): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    let registeredPeers = account.registeredPeers
+    let elementIndex = registeredPeers.indexOf(event.params.hoprPeerId)
+
+    if ( elementIndex == -1) {
+        log.error(` [ error] Cannot find registration: {}`, [event.params.account.toHex(), event.params.hoprPeerId])
+    } else {
+        registeredPeers.splice(elementIndex, 1)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleOwnerDeregistered(event: DeregisteredByOwner): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    let registeredPeers = account.registeredPeers
+    let elementIndex = registeredPeers.indexOf(event.params.hoprPeerId)
+
+    if ( elementIndex == -1) {
+        log.error(` [ error] Cannot find registration: {}`, [event.params.account.toHex(), event.params.hoprPeerId])
+    } else {
+        registeredPeers.splice(elementIndex, 1)
+    }
+    account.registeredPeers = registeredPeers
+    account.save()
+}
+
+export function handleEligibilityUpdated(event: EligibilityUpdated): void {
+    let account = getOrInitiateRegistration(event.params.account)
+    account.eligibility = event.params.eligibility
+    account.save()
 }
