@@ -1,0 +1,275 @@
+.content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  min-height: 100vh;
+
+  .container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 120px;
+
+    .menu {
+      background-color: var(--white);
+      color: black;
+      box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      display: flex;
+      margin-bottom: 40px;
+
+      .user {
+        width: 230px;
+        height: 45px;
+        border-radius: 8px;
+        color: white;
+        margin: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .relayer {
+        width: 230px;
+        height: 45px;
+        background-color: green;
+        color: white;
+        margin: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+      }
+    }
+
+    .interface {
+      width: 800px;
+      box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+
+      .columns {
+        width: 100%;
+        display: flex;
+
+        .left {
+          width: 400px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 25px;
+          flex-direction: column;
+
+          .form {
+            width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            .relayerStatus {
+              width: 330px;
+              color: black;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              margin-top: 20px;
+
+              .ball {
+                width: 14px;
+                height: 14px;
+                border-radius: 15px;
+                margin-right: 5px;
+              }
+            }
+
+            .dropdown {
+              width: 333px;
+              margin-top: 15px;
+
+              .title {
+                padding-bottom: 5px;
+
+                label {
+                  color: black;
+                  font-size: 14px;
+                }
+              }
+            }
+
+            .dropdown:nth-child(1) {
+              margin-top: 5px;
+            }
+
+            .input {
+              width: 333px;
+              margin-top: 15px;
+
+              .title {
+                padding-bottom: 5px;
+
+                label {
+                  color: black;
+                  font-size: 14px;
+                }
+              }
+
+              input {
+                width: 100%;
+                height: 38px;
+                border-radius: 0.28571429rem;
+                border: 1px solid rgba(192, 192, 192, 1);
+                outline: none;
+                padding: 10px;
+              }
+            }
+
+            .input:nth-child(1) {
+              margin-top: 5px;
+            }
+
+            .parameters {
+              width: 333px;
+              margin-top: 20px;
+
+              .spanTitle {
+                color: black;
+                font-size: 18px;
+              }
+
+              .checkbox {
+                margin-top: 15px;
+                display: flex;
+
+                label {
+                  margin-left: 10px;
+                  color: black;
+                }
+              }
+            }
+          }
+
+          .saveButton {
+            width: 333px;
+            background: linear-gradient(180deg, #000000 0%, #0101b5 100%);
+            border-radius: 10px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 30px;
+          }
+        }
+
+        .right {
+          width: 400px;
+          padding-top: 25px;
+
+          .preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            .title {
+              margin-bottom: 5px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              width: 100%;
+              max-width: 330px;
+
+              label {
+                color: black;
+                font-size: 14px;
+              }
+            }
+
+            textarea {
+              resize: none;
+              border-radius: 10px;
+              border-color: rgba(192, 192, 192, 1);
+              padding: 10px;
+              max-width: 333px;
+              max-height: 162px;
+            }
+          }
+
+          .response {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            .title {
+              margin-bottom: 5px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              width: 100%;
+              max-width: 330px;
+
+              label {
+                color: black;
+                font-size: 14px;
+              }
+            }
+
+            textarea {
+              resize: none;
+              border-radius: 10px;
+              border-color: rgba(192, 192, 192, 1);
+              padding: 10px;
+              max-width: 333px;
+              max-height: 162px;
+            }
+          }
+
+          .logs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            .title {
+              margin-bottom: 5px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              width: 100%;
+              max-width: 330px;
+
+              label {
+                color: black;
+                font-size: 14px;
+              }
+            }
+
+            textarea {
+              resize: none;
+              border-radius: 10px;
+              border-color: rgba(192, 192, 192, 1);
+              padding: 10px;
+              max-width: 333px;
+              max-height: 420px;
+            }
+          }
+        }
+      }
+
+      .sendButton {
+        background: linear-gradient(180deg, #000000 0%, #0101b5 100%);
+        border-radius: 8px;
+        margin: 20px;
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+  }
+}
