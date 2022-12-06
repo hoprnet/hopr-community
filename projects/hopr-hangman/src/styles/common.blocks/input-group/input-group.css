@@ -1,0 +1,9 @@
+.input-group {
+    display: block;
+}
+.input-group__input {
+    display: inline-block;
+    padding: 0.5em 0.3em;
+    border-radius: 5px;
+    border: 1px solid black;
+}

@@ -1,0 +1,9 @@
+.player-list {
+    border: 2px solid brown;
+    max-width: 500px;
+}
+
+.player-list__title {
+    display: block;
+    border-bottom: 2px solid brown;
+}

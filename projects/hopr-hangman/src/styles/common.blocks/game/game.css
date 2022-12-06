@@ -1,0 +1,21 @@
+.game__player-list {
+    margin-left: auto;
+}
+.game-drawing {
+    position: relative;
+    padding-top: 50px;
+    width: 250px;
+    margin: auto;
+}
+.game-drawing__hangman {
+    margin-left: 120px;
+}
+
+.game__word {
+    margin: auto;
+    width: fit-content;
+}
+.game__keyboard {
+    margin: 3rem auto;
+    width: 80%;
+}

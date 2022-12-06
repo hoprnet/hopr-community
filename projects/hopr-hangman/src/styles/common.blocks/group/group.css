@@ -1,0 +1,7 @@
+.group {
+    gap: 2em;
+}
+
+.group_small-gap {
+    gap: 1em;
+}

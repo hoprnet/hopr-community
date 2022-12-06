@@ -1,0 +1,9 @@
+.link {
+    background: none;
+    cursor: pointer;
+    border: none;
+    box-sizing: border-box;
+}
+.link:hover {
+    border-bottom: 1px solid white;
+}
