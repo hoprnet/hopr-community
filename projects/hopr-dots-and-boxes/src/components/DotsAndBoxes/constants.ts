@@ -1,0 +1,18 @@
+const Constants = {
+	START_GAME: 'START_GAME',
+	GENERATE_GRID: 'GENERATE_GRID',
+	UPDATE_GRID: 'UPDATE_GRID',
+	RESTART_GAME: 'RESTART_GAME',
+	colors: {
+		DEFAULT_BAR_COLOR: '#d0d0d0',
+		PRIMARY_BAR_COLOR: '#ffffa0',
+		SECONDARY_BAR_COLOR: '#0000b4',
+		DEFAULT_BOX_COLOR: '#ffffff',
+		PRIMARY_BOX_COLOR: '#ffffcc',
+		SECONDARY_BOX_COLOR: '#6666ff',
+		PRIMARY_FONT_COLOR: '#e6e600',
+		SECONDARY_FONT_COLOR: '#6666ff',
+	},
+};
+
+export default Constants

@@ -1,0 +1,29 @@
+.vertical-bar3 {
+  width: 20px;
+  height: 60px;
+}
+
+.horizontal-bar3 {
+  width: 60px;
+  height: 20px;
+}
+
+.horizontal-bar4 {
+  width: 45px;
+  height: 16px;
+}
+
+.vertical-bar4 {
+  width: 16px;
+  height: 45px;
+}
+
+.horizontal-bar5 {
+  width: 40px;
+  height: 10px;
+}
+
+.vertical-bar5 {
+  width: 10px;
+  height: 40px;
+}
