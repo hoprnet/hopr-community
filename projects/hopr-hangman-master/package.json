@@ -1,0 +1,58 @@
+{
+  "name": "hangman",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "debounce": "^1.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "react-scripts": "5.0.1",
+    "rlp": "^3.0.0",
+    "use-immer": "^0.7.0",
+    "uuid": "^9.0.0",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "npm run test-karma",
+    "test-system": "TESTS=system npm run test-karma",
+    "test-network": "TESTS=network npm run test-karma",
+    "test-karma": "export NODE_ENV=development && . ./.env.test && karma start",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
+    "babel-plugin-rewire": "^1.2.0",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "karma": "^6.4.0",
+    "karma-babel-preprocessor": "^8.0.2",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-cli": "^2.0.0",
+    "karma-mocha": "^2.0.1",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-sourcemap-loader": "^0.3.8",
+    "karma-webpack": "^5.0.0",
+    "mocha": "^10.0.0",
+    "proxyquire": "^2.1.3",
+    "sinon": "^14.0.0",
+    "sowpods-five": "^1.0.1",
+    "sowpods-six": "^1.0.0"
+  }
+}
