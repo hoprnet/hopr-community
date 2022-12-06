@@ -13,13 +13,16 @@
 
 ## List of community projects
 
-| Project             | Name       | Try it out                              | Author                                      |
-| ------------------- | ---------- | --------------------------------------- | ------------------------------------------- |
-| hopr-status-board   | Cockpit    | https://hopr-status-board.vercel.app/   | [0xMrH](https://github.com/0xMrH)           |
-| hopr-visual         | Visualizer | https://hopr-visual.vercel.app/         | [Eliaxie](https://github.com/Eliaxie)       |
-| hopr-chess          | Chess      | https://hopr-chess.vercel.app/          | [vividwood](https://github.com/vividwood)   |
-| hopr-boomerang-chat | Boomerang  | https://hopr-boomerang-chat.vercel.app/ | [0xjjpa](https://github.com/0xjjpa)         |
-| maze-game           | Maze       | https://hopr-maze-game.vercel.app/      | [mjadach-iv](https://github.com/mjadach-iv) |
+| Project             | Name        | Try it out                              | Author                                      |
+| ------------------- | ----------  | --------------------------------------- | ------------------------------------------- |
+| hopr-status-board   | Cockpit     | https://hopr-status-board.vercel.app/   | [0xMrH](https://github.com/0xMrH)           |
+| hopr-visual         | Visualizer  | https://hopr-visual.vercel.app/         | [Eliaxie](https://github.com/Eliaxie)       |
+| hopr-chess          | Chess       | https://hopr-chess.vercel.app/          | [vividwood](https://github.com/vividwood)   |
+| hopr-dots-and-boxes | Dots and Boxes  | https://hopr-dots-and-boxes.vercel.app/ | [vividwood](https://github.com/vividwood) |
+| hopr-hangman        | Hangman     | https://hopr-hangman.vercel.app/ | [ginanisque](https://github.com/ginanisque)         |
+| hopr-boomerang-chat | Boomerang   | https://hopr-boomerang-chat.vercel.app/ | [0xjjpa](https://github.com/0xjjpa)         |
+| hopr-tic-tac-toe    | Tic tac toe | https://hopr-tic-tac-toe.vercel.app/  | [h1xten](https://github.com/h1xten)         |
+| maze-game           | Maze        | https://hopr-maze-game.vercel.app/      | [mjadach-iv](https://github.com/mjadach-iv) |
 
 To add a new project, see [GUIDE](./ADMIN_GUIDE.md).
 
