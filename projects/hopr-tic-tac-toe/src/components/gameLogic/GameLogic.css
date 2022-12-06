@@ -1,0 +1,123 @@
+.hello__player{
+    margin: 0px auto;
+    padding: 2rem 4rem;
+    background-color: var(--second-bg);
+    font-size: 18px;
+    border-radius: 25px;
+}
+.hello__player>h2{
+    color: #fff;
+    margin: 0;
+}
+.game {
+    /* padding-top: 6rem;
+    padding-bottom: 4rem; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.gamestatus {
+    display: flex;
+    font-size: 18px;
+    color: var(--hover-color);
+}
+.gamestatus>p{
+    margin-left: 15px;
+}
+.game__info{
+    color: var(--primary-color);
+    letter-spacing: 2px;
+    width: 30%;
+    height: 21.6rem;
+}
+.game__result {
+    text-align: center;
+}
+.game__info>h2{
+    color: inherit;
+    font-size: 28px;
+}
+.game__info>h3{
+    color: var(--second-bg);
+    font-size: 20px;
+}
+.win__text {
+    color: #fff;
+    text-shadow:
+        0 0 7px var(--second-bg),
+        0 0 10px var(--second-bg),
+        0 0 21px var(--second-bg),
+        0 0 42px #0fa,
+        0 0 82px #0fa,
+        0 0 92px #0fa,
+        0 0 102px #0fa,
+        0 0 151px #0fa;
+}
+.lose__text{
+    color: #fff;
+    text-shadow:
+        0 0 7px var(--second-bg),
+        0 0 10px var(--second-bg),
+        0 0 21px var(--second-bg),
+        0 0 42px #ff0000,
+        0 0 82px #ff0000,
+        0 0 92px #ff0000,
+        0 0 102px #ff0000,
+        0 0 151px #ff0000;
+}
+.draw__text {
+    color: #fff;
+    text-shadow:
+        0 0 7px var(--second-bg),
+        0 0 10px var(--second-bg),
+        0 0 21px var(--second-bg),
+        0 0 42px #0fa,
+        0 0 82px #0fa,
+        0 0 92px #0fa,
+        0 0 102px #0fa,
+        0 0 151px #0fa;
+}
+.field{
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+    justify-content: center;
+}
+.board{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    align-items: center;
+    
+}
+.board_new_game {
+    position: absolute;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
+.new_btn{
+    width: 100%;
+}
+.new_btn:not(:last-child){
+    margin-bottom: 10px;
+}
+.square{
+    cursor: pointer;
+    border: 0;
+    border-radius: 15px;
+    font-size: 2rem;
+    background-color: var(--second-bg);
+    color: var(--hover-color);
+    margin: 0.1rem;
+    height: 7rem;
+    width: 7rem;
+}
+.checked {
+    color: green !important;
+}

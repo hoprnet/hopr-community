@@ -1,0 +1,135 @@
+@media only screen and (max-width: 1200px) {}
+@media only screen and (max-width: 992px) {
+    .hello__player {
+        font-size: 16px !important;
+    }
+    .game{
+        display:grid !important;
+    }
+    .game__info{
+        margin: 2rem 0rem;
+        width: 100% !important;
+        text-align: center !important;
+        height: auto !important;
+    }
+    .game__info>h2 {
+        font-size: 22px !important;
+    }
+    .game__info>h3{
+        font-size: 18px !important;
+    }
+    .square{
+        font-size: 1.2rem !important;
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+    .game__info>h2 {
+        font-size: 22px !important;
+    }
+    .game__info>h3{
+        font-size: 18px !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .hello__player {
+        font-size: 13px !important;
+    }
+    .game{
+        display:grid !important;
+    }
+    .game__info{
+        margin: 2rem 0rem;
+        width: 100% !important;
+        text-align: center !important;
+        height: auto !important;
+    }
+    .game__info>h2 {
+        font-size: 22px !important;
+    }
+    .game__info>h3{
+        font-size: 18px !important;
+    }
+    .square{
+        font-size: 1.2rem !important;
+        height: 5rem !important;
+        width: 5rem !important;
+    }
+}
+
+@media only screen and (max-width: 630px) {
+    .hello__player {
+        font-size: 12px !important;
+    }
+    .navbar {
+        font-size: 12px !important;
+    }
+    .navbar__content{
+        display: block !important;
+    }
+    .navbar__logo{
+        display: flex !important;
+        justify-content: center !important;
+    }
+    .navbar__settings>button:not(:last-child) {
+        margin: 0 !important;
+    }
+    .navbar__settings>button{
+        font-size: 12px !important;
+        height: auto;
+    }
+    .navbar__settings>button>span{
+        font-size: 12px !important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .hello__player {
+        font-size: 12px !important;
+    }
+    .navbar {
+        font-size: 12px !important;
+    }
+    .navbar__content{
+        display: block !important;
+    }
+    .navbar__logo{
+        display: flex !important;
+        justify-content: center !important;
+    }
+    .navbar__settings>button:not(:last-child) {
+        margin: 0 !important;
+    }
+    .navbar__settings>button{
+        font-size: 12px !important;
+        height: auto;
+    }
+    .navbar__settings>button>span{
+        font-size: 12px !important;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .navbar {
+        font-size: 12px !important;
+    }
+    .navbar__content{
+        display: block !important;
+    }
+    .navbar__logo{
+        display: flex !important;
+        justify-content: center !important;
+    }
+    .navbar__settings>button:not(:last-child) {
+        margin: 0 !important;
+    }
+    .navbar__settings>button{
+        font-size: 12px !important;
+        height: auto;
+    }
+    .navbar__settings>button>span{
+        font-size: 12px !important;
+    }
+    .hello__player{
+        padding: 1rem 3rem !important;
+    }
+}
