@@ -1,0 +1,6 @@
+.group_flex {
+    display: flex;
+}
+.group_flex_center {
+    justify-content: center;
+}

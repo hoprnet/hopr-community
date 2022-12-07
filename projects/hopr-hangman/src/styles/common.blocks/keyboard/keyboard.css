@@ -1,0 +1,22 @@
+.keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.keyboard__key {
+    padding: 0.8em 1.2em;
+    background: white;
+    display: block;
+    border: 1px solid black;
+}
+.keyboard__key_unselected:hover {
+    background: grey;
+    color: white;
+}
+.keyboard__key_red {
+    background: red;
+}
+.keyboard__key_green {
+    background: green;
+}

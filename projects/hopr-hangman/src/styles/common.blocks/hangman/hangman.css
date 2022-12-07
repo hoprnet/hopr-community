@@ -1,0 +1,40 @@
+.hangman {
+    --hangman-height: 150px;
+    --hangman-width: 100px;
+    --hangman-face-width: 18px;
+    --hangman-face-height: 18px;
+    width: fit-content;
+    height: var(--hangman-height);
+    position: relative;
+}
+.hangman img {
+    max-width: 100%;
+}
+.hangman__body {
+    height: calc(var(--hangman-height) - 50px);
+}
+.hangman__face {
+    position: absolute;
+    top: 7px;
+    left: calc(50% - 14px);
+    height: var(--hangman-face-height);
+    width: var(--hangman-face-width);
+}
+.hangman__eyes, .hangman__mouth {
+    display: block;
+}
+.hangman__mouth {
+    max-height: 13px;
+}
+
+.gallows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    fill: brown;
+    stroke: black;
+}
+.gallows__hbeam {
+}
+.gallows__pillar {
+}

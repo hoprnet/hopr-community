@@ -1,0 +1,8 @@
+.button_selector {
+    box-sizing: border-box;
+}
+.button_selector_active {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+}
