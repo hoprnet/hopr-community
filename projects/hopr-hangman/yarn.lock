@@ -8599,16 +8599,6 @@ sourcemap-codec@^1.4.8:
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
 
-sowpods-five@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/sowpods-five/-/sowpods-five-1.0.1.tgz#fffefbe51a74504e20ca6dbe55cee6f229e5a01b"
-  integrity sha512-c4lIanE7uYQ51ke1cI/5G1lth72sOSU5I46m7YT5UcZwbRDoNkhzdU9jFRRdRDSiQfQcRzaOshTMJ5uWH12+/Q==
-
-sowpods-six@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/sowpods-six/-/sowpods-six-1.0.0.tgz#2f3dffc011ccfa24cad5374694293fd6a410da20"
-  integrity sha512-PRlyrsdtnamiF+M4BMphF+lPpytvuZJJZ1rg13ZhSCMD4DfjHJtvVeaZR59Exfw80Entk6VKOJj+gPeCS7LOwQ==
-
 spdy-transport@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/spdy-transport/-/spdy-transport-3.0.0.tgz#00d4863a6400ad75df93361a1608605e5dcdcf31"

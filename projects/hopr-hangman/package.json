@@ -51,8 +51,6 @@
     "karma-webpack": "^5.0.0",
     "mocha": "^10.0.0",
     "proxyquire": "^2.1.3",
-    "sinon": "^14.0.0",
-    "sowpods-five": "^1.0.1",
-    "sowpods-six": "^1.0.0"
+    "sinon": "^14.0.0"
   }
 }
