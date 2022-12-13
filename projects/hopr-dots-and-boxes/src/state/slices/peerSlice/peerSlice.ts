@@ -36,8 +36,8 @@ const initialState: PeerState = {
   options: {},
   num: null,
   status: Status.Idle,
-  endpoint: 'http://localhost:13301',
-  securityToken: '^^LOCAL-testing-123^^',
+  endpoint: '',
+  securityToken: '',
   opponent: {}
 };
 
@@ -99,10 +99,10 @@ export const peerSlice = createSlice({
 
 export const receiveAnswer = (message: string): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   let state = getState() as RootState
-
+  console.log('receiveAnswer', state)
   if (state.peer.status === Status.Handshake) {
     if (state.peer.opponent.address && state.peer.num) {
-      const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
+      const request = sendMessage(selectEndpoint(state), getHeaders(true, selectSecurityToken(state)))
       await request(state.peer.opponent.address, JSON.stringify(answer(state.peer.num)))
       dispatch(peerSlice.actions.sendAnswer())
     }
@@ -144,11 +144,10 @@ export const connectGame = (): ThunkAction<void, RootState, unknown, Action<stri
 
 export const receiveHandshake = (message: any): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-
+  console.log('receiveHandshake', state)
   const { hash, options = {} } = message
-
   if (state.peer.opponent.address && state.peer.num && state.peer.status === Status.Waiting) {
-    const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
+    const request = sendMessage(selectEndpoint(state), getHeaders(true, selectSecurityToken(state)))
     await request(state.peer.opponent.address, JSON.stringify(handshake(state.peer.num, state.peer.options)))
     
     dispatch(peerSlice.actions.sendHandshake())
@@ -161,9 +160,9 @@ export const receiveHandshake = (message: any): ThunkAction<void, RootState, unk
 
 export const sendAnswer = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-  
+  console.log('sendAnswer state', state)
   if (state.peer.opponent.address && state.peer.num && state.peer.status === Status.Handshake) {
-    const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
+    const request = sendMessage(selectEndpoint(state), getHeaders(true, selectSecurityToken(state)))
     await request(state.peer.opponent.address, JSON.stringify(answer(state.peer.num)))
     dispatch(peerSlice.actions.sendAnswer())
   }
@@ -171,9 +170,9 @@ export const sendAnswer = (): ThunkAction<void, RootState, unknown, Action<strin
 
 export const sendHandshake = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-
+  console.log('sendHandshake state', state)
   if (state.peer.opponent.address && state.peer.num && state.peer.status === Status.Waiting) {
-    const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
+    const request = sendMessage(selectEndpoint(state), getHeaders(true, selectSecurityToken(state)))
     await request(state.peer.opponent.address, JSON.stringify(handshake(state.peer.num)))
     dispatch(peerSlice.actions.sendHandshake())
   }
@@ -181,18 +180,18 @@ export const sendHandshake = (): ThunkAction<void, RootState, unknown, Action<st
 
 export const sendHeartbeat = (): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-
+  console.log('sendHeartbeat state', state)
   if (state.peer.opponent.address && state.peer.status === Status.Playing) {
-    const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
+    const request = sendMessage(selectEndpoint(state), getHeaders(true, selectSecurityToken(state)))
     await request(state.peer.opponent.address, JSON.stringify(heartbeat(state.game.grid)))
   }
 }
 
 export const sendMove = (move: { row: number, column: number, type: string }): ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch, getState) => {
   const state = getState() as RootState;
-
+  console.log('sendMove state', state)
   if (state.peer.opponent.address && state.peer.status === Status.Playing) {
-    const request = sendMessage(selectEndpoint(state), getHeaders(true, state.peer.securityToken))
+    const request = sendMessage(selectEndpoint(state), getHeaders(true, selectSecurityToken(state)))
     await request(state.peer.opponent.address, JSON.stringify(moveAction(move.row, move.column, move.type)))
   }
 }
@@ -204,7 +203,7 @@ export const selectNumber = (state: RootState) => state.peer.num;
 export const selectHashedNumber = (state: RootState) => state.peer.num == null ? '' : sha256(state.peer.num.toString())
 export const selectStatus = (state: RootState) => state.peer.status
 // export const selectSecurityToken = (state: RootState) => state.peer.securityToken
-export const selectSecurityToken = (state: RootState) => state.router.location ? (getParam(state.router.location, 'securityToken') || '') : ''
+export const selectSecurityToken = (state: RootState) => state.router.location ? (getParam(state.router.location, 'apiToken') || '') : ''
 export const selectEndpoint = (state: RootState) => state.router.location ? (getParam(state.router.location, 'apiEndpoint') || '') : ''
 export const selectOpponent = (state: RootState) => state.peer.opponent.address || '' 
 export const selectLocation = (state: RootState) => state.router.location

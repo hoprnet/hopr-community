@@ -53,7 +53,7 @@ const StyledPopup = styled(Popup)`
 function SettingsCard({ hoprAddress }: { hoprAddress: string }) {
   const dispatch = useAppDispatch();
 
-  const securityToken = useAppSelector(selectSecurityToken)
+  const apiToken = useAppSelector(selectSecurityToken)
   const apiEndpoint = useAppSelector(selectEndpoint)
   const status = useAppSelector(selectStatus)
   const location = useAppSelector(selectLocation)
@@ -74,12 +74,16 @@ function SettingsCard({ hoprAddress }: { hoprAddress: string }) {
           </Typography>
           <TextField sx={{ width: '25ch' }} id="apiEndpoint" label="API Endpoint" variant="standard" value={apiEndpoint} onChange={(e: ChangeEvent<HTMLInputElement>) =>
             location && dispatch(push(location.pathname + setParam(location, 'apiEndpoint', e.target.value)))
-          } />
-          <TextField sx={{ width: '25ch' }} id="securityToken" label="Security Token" variant="standard" value={securityToken} onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            location && dispatch(push(location.pathname + setParam(location, 'securityToken', e.target.value)))
+          }
+            disabled 
+          />
+          <TextField sx={{ width: '25ch' }} id="securityToken" label="API Token" variant="standard" value={apiToken} onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            location && dispatch(push(location.pathname + setParam(location, 'apiToken', e.target.value)))
             // dispatch(setSecurityToken(e.target.value))
-          } />
-          <TextField id="hoprAddress" label="HOPR Address" variant="standard" value={hoprAddress} />
+          } 
+            disabled
+          />
+          <TextField id="hoprAddress" label="HOPR Address" variant="standard" value={hoprAddress} disabled/>
           <Divider sx={{ m: 2 }} />
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Debug
@@ -209,11 +213,11 @@ function App() {
     const newLocation = { ...location }
 
     if (!getParam(newLocation, 'apiEndpoint')) {
-      newLocation.search = setParam(newLocation, 'apiEndpoint', 'http://localhost:13301')
+      newLocation.search = setParam(newLocation, 'apiEndpoint', '')
     }
 
-    if (!getParam(newLocation, 'securityToken')) {
-      newLocation.search = setParam(newLocation, 'securityToken', '^^LOCAL-testing-123^^')
+    if (!getParam(newLocation, 'apiToken')) {
+      newLocation.search = setParam(newLocation, 'apiToken', '')
     }
 
     if (newLocation.search !== location.search) {

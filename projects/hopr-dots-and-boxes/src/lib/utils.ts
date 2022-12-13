@@ -1,10 +1,10 @@
-export const getHeaders = (isPost = false, securityToken: string) => {
+export const getHeaders = (isPost = false, apiToken: string) => {
   const headers = new Headers();
   if (isPost) {
     headers.set("Content-Type", "application/json");
     headers.set("Accept-Content", "application/json");
   }
-  headers.set("Authorization", "Basic " + btoa(securityToken));
+  headers.set("Authorization", "Basic " + btoa(apiToken));
   return headers;
 };
 

@@ -187,7 +187,10 @@ export const { setNumber, inviteOpponent, setSecurityToken, setOpponent } = peer
 export const selectNumber = (state: RootState) => state.peer.num;
 export const selectHashedNumber = (state: RootState) => state.peer.num == null ? '' : sha256(state.peer.num.toString())
 export const selectStatus = (state: RootState) => state.peer.status
-export const selectSecurityToken = (state: RootState) => state.router.location ? (getParam(state.router.location, 'apiToken') || '') : state.peer.securityToken
+export const selectSecurityToken = (state: RootState) => {
+  console.log('selectSecurityToken', state, state.peer.securityToken)
+  return state.router.location ? (getParam(state.router.location, 'apiToken') || '') : state.peer.securityToken
+}
 export const selectEndpoint = (state: RootState) => state.router.location ? (getParam(state.router.location, 'apiEndpoint') || '') : state.peer.endpoint
 export const selectOpponent = (state: RootState) => state.peer.opponent.address || ''
 export const selectLocation = (state: RootState) => state.router.location
