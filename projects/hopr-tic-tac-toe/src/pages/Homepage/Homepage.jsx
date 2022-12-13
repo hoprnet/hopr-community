@@ -28,6 +28,7 @@ const Homepage = () => {
   const [skipPeerInfo, setSkipPeerInfo] = useState(true);
   const [messages, setMessages] = useState([]);
   const [isNewMessage, setIsNewMessage] = useState(false);
+  const gamestatus = useSelector((state) => state?.game?.status);
 
   const {
     data: peer,
@@ -58,6 +59,11 @@ const Homepage = () => {
     dispatch(setSecurityToken(securityToken));
     dispatch(setNodeApi(nodeApi));
   }, []);
+
+  useEffect(() => {
+    if(gamestatus === 'playing') setIsGameModalVisible(false);
+  }, [gamestatus]);
+
 
   return (
     <div className='tic-tac-toe'>
