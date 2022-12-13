@@ -62,7 +62,7 @@ const Header = ({
   const [sendMessage] = useSendMessageMutation();
 
   const handleSendMessage = () => {
-    dispatch(setClearPeer());
+ //   dispatch(setClearPeer());
     dispatch(setClearGame());
     const randNumber = getRandom(1500);
     sendMessage({
