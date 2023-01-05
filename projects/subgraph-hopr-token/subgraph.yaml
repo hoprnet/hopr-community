@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.5
 description: mainnet HOPR balance
 repository: https://github.com/hoprnet/hopr-community
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 11887223
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Transfer
