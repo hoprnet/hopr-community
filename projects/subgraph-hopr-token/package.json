@@ -4,11 +4,9 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ hoprnet/hopr-on-mainnet",
-    "create-local": "graph create --node http://localhost:8020/ hoprnet/hopr-on-mainnet",
-    "remove-local": "graph remove --node http://localhost:8020/ hoprnet/hopr-on-mainnet",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hoprnet/hopr-on-mainnet",
-    "deploy-xdai:prod": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs hoprnet/hopr-on-mainnet --access-token $ACCESS_TOKEN"
+    "auth": "graph auth --studio $DEPLOY_KEY",
+    "deploy:studio": "graph deploy --studio $SUBGRAPH_SLUG",
+    "deploy:hosted-prod": "graph deploy --product hosted-service --ipfs https://api.thegraph.com/ipfs hoprnet/hopr-on-mainnet --access-token $ACCESS_TOKEN"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.37.1",
