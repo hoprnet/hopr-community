@@ -20,9 +20,15 @@ Then follow by compiling the subgraph deployment code
 yarn codegen
 yarn build --network <network>
 ```
-Next, get the access token from https://thegraph.com/hosted-service/dashboard and deploy, e.g. to the production network
+Next, get the access token from https://thegraph.com/hosted-service/dashboard and deploy, e.g. to the production network (hosted service)
 ```
 ACCESS_TOKEN=<access_token> yarn deploy-xdai
+```
+
+To get to deploy to decentralized network
+```
+graph auth --studio <auth_key>
+graph deploy --studio hopr-channels
 ```
 
 ## How to run (deprecated)

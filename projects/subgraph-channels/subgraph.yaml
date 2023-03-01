@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: HoprChannels
-    network: xdai
+    network: gnosis
     source:
       abi: HoprChannels
       address: "0xFaBeE463f31E39eC8952bBfB4490C41103bf573e"
@@ -35,7 +35,7 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: HoprNetworkRegistry
-    network: xdai
+    network: gnosis
     source:
       abi: HoprNetworkRegistry
       address: "0x819E6a81e1e3f96CF1ac9200477C2d09c676959D"
