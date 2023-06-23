@@ -1,0 +1,95 @@
+.popup {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .background {
+    position: absolute;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    width: 100%;
+    height: 100vh;
+  }
+
+  .settings {
+    position: absolute;
+    background-color: white;
+    width: 470px;
+    height: 350px;
+    box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+
+    img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      margin: 22px;
+      cursor: pointer;
+    }
+
+    .title {
+      margin-top: 40px;
+      font-size: 16px;
+      text-align: center;
+      color: black;
+    }
+
+    .form {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      .item {
+        width: 330px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+
+        .title {
+          margin-top: 0;
+          margin-bottom: 5px;
+
+          label {
+            color: black;
+            font-size: 14px;
+          }
+        }
+
+        input {
+          width: 100%;
+          height: 38px;
+          border-radius: 0.28571429rem;
+          border: 1px solid rgba(192, 192, 192, 1);
+          outline: none;
+          padding: 10px;
+        }
+      }
+
+      .item:nth-child(2) {
+        margin-top: 15px;
+      }
+
+      .saveButton {
+        width: 330px;
+        height: 50px;
+        background: linear-gradient(180deg, #000000 0%, #0101b5 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 60px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    }
+  }
+}
