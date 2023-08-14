@@ -1,0 +1,29 @@
+.container {
+  width: 350px;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .message {
+    width: 260px;
+    min-height: 50px;
+    background-color: var(--sl-grey);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    border-top-right-radius: 0;
+    text-align: left;
+    margin-right: 10px;
+
+    .wrapper {
+      width: 230px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+  }
+}

@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+:root {
+  --white: #fff;
+  --black: #000;
+  --grey: rgba(20, 20, 20, 1);
+  --l-grey: rgba(40, 40, 40, 1);
+  --sl-grey: rgba(80, 80, 80, 1);
+  --blue: #0b6bb8;
+  --purple: #593697;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: transparent;
+}
+
+.app {
+  width: 350px;
+  height: 550px;
+  background-color: var(--grey);
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #0b6bb8 #3c3c3c;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #3c3c3c;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #0b6bb8;
+  border-radius: 20px;
+  border: 3px solid #3c3c3c;
+}

@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "short_name": "Chatr!",
+  "name": "Chatr",
+  "description": "Chatr leverages HOPR's mixnet to provide a secure and private way to chat and send tokens straight from your browser.",
+  "icons": {
+    "16": "/logo192.png",
+    "48": "/logo192.png",
+    "128": "/logo192.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "/logo192.png",
+      "32": "/logo192.png",
+      "48": "/logo192.png",
+      "128": "/logo192.png"
+    }
+  }
+}
